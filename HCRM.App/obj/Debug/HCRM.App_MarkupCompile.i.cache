@@ -1,0 +1,20 @@
+﻿HCRM.App
+
+
+winexe
+C#
+.cs
+D:\Nhat Hoang\Projects\FL\CRM\HCRM.App\obj\Debug\
+HCRM.App
+none
+false
+DEBUG;TRACE
+D:\Nhat Hoang\Projects\FL\CRM\HCRM.App\App.xaml
+181321540690
+
+802065907660
+98-2098466918
+MainWindow.xaml;Pages\EmployeePage.xaml;Pages\ProductPage.xaml;Pages\Products\ImportProduct.xaml;Pages\Settings\About.xaml;Pages\Settings\Appearance.xaml;Pages\Home.xaml;Pages\SettingsPage.xaml;Views\Alert\DesignTimeNotificationData.xaml;Views\Alert\GrowlNotifiactions.xaml;Views\CustomControls\PaginDataGridView.xaml;Views\FormViews\SaleFormView.xaml;Views\Home.xaml;Views\LoginWindow.xaml;Views\OthersViews\CustomerPageView.xaml;Views\OthersViews\EmployeePageView.xaml;Views\PrintViews\PrintPreview.xaml;Views\ProductViews\ProductPageView.xaml;
+
+True
+

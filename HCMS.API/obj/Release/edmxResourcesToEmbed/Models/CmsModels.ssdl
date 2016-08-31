@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HCMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cms_AdminMenu">
+    <Key>
+      <PropertyRef Name="AdminMenuID" />
+    </Key>
+    <Property Name="AdminMenuID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="250" />
+    <Property Name="URL" Type="varchar" MaxLength="250" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="AdminMenuParentID" Type="int" />
+  </EntityType>
+  <EntityType Name="Cms_Article">
+    <Key>
+      <PropertyRef Name="ArticleID" />
+    </Key>
+    <Property Name="ArticleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageID" Type="int" />
+    <Property Name="Position" Type="nvarchar" MaxLength="50" />
+    <Property Name="Image" Type="nvarchar" MaxLength="50" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Views" Type="int" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="Source" Type="nvarchar" MaxLength="4000" />
+    <Property Name="PublishDate" Type="date" />
+    <Property Name="URL" Type="nvarchar" MaxLength="4000" />
+    <Property Name="ExpiredDate" Type="date" />
+    <Property Name="Workplace" Type="nvarchar" MaxLength="4000" />
+  </EntityType>
+  <EntityType Name="Cms_ArticleContent">
+    <Key>
+      <PropertyRef Name="ArticleContentID" />
+    </Key>
+    <Property Name="ArticleContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ArticleID" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="4000" />
+    <Property Name="BriefContent" Type="ntext" />
+    <Property Name="FullContent" Type="ntext" />
+    <Property Name="LanguageID" Type="nvarchar" MaxLength="5" />
+    <Property Name="SEOTitle" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEODescription" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEOKeywords" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEName" Type="nvarchar" MaxLength="4000" />
+    <Property Name="URL" Type="nvarchar" MaxLength="4000" />
+  </EntityType>
+  <EntityType Name="Cms_ArticleImage">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Caption" Type="nvarchar" MaxLength="250" />
+    <Property Name="Width" Type="int" />
+    <Property Name="Height" Type="int" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="ArticleID" Type="int" Nullable="false" />
+    <Property Name="Src" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="Cms_Banner">
+    <Key>
+      <PropertyRef Name="BannerID" />
+    </Key>
+    <Property Name="BannerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" />
+    <Property Name="ImageSrc" Type="nvarchar" MaxLength="50" />
+    <Property Name="Position" Type="nvarchar" MaxLength="50" />
+    <Property Name="URL" Type="nvarchar" MaxLength="250" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
+    <Property Name="Views" Type="int" />
+  </EntityType>
+  <EntityType Name="Cms_Contact">
+    <Key>
+      <PropertyRef Name="ContactID" />
+    </Key>
+    <Property Name="ContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="1024" />
+    <Property Name="Email" Type="nvarchar" MaxLength="1024" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="1024" />
+    <Property Name="Message" Type="nvarchar" MaxLength="4000" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Cms_Newsletter">
+    <Key>
+      <PropertyRef Name="NewsletterID" />
+    </Key>
+    <Property Name="NewsletterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="4000" />
+    <Property Name="Email" Type="nvarchar" MaxLength="1024" />
+    <Property Name="Telephone" Type="nvarchar" MaxLength="250" />
+    <Property Name="PropertyCategory" Type="nvarchar" MaxLength="4000" />
+    <Property Name="PropertyType" Type="nvarchar" MaxLength="4000" />
+    <Property Name="Price" Type="nvarchar" MaxLength="4000" />
+    <Property Name="Province" Type="nvarchar" MaxLength="4000" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Cms_Notification">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NotificationKey" Type="nvarchar" MaxLength="250" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="Cms_NotificationContent">
+    <Key>
+      <PropertyRef Name="NotificationContentID" />
+    </Key>
+    <Property Name="NotificationContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NotificationID" Type="int" />
+    <Property Name="LanguageID" Type="nvarchar" MaxLength="5" />
+    <Property Name="EmailSubject" Type="nvarchar" MaxLength="4000" />
+    <Property Name="EmailFrom" Type="nvarchar" MaxLength="2500" />
+    <Property Name="EmailTos" Type="nvarchar" MaxLength="4000" />
+    <Property Name="EmailCCs" Type="nvarchar" MaxLength="4000" />
+    <Property Name="EmailBCCs" Type="nvarchar" MaxLength="4000" />
+    <Property Name="EmailBody" Type="ntext" />
+    <Property Name="FromName" Type="nvarchar" MaxLength="4000" />
+  </EntityType>
+  <EntityType Name="Cms_Page">
+    <Key>
+      <PropertyRef Name="PageID" />
+    </Key>
+    <Property Name="PageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageLevel" Type="int" />
+    <Property Name="PageParentID" Type="int" />
+    <Property Name="PageParentIDSets" Type="varchar" MaxLength="50" />
+    <Property Name="Position" Type="varchar" MaxLength="50" />
+    <Property Name="Icon" Type="nvarchar" MaxLength="250" />
+    <Property Name="Template" Type="nvarchar" MaxLength="250" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+    <Property Name="Views" Type="int" />
+    <Property Name="CssClass" Type="nvarchar" MaxLength="250" />
+    <Property Name="IsPublish" Type="bit" />
+    <Property Name="PropertyCategoryID" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Cms_PageContent">
+    <Key>
+      <PropertyRef Name="PageContentID" />
+    </Key>
+    <Property Name="PageContentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PageID" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEOTitle" Type="nvarchar" MaxLength="4000" />
+    <Property Name="URL" Type="nvarchar" MaxLength="4000" />
+    <Property Name="LanguageID" Type="nvarchar" MaxLength="5" />
+    <Property Name="Description" Type="ntext" />
+    <Property Name="SEODescription" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEOKeywords" Type="nvarchar" MaxLength="4000" />
+    <Property Name="SEName" Type="nvarchar" MaxLength="4000" />
+  </EntityType>
+  <EntityType Name="Cms_PageImage">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Caption" Type="nvarchar" MaxLength="250" />
+    <Property Name="Width" Type="int" />
+    <Property Name="Height" Type="int" />
+    <Property Name="DisplayOrder" Type="int" />
+    <Property Name="PageID" Type="int" Nullable="false" />
+    <Property Name="Src" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <Association Name="FK_Cms_articlecontent_Cms_article">
+    <End Role="Cms_Article" Type="Self.Cms_Article" Multiplicity="1" />
+    <End Role="Cms_ArticleContent" Type="Self.Cms_ArticleContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Article">
+        <PropertyRef Name="ArticleID" />
+      </Principal>
+      <Dependent Role="Cms_ArticleContent">
+        <PropertyRef Name="ArticleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_articleimage_Cms_article">
+    <End Role="Cms_Article" Type="Self.Cms_Article" Multiplicity="1" />
+    <End Role="Cms_ArticleImage" Type="Self.Cms_ArticleImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Article">
+        <PropertyRef Name="ArticleID" />
+      </Principal>
+      <Dependent Role="Cms_ArticleImage">
+        <PropertyRef Name="ArticleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_notificationcontent_Cms_notification">
+    <End Role="Cms_Notification" Type="Self.Cms_Notification" Multiplicity="0..1" />
+    <End Role="Cms_NotificationContent" Type="Self.Cms_NotificationContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Notification">
+        <PropertyRef Name="NotificationID" />
+      </Principal>
+      <Dependent Role="Cms_NotificationContent">
+        <PropertyRef Name="NotificationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_paageimage_Cms_page">
+    <End Role="Cms_Page" Type="Self.Cms_Page" Multiplicity="1" />
+    <End Role="Cms_PageImage" Type="Self.Cms_PageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Page">
+        <PropertyRef Name="PageID" />
+      </Principal>
+      <Dependent Role="Cms_PageImage">
+        <PropertyRef Name="PageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_pagecontent_Cms_page">
+    <End Role="Cms_Page" Type="Self.Cms_Page" Multiplicity="1" />
+    <End Role="Cms_PageContent" Type="Self.Cms_PageContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Page">
+        <PropertyRef Name="PageID" />
+      </Principal>
+      <Dependent Role="Cms_PageContent">
+        <PropertyRef Name="PageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HCMSModelStoreContainer">
+    <EntitySet Name="Cms_AdminMenu" EntityType="Self.Cms_AdminMenu" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Article" EntityType="Self.Cms_Article" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_ArticleContent" EntityType="Self.Cms_ArticleContent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_ArticleImage" EntityType="Self.Cms_ArticleImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Banner" EntityType="Self.Cms_Banner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Contact" EntityType="Self.Cms_Contact" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Newsletter" EntityType="Self.Cms_Newsletter" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Notification" EntityType="Self.Cms_Notification" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_NotificationContent" EntityType="Self.Cms_NotificationContent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_Page" EntityType="Self.Cms_Page" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_PageContent" EntityType="Self.Cms_PageContent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cms_PageImage" EntityType="Self.Cms_PageImage" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Cms_articlecontent_Cms_article" Association="Self.FK_Cms_articlecontent_Cms_article">
+      <End Role="Cms_Article" EntitySet="Cms_Article" />
+      <End Role="Cms_ArticleContent" EntitySet="Cms_ArticleContent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_articleimage_Cms_article" Association="Self.FK_Cms_articleimage_Cms_article">
+      <End Role="Cms_Article" EntitySet="Cms_Article" />
+      <End Role="Cms_ArticleImage" EntitySet="Cms_ArticleImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_notificationcontent_Cms_notification" Association="Self.FK_Cms_notificationcontent_Cms_notification">
+      <End Role="Cms_Notification" EntitySet="Cms_Notification" />
+      <End Role="Cms_NotificationContent" EntitySet="Cms_NotificationContent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_paageimage_Cms_page" Association="Self.FK_Cms_paageimage_Cms_page">
+      <End Role="Cms_Page" EntitySet="Cms_Page" />
+      <End Role="Cms_PageImage" EntitySet="Cms_PageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_pagecontent_Cms_page" Association="Self.FK_Cms_pagecontent_Cms_page">
+      <End Role="Cms_Page" EntitySet="Cms_Page" />
+      <End Role="Cms_PageContent" EntitySet="Cms_PageContent" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

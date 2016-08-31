@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HCMSModelStoreContainer" CdmEntityContainer="HCMSEntities">
+    <EntitySetMapping Name="Cms_AdminMenu">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_AdminMenu">
+        <MappingFragment StoreEntitySet="Cms_AdminMenu">
+          <ScalarProperty Name="AdminMenuID" ColumnName="AdminMenuID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="AdminMenuParentID" ColumnName="AdminMenuParentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Article">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Article">
+        <MappingFragment StoreEntitySet="Cms_Article">
+          <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+          <ScalarProperty Name="PageID" ColumnName="PageID" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="Views" ColumnName="Views" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="ExpiredDate" ColumnName="ExpiredDate" />
+          <ScalarProperty Name="Workplace" ColumnName="Workplace" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_ArticleContent">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_ArticleContent">
+        <MappingFragment StoreEntitySet="Cms_ArticleContent">
+          <ScalarProperty Name="ArticleContentID" ColumnName="ArticleContentID" />
+          <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="BriefContent" ColumnName="BriefContent" />
+          <ScalarProperty Name="FullContent" ColumnName="FullContent" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="SEOTitle" ColumnName="SEOTitle" />
+          <ScalarProperty Name="SEODescription" ColumnName="SEODescription" />
+          <ScalarProperty Name="SEOKeywords" ColumnName="SEOKeywords" />
+          <ScalarProperty Name="SEName" ColumnName="SEName" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_ArticleImage">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_ArticleImage">
+        <MappingFragment StoreEntitySet="Cms_ArticleImage">
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="Width" ColumnName="Width" />
+          <ScalarProperty Name="Height" ColumnName="Height" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+          <ScalarProperty Name="Src" ColumnName="Src" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Banner">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Banner">
+        <MappingFragment StoreEntitySet="Cms_Banner">
+          <ScalarProperty Name="BannerID" ColumnName="BannerID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Views" ColumnName="Views" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Contact">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Contact">
+        <MappingFragment StoreEntitySet="Cms_Contact">
+          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Newsletter">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Newsletter">
+        <MappingFragment StoreEntitySet="Cms_Newsletter">
+          <ScalarProperty Name="NewsletterID" ColumnName="NewsletterID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="PropertyCategory" ColumnName="PropertyCategory" />
+          <ScalarProperty Name="PropertyType" ColumnName="PropertyType" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Notification">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Notification">
+        <MappingFragment StoreEntitySet="Cms_Notification">
+          <ScalarProperty Name="NotificationID" ColumnName="NotificationID" />
+          <ScalarProperty Name="NotificationKey" ColumnName="NotificationKey" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_NotificationContent">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_NotificationContent">
+        <MappingFragment StoreEntitySet="Cms_NotificationContent">
+          <ScalarProperty Name="NotificationContentID" ColumnName="NotificationContentID" />
+          <ScalarProperty Name="NotificationID" ColumnName="NotificationID" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+          <ScalarProperty Name="EmailFrom" ColumnName="EmailFrom" />
+          <ScalarProperty Name="EmailTos" ColumnName="EmailTos" />
+          <ScalarProperty Name="EmailCCs" ColumnName="EmailCCs" />
+          <ScalarProperty Name="EmailBCCs" ColumnName="EmailBCCs" />
+          <ScalarProperty Name="EmailBody" ColumnName="EmailBody" />
+          <ScalarProperty Name="FromName" ColumnName="FromName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_Page">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_Page">
+        <MappingFragment StoreEntitySet="Cms_Page">
+          <ScalarProperty Name="PageID" ColumnName="PageID" />
+          <ScalarProperty Name="PageLevel" ColumnName="PageLevel" />
+          <ScalarProperty Name="PageParentID" ColumnName="PageParentID" />
+          <ScalarProperty Name="PageParentIDSets" ColumnName="PageParentIDSets" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Icon" ColumnName="Icon" />
+          <ScalarProperty Name="Template" ColumnName="Template" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Views" ColumnName="Views" />
+          <ScalarProperty Name="CssClass" ColumnName="CssClass" />
+          <ScalarProperty Name="IsPublish" ColumnName="IsPublish" />
+          <ScalarProperty Name="PropertyCategoryID" ColumnName="PropertyCategoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_PageContent">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_PageContent">
+        <MappingFragment StoreEntitySet="Cms_PageContent">
+          <ScalarProperty Name="PageContentID" ColumnName="PageContentID" />
+          <ScalarProperty Name="PageID" ColumnName="PageID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="SEOTitle" ColumnName="SEOTitle" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="SEODescription" ColumnName="SEODescription" />
+          <ScalarProperty Name="SEOKeywords" ColumnName="SEOKeywords" />
+          <ScalarProperty Name="SEName" ColumnName="SEName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cms_PageImage">
+      <EntityTypeMapping TypeName="HCMSModel.Cms_PageImage">
+        <MappingFragment StoreEntitySet="Cms_PageImage">
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="Width" ColumnName="Width" />
+          <ScalarProperty Name="Height" ColumnName="Height" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="PageID" ColumnName="PageID" />
+          <ScalarProperty Name="Src" ColumnName="Src" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,7 @@
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\bin\Debug\CodeReason.Reports.dll
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\bin\Debug\CodeReason.Reports.pdb
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\obj\Debug\CodeReason.Reports.VS2008.csprojResolveAssemblyReference.cache
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\obj\Debug\CodeReason.Reports.Properties.Resources.resources
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\obj\Debug\CodeReason.Reports.VS2008.csproj.GenerateResource.Cache
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\obj\Debug\CodeReason.Reports.dll
+D:\Nhat Hoang\Softwares\codereason_reports_v0.5_alpha\CodeReason.Reports\obj\Debug\CodeReason.Reports.pdb

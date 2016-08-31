@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WpfApplicationFramework.UnitTesting</name>
+    </assembly>
+    <members>
+        <member name="T:System.Waf.UnitTesting.AssertException">
+            <summary>
+            Represents assertion errors that occur at runtime.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Waf.UnitTesting.AssertException"/> class.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Waf.UnitTesting.AssertException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Waf.UnitTesting.AssertException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Waf.UnitTesting.AssertException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="info"/> parameter is null.
+            </exception>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">
+            The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0).
+            </exception>
+        </member>
+        <member name="T:System.Waf.UnitTesting.AssertHelper">
+            <summary>
+            This class contains assert methods which can be used in unit tests.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertHelper.ExpectedException``1(System.Action)">
+            <summary>
+            Asserts that the execution of the provided action throws the specified exception.
+            </summary>
+            <typeparam name="T">The expected exception type</typeparam>
+            <param name="action">The action to execute.</param>
+            <exception cref="T:System.Waf.UnitTesting.AssertException">This exception is thrown when the expected exception was
+            not thrown by the action.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertHelper.CanExecuteChangedEvent(System.Windows.Input.ICommand,System.Action)">
+            <summary>
+            Asserts that the execution of the provided action raises the CanExecuteChanged event of the command.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="raiseCanExecuteChanged">An action that results in a CanExecuteChanged event of the command.</param>
+            <exception cref="T:System.Waf.UnitTesting.AssertException">This exception is thrown when no or more than one CanExecuteChanged event was 
+            raised by the command or the sender object of the event was not the command object.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertHelper.CanExecuteChangedEvent(System.Windows.Input.ICommand,System.Action,System.Int32,System.Waf.UnitTesting.ExpectedChangedCountMode)">
+            <summary>
+            Asserts that the execution of the provided action raises the CanExecuteChanged event of the command.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="raiseCanExecuteChanged">An action that results in a CanExecuteChanged event of the command.</param>
+            <param name="expectedChangedCount">The expected count of CanExecuteChanged events.</param>
+            <param name="expectedChangedCountMode">The mode defines how the expected changed count is used as assert condition.</param>
+            <exception cref="T:System.Waf.UnitTesting.AssertException">This exception is thrown when no or more than one CanExecuteChanged event was 
+            raised by the command or the sender object of the event was not the command object.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertHelper.PropertyChangedEvent``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Action)">
+            <summary>
+            Asserts that the execution of the provided action raises the property changed event.
+            </summary>
+            <typeparam name="T">The type of the observable.</typeparam>
+            <param name="observable">The observable which should raise the property changed event.</param>
+            <param name="expression">A simple expression which identifies the property (e.g. x =&gt; x.Name).</param>
+            <param name="raisePropertyChanged">An action that results in a property changed event of the observable.</param>
+            <exception cref="T:System.Waf.UnitTesting.AssertException">This exception is thrown when no or more than one property changed event was 
+            raised by the observable or the sender object of the event was not the observable object.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.AssertHelper.PropertyChangedEvent``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Action,System.Int32,System.Waf.UnitTesting.ExpectedChangedCountMode)">
+            <summary>
+            Asserts that the execution of the provided action raises the property changed event.
+            </summary>
+            <typeparam name="T">The type of the observable.</typeparam>
+            <param name="observable">The observable which should raise the property changed event.</param>
+            <param name="expression">A simple expression which identifies the property (e.g. x =&gt; x.Name).</param>
+            <param name="raisePropertyChanged">An action that results in a property changed event of the observable.</param>
+            <param name="expectedChangedCount">The expected count of PropertyChanged events.</param>
+            <param name="expectedChangedCountMode">The mode defines how the expected changed count is used as assert condition.</param>
+            <exception cref="T:System.Waf.UnitTesting.AssertException">This exception is thrown when no or more than one property changed event was 
+            raised by the observable or the sender object of the event was not the observable object.</exception>
+        </member>
+        <member name="T:System.Waf.UnitTesting.ExpectedChangedCountMode">
+            <summary>
+            Defines how the expected changed count is used for the assert condition.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.ExpectedChangedCountMode.Exact">
+            <summary>
+            Expects the exact count of changed events.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.ExpectedChangedCountMode.AtLeast">
+            <summary>
+            Expects at least the count of changed events.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.ExpectedChangedCountMode.AtMost">
+            <summary>
+            Expects at most the count of changed events.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.FileDialogType">
+            <summary>
+            Defines the file dialog type.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.FileDialogType.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.FileDialogType.OpenFileDialog">
+            <summary>
+            The open file dialog.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.FileDialogType.SaveFileDialog">
+            <summary>
+            The save file dialog.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.MessageType">
+            <summary>
+            Defines the message type.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.MessageType.None">
+            <summary>
+            No message.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.MessageType.Message">
+            <summary>
+            A message.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.MessageType.Warning">
+            <summary>
+            A warning.
+            </summary>
+        </member>
+        <member name="F:System.Waf.UnitTesting.Mocks.MessageType.Error">
+            <summary>
+            An error.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.MockDialogView`1">
+            <summary>
+            Base class for a mock dialog view implementation.
+            </summary>
+            <typeparam name="TMockView">The type of the concrete mock dialog view.</typeparam>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.MockView">
+            <summary>
+            Mock class that implements the IView interface.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockView.DataContext">
+            <summary>
+            Gets or sets the data context of the view.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockDialogView`1.ShowDialog(System.Object)">
+            <summary>
+            Shows the view. This method calls the ShowDialogAction.
+            </summary>
+            <param name="owner">The owner of this view.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockDialogView`1.Close">
+            <summary>
+            Close the view. This method sets IsVisible to false.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockDialogView`1.ShowDialogAction">
+            <summary>
+            Gets or sets a delegate which is called when this view should be shown.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockDialogView`1.Owner">
+            <summary>
+            Gets the owner of this view.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockDialogView`1.IsVisible">
+            <summary>
+            Gets a value indicating whether this view is visible.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.MockFileDialogService">
+            <summary>
+            This mock class implements the IFileDialogService interface.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockFileDialogService.ShowOpenFileDialog(System.Object,System.Collections.Generic.IEnumerable{System.Waf.Applications.Services.FileType},System.Waf.Applications.Services.FileType,System.String)">
+            <summary>
+            Shows the open file dialog box that allows a user to specify a file that should be opened.
+            </summary>
+            <param name="owner">The window that owns this OpenFileDialog.</param>
+            <param name="fileTypes">The supported file types.</param>
+            <param name="defaultFileType">Default file type.</param>
+            <param name="defaultFileName">Default filename. The directory name is used as initial directory when it is specified.</param>
+            <returns>A FileDialogResult object which contains the filename selected by the user.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockFileDialogService.ShowSaveFileDialog(System.Object,System.Collections.Generic.IEnumerable{System.Waf.Applications.Services.FileType},System.Waf.Applications.Services.FileType,System.String)">
+            <summary>
+            Shows the save file dialog box that allows a user to specify a filename to save a file as.
+            </summary>
+            <param name="owner">The window that owns this SaveFileDialog.</param>
+            <param name="fileTypes">The supported file types.</param>
+            <param name="defaultFileType">Default file type.</param>
+            <param name="defaultFileName">Default filename. The directory name is used as initial directory when it is specified.</param>
+            <returns>A FileDialogResult object which contains the filename entered by the user.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockFileDialogService.Clear">
+            <summary>
+            Clears the last remembered dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.Result">
+            <summary>
+            The file dialog result of the last dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.Owner">
+            <summary>
+            The owner window of the last dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.FileDialogType">
+            <summary>
+            The file dialog type of the last dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.FileTypes">
+            <summary>
+            The supported file types of the last dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.DefaultFileType">
+            <summary>
+            The default file type of the last dialog.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockFileDialogService.DefaultFileName">
+            <summary>
+            The default file name of the last dialog.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.Mocks.MockMessageService">
+            <summary>
+            This mock class implements the IMessageService interface.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.ShowMessage(System.Object,System.String)">
+            <summary>
+            Shows the message.
+            </summary>
+            <param name="owner">The window that owns this Message Window.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.ShowWarning(System.Object,System.String)">
+            <summary>
+            Shows the message as warning.
+            </summary>
+            <param name="owner">The window that owns this Message Window.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.ShowError(System.Object,System.String)">
+            <summary>
+            Shows the message as error.
+            </summary>
+            <param name="owner">The window that owns this Message Window.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.ShowQuestion(System.Object,System.String)">
+            <summary>
+            Shows the specified question.
+            </summary>
+            <param name="owner">The window that owns this Message Window.</param>
+            <param name="message">The question.</param>
+            <returns><c>true</c> for yes, <c>false</c> for no and <c>null</c> for cancel.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.ShowYesNoQuestion(System.Object,System.String)">
+            <summary>
+            Shows the specified yes/no question.
+            </summary>
+            <param name="owner">The window that owns this Message Window.</param>
+            <param name="message">The question.</param>
+            <returns><c>true</c> for yes and <c>false</c> for no.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.Mocks.MockMessageService.Clear">
+            <summary>
+            Clears the last remembered message.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockMessageService.MessageType">
+            <summary>
+            Gets the message type of the last shown message.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockMessageService.Owner">
+            <summary>
+            Gets the owner window of the last shown message.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockMessageService.Message">
+            <summary>
+            Gets the message content of the last shown message.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockMessageService.ShowQuestionAction">
+            <summary>
+            Gets or sets a delegate that is called when ShowQuestion is called.
+            </summary>
+        </member>
+        <member name="P:System.Waf.UnitTesting.Mocks.MockMessageService.ShowYesNoQuestionAction">
+            <summary>
+            Gets or sets a delegate that is called when ShowYesNoQuestion is called.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.UnitTestSynchronizationContext">
+            <summary>
+            Provides a synchronization context for unit tests that simulates the behavior of the WPF or Windows Forms synchronization context.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Create">
+            <summary>
+            Creates a new instance of the unit test synchronization context and sets this instance as current synchronization context for this thread.
+            </summary>
+            <returns>The unit test synchronization context.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.CreateCopy">
+            <summary>
+            Creates a copy of this <see cref="T:System.Waf.UnitTesting.UnitTestSynchronizationContext"/>.
+            </summary>
+            <returns>The copy of this synchronization context.</returns>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Dispose">
+            <summary>
+            Dispose this synchronization context and sets the previous context back as current synchronization context.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Send(System.Threading.SendOrPostCallback,System.Object)">
+            <summary>
+            Invokes the callback in the synchronization context synchronously.
+            </summary>
+            <param name="d">The delegate to call.</param>
+            <param name="state">The object passed to the delegate.</param>
+            <exception cref="T:System.ArgumentNullException">d must not be null.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Post(System.Threading.SendOrPostCallback,System.Object)">
+            <summary>
+            Invokes the callback in the synchronization context asynchronously. 
+            </summary>
+            <param name="d">The delegate to call.</param>
+            <param name="state">The object passed to the delegate.</param>
+            <exception cref="T:System.ArgumentNullException">d must not be null.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Wait(System.Threading.Tasks.Task)">
+            <summary>
+            Process the message queue until the specified task is completed.
+            </summary>
+            <param name="task">The task to wait for completion.</param>
+            <exception cref="T:System.ArgumentNullException">task must not be null.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContext.Wait(System.TimeSpan)">
+            <summary>
+            Process the message queue for the specified time.
+            </summary>
+            <param name="time">Defines how long the message queue is processed.</param>
+        </member>
+        <member name="P:System.Waf.UnitTesting.UnitTestSynchronizationContext.Current">
+            <summary>
+            Gets the unit test synchronization context for the current thread.
+            </summary>
+        </member>
+        <member name="T:System.Waf.UnitTesting.UnitTestSynchronizationContextExtensions">
+            <summary>
+            Provides extension methods for working with the <see cref="T:System.Waf.UnitTesting.UnitTestSynchronizationContext"/>.
+            </summary>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContextExtensions.Wait(System.Threading.Tasks.Task,System.Waf.UnitTesting.UnitTestSynchronizationContext)">
+            <summary>
+            Process the message queue until the task is completed.
+            </summary>
+            <param name="task">The task to wait for completion.</param>
+            <param name="context">The current unit test synchronization context.</param>
+            <exception cref="T:System.ArgumentNullException">task must not be null.</exception>
+            <exception cref="T:System.ArgumentNullException">context must not be null.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContextExtensions.GetResult``1(System.Threading.Tasks.Task{``0},System.Waf.UnitTesting.UnitTestSynchronizationContext)">
+            <summary>
+            Process the message queue until the task is completed and returns the task's result.
+            </summary>
+            <param name="task">The task to wait for completion.</param>
+            <param name="context">The current unit test synchronization context.</param>
+            <exception cref="T:System.ArgumentNullException">task must not be null.</exception>
+            <exception cref="T:System.ArgumentNullException">context must not be null.</exception>
+        </member>
+        <member name="M:System.Waf.UnitTesting.UnitTestSynchronizationContextExtensions.WaitFor(System.Waf.UnitTesting.UnitTestSynchronizationContext,System.Func{System.Boolean},System.TimeSpan)">
+            <summary>
+            Process the message queue until the predicate returns true. 
+            This method uses a polling approach and therefore the predicate is called often.
+            </summary>
+            <param name="context">The current unit test synchronization context.</param>
+            <param name="predicate">The predicate returns true when the waiting should end.</param>
+            <param name="timeout">Defines a timeout for the waiting.</param>
+            <exception cref="T:System.ArgumentNullException">context must not be null.</exception>
+            <exception cref="T:System.ArgumentNullException">predicate must not be null.</exception>
+            <exception cref="T:System.TimeoutException">A timeout occurred.</exception>
+        </member>
+    </members>
+</doc>

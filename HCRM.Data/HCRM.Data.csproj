@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9B53D289-5026-40AF-8401-40EA51D37B28}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HCRM.Data</RootNamespace>
+    <AssemblyName>HCRM.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CRM_Address.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Employee.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityHelper.cs" />
+    <Compile Include="CRM_Customer.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Menu.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Product.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Product_Details_Template.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Product_Property.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Provider.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Receipt_Delivery.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Receipt_Details.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Receipt_Return.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Receipt_Warehouse.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Role_Menu.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_Tags.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CRM_User.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HCRMModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HCRMModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HCRMModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HCRMModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HCRMModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>HCRMModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="HCRMModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>HCRMModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="HCRMModel.edmx.diagram">
+      <DependentUpon>HCRMModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HCRMModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HCRMModel.edmx</DependentUpon>
+      <LastGenOutput>HCRMModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="HCRMModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HCRMModel.edmx</DependentUpon>
+      <LastGenOutput>HCRMModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

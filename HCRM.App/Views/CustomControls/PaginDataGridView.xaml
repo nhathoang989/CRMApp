@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="HCRM.App.Views.CustomControls.PaginDataGridView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HCRM.App.Views.CustomControls"
+             mc:Ignorable="d"
+             >
+    <StackPanel DataContext="{Binding PagingViewModel}">
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
+                          RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False"
+                            HorizontalAlignment="Stretch"   
+                            VerticalAlignment="Stretch"
+                              Height="150"
+                          >
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
+                <DataGridTemplateColumn Header="Hình ảnh">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Image}" Height="50" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Tồn kho" Binding="{Binding CountRemain}" />
+                <DataGridTextColumn Header="Đã bán" Binding="{Binding CountSaled}" />
+            </DataGrid.Columns>
+
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Content="First" Margin="10 0" Width="80" Command="{Binding FirstCommand}"/>
+            <Button Content="Previous" Margin="10 0" Width="80" Command="{Binding PreviousCommand}"/>
+            <TextBlock Width="auto" Text="{Binding CurrentPageIndex}"/>
+            <TextBlock Text=" of "/>
+            <TextBlock Width="auto" Margin="10 0" Text="{Binding TotalPages}"/>
+            <Button Content="Next" Margin="10 0" Width="80" Command="{Binding NextCommand}"/>
+            <Button Content="Last" Margin="10 0" Width="80" Command="{Binding LastCommand}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

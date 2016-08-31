@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HCMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cms_AdminMenu">
+    <Key>
+      <PropertyRef Name="AdminMenuID" />
+    </Key>
+    <Property Name="AdminMenuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="AdminMenuParentID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Cms_Article">
+    <Key>
+      <PropertyRef Name="ArticleID" />
+    </Key>
+    <Property Name="ArticleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PageID" Type="Int32" />
+    <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="Views" Type="Int32" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Source" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="PublishDate" Type="DateTime" Precision="0" />
+    <Property Name="URL" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="ExpiredDate" Type="DateTime" Precision="0" />
+    <Property Name="Workplace" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_ArticleContent" Relationship="Self.FK_Cms_articlecontent_Cms_article" FromRole="Cms_Article" ToRole="Cms_ArticleContent" />
+    <NavigationProperty Name="Cms_ArticleImage" Relationship="Self.FK_Cms_articleimage_Cms_article" FromRole="Cms_Article" ToRole="Cms_ArticleImage" />
+  </EntityType>
+  <EntityType Name="Cms_ArticleContent">
+    <Key>
+      <PropertyRef Name="ArticleContentID" />
+    </Key>
+    <Property Name="ArticleContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ArticleID" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="BriefContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FullContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LanguageID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="SEOTitle" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEODescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEOKeywords" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEName" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_Article" Relationship="Self.FK_Cms_articlecontent_Cms_article" FromRole="Cms_ArticleContent" ToRole="Cms_Article" />
+  </EntityType>
+  <EntityType Name="Cms_ArticleImage">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Width" Type="Int32" />
+    <Property Name="Height" Type="Int32" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="ArticleID" Type="Int32" Nullable="false" />
+    <Property Name="Src" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_Article" Relationship="Self.FK_Cms_articleimage_Cms_article" FromRole="Cms_ArticleImage" ToRole="Cms_Article" />
+  </EntityType>
+  <EntityType Name="Cms_Banner">
+    <Key>
+      <PropertyRef Name="BannerID" />
+    </Key>
+    <Property Name="BannerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ImageSrc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Views" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Cms_Contact">
+    <Key>
+      <PropertyRef Name="ContactID" />
+    </Key>
+    <Property Name="ContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+    <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Cms_Newsletter">
+    <Key>
+      <PropertyRef Name="NewsletterID" />
+    </Key>
+    <Property Name="NewsletterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+    <Property Name="Telephone" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="PropertyCategory" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="PropertyType" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Cms_Notification">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NotificationKey" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <NavigationProperty Name="Cms_NotificationContent" Relationship="Self.FK_Cms_notificationcontent_Cms_notification" FromRole="Cms_Notification" ToRole="Cms_NotificationContent" />
+  </EntityType>
+  <EntityType Name="Cms_NotificationContent">
+    <Key>
+      <PropertyRef Name="NotificationContentID" />
+    </Key>
+    <Property Name="NotificationContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NotificationID" Type="Int32" />
+    <Property Name="LanguageID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="EmailSubject" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="EmailFrom" Type="String" MaxLength="2500" FixedLength="false" Unicode="true" />
+    <Property Name="EmailTos" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="EmailCCs" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="EmailBCCs" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="EmailBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FromName" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_Notification" Relationship="Self.FK_Cms_notificationcontent_Cms_notification" FromRole="Cms_NotificationContent" ToRole="Cms_Notification" />
+  </EntityType>
+  <EntityType Name="Cms_Page">
+    <Key>
+      <PropertyRef Name="PageID" />
+    </Key>
+    <Property Name="PageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PageLevel" Type="Int32" />
+    <Property Name="PageParentID" Type="Int32" />
+    <Property Name="PageParentIDSets" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Icon" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Template" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Views" Type="Int32" />
+    <Property Name="CssClass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsPublish" Type="Boolean" />
+    <Property Name="PropertyCategoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_PageImage" Relationship="Self.FK_Cms_paageimage_Cms_page" FromRole="Cms_Page" ToRole="Cms_PageImage" />
+    <NavigationProperty Name="Cms_PageContent" Relationship="Self.FK_Cms_pagecontent_Cms_page" FromRole="Cms_Page" ToRole="Cms_PageContent" />
+  </EntityType>
+  <EntityType Name="Cms_PageContent">
+    <Key>
+      <PropertyRef Name="PageContentID" />
+    </Key>
+    <Property Name="PageContentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PageID" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEOTitle" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="LanguageID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SEODescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEOKeywords" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="SEName" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_Page" Relationship="Self.FK_Cms_pagecontent_Cms_page" FromRole="Cms_PageContent" ToRole="Cms_Page" />
+  </EntityType>
+  <EntityType Name="Cms_PageImage">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Width" Type="Int32" />
+    <Property Name="Height" Type="Int32" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="PageID" Type="Int32" Nullable="false" />
+    <Property Name="Src" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Cms_Page" Relationship="Self.FK_Cms_paageimage_Cms_page" FromRole="Cms_PageImage" ToRole="Cms_Page" />
+  </EntityType>
+  <Association Name="FK_Cms_articlecontent_Cms_article">
+    <End Role="Cms_Article" Type="Self.Cms_Article" Multiplicity="1" />
+    <End Role="Cms_ArticleContent" Type="Self.Cms_ArticleContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Article">
+        <PropertyRef Name="ArticleID" />
+      </Principal>
+      <Dependent Role="Cms_ArticleContent">
+        <PropertyRef Name="ArticleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_articleimage_Cms_article">
+    <End Role="Cms_Article" Type="Self.Cms_Article" Multiplicity="1" />
+    <End Role="Cms_ArticleImage" Type="Self.Cms_ArticleImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Article">
+        <PropertyRef Name="ArticleID" />
+      </Principal>
+      <Dependent Role="Cms_ArticleImage">
+        <PropertyRef Name="ArticleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_notificationcontent_Cms_notification">
+    <End Role="Cms_Notification" Type="Self.Cms_Notification" Multiplicity="0..1" />
+    <End Role="Cms_NotificationContent" Type="Self.Cms_NotificationContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Notification">
+        <PropertyRef Name="NotificationID" />
+      </Principal>
+      <Dependent Role="Cms_NotificationContent">
+        <PropertyRef Name="NotificationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_paageimage_Cms_page">
+    <End Role="Cms_Page" Type="Self.Cms_Page" Multiplicity="1" />
+    <End Role="Cms_PageImage" Type="Self.Cms_PageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Page">
+        <PropertyRef Name="PageID" />
+      </Principal>
+      <Dependent Role="Cms_PageImage">
+        <PropertyRef Name="PageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cms_pagecontent_Cms_page">
+    <End Role="Cms_Page" Type="Self.Cms_Page" Multiplicity="1" />
+    <End Role="Cms_PageContent" Type="Self.Cms_PageContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cms_Page">
+        <PropertyRef Name="PageID" />
+      </Principal>
+      <Dependent Role="Cms_PageContent">
+        <PropertyRef Name="PageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HCMSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cms_AdminMenu" EntityType="Self.Cms_AdminMenu" />
+    <EntitySet Name="Cms_Article" EntityType="Self.Cms_Article" />
+    <EntitySet Name="Cms_ArticleContent" EntityType="Self.Cms_ArticleContent" />
+    <EntitySet Name="Cms_ArticleImage" EntityType="Self.Cms_ArticleImage" />
+    <EntitySet Name="Cms_Banner" EntityType="Self.Cms_Banner" />
+    <EntitySet Name="Cms_Contact" EntityType="Self.Cms_Contact" />
+    <EntitySet Name="Cms_Newsletter" EntityType="Self.Cms_Newsletter" />
+    <EntitySet Name="Cms_Notification" EntityType="Self.Cms_Notification" />
+    <EntitySet Name="Cms_NotificationContent" EntityType="Self.Cms_NotificationContent" />
+    <EntitySet Name="Cms_Page" EntityType="Self.Cms_Page" />
+    <EntitySet Name="Cms_PageContent" EntityType="Self.Cms_PageContent" />
+    <EntitySet Name="Cms_PageImage" EntityType="Self.Cms_PageImage" />
+    <AssociationSet Name="FK_Cms_articlecontent_Cms_article" Association="Self.FK_Cms_articlecontent_Cms_article">
+      <End Role="Cms_Article" EntitySet="Cms_Article" />
+      <End Role="Cms_ArticleContent" EntitySet="Cms_ArticleContent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_articleimage_Cms_article" Association="Self.FK_Cms_articleimage_Cms_article">
+      <End Role="Cms_Article" EntitySet="Cms_Article" />
+      <End Role="Cms_ArticleImage" EntitySet="Cms_ArticleImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_notificationcontent_Cms_notification" Association="Self.FK_Cms_notificationcontent_Cms_notification">
+      <End Role="Cms_Notification" EntitySet="Cms_Notification" />
+      <End Role="Cms_NotificationContent" EntitySet="Cms_NotificationContent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_paageimage_Cms_page" Association="Self.FK_Cms_paageimage_Cms_page">
+      <End Role="Cms_Page" EntitySet="Cms_Page" />
+      <End Role="Cms_PageImage" EntitySet="Cms_PageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cms_pagecontent_Cms_page" Association="Self.FK_Cms_pagecontent_Cms_page">
+      <End Role="Cms_Page" EntitySet="Cms_Page" />
+      <End Role="Cms_PageContent" EntitySet="Cms_PageContent" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

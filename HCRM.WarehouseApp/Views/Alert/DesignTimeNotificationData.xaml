@@ -1,0 +1,8 @@
+﻿
+<Notifications xmlns="clr-namespace:HCRM.WarehouseApp.ViewModels.Alert">
+    <Notification Id="1" Title="Notification #1" ImageUrl="pack://application:,,,/Files/notification-icon.png" Message="Message Content 1." />
+    <Notification Id="2" Title="Notification #2" ImageUrl="pack://application:,,,/Files/notification-icon.png" Message="Message Content 2." />
+    <Notification Id="3" Title="Notification #3" ImageUrl="pack://application:,,,/Files/notification-icon.png" Message="Message Content 3." />
+    <Notification Id="4" Title="Notification #4" ImageUrl="pack://application:,,,/Files/notification-icon.png" Message="Message Content 4." />
+
+</Notifications>
