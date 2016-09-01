@@ -10,9 +10,7 @@ using System.Linq.Expressions;
 namespace HCRM.DAL
 {
     public class BaseDAL<T> : IDAL<T> where T : class
-    {       
-        
-        
+    {   
         public Boolean Exists(T entity)
         {
             using (HCRMEntities context = new HCRMEntities())

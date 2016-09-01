@@ -9,6 +9,14 @@
              xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              mc:Ignorable="d" 
              >
-    
+    <Grid>
+        <!-- TODO: set @SelectedSource -->
+        <mui:ModernTab Layout="List"  SelectedSource="/Pages/Products/ImportProduct.xaml">
+            <mui:ModernTab.Links>
+                <!-- TODO: set @Source -->
+                <mui:Link DisplayName="Nhập hàng" Source="/Pages/Products/ImportProduct.xaml" />
+            </mui:ModernTab.Links>
+        </mui:ModernTab>
+    </Grid>
     
 </UserControl>
