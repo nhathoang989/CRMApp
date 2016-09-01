@@ -49,10 +49,13 @@ namespace HCRM.App.Repositories
         {
             string apiURL = Path.Combine(UrlRepo.GetSingleURL, param.ToString());
             var rsp = await ApiHelper.getApi<TModel>(Helpers.Parameters.ApiContentType.XWWWForm, apiURL, new List<Helpers.Parameters.ApiParameter>());
+
             var model = common.ParseObject<TModel>(rsp.Content);
+
             Type classType = typeof(TView);
             ConstructorInfo classConstructor = classType.GetConstructor(new Type[] { model.GetType() });
             TView vm = (TView)classConstructor.Invoke(new object[] { model });
+
             return vm;
         }
 

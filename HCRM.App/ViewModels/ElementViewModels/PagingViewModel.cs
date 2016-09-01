@@ -10,16 +10,17 @@ namespace HCRM.App.ViewModels.ElementViewModels
     public class PagingViewModel<TModel, TView> : ObjectBase where TModel : new() where TView : new()
     {
         private BaseRepo<TModel, TView> _repo;
-        private ICommand previousCommand;
-        private ICommand nextCommand;
-        private ICommand firstCommand;
-        private ICommand lastCommand;
-        private List<TView> lstDisplay;
-        private List<TView> lstAll;
+        private ICommand _previousCommand;
+        private ICommand _nextCommand;
+        private ICommand _firstCommand;
+        private ICommand _lastCommand;
+        private List<TView> _lstDisplay;
+        private List<TView> _lstAll;
         private int _pageSize = 10;
         private int _itemCount;
         private int _currentPageIndex;
         private int _totalPage;
+
         #region Properties
 
         public ICommand PreviousCommand
@@ -27,16 +28,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
             get
             {
 
-                if (previousCommand == null)
+                if (_previousCommand == null)
                 {
-                    previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-1),p=>CanPrevPage());
+                    _previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-1),p=>CanPrevPage());
                 }
-                return previousCommand;
+                return _previousCommand;
             }
 
             set
             {
-                previousCommand = value;
+                _previousCommand = value;
             }
         }
 
@@ -46,16 +47,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (nextCommand == null)
+                if (_nextCommand == null)
                 {
-                    nextCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex + 1), p => CanNextPage());
+                    _nextCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex + 1), p => CanNextPage());
                 }
-                return nextCommand;
+                return _nextCommand;
             }
 
             set
             {
-                nextCommand = value;
+                _nextCommand = value;
             }
         }
 
@@ -63,16 +64,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (firstCommand == null)
+                if (_firstCommand == null)
                 {
-                    firstCommand = new RelayCommand(p => ChangeListView(0), p => CanFirstPage());
+                    _firstCommand = new RelayCommand(p => ChangeListView(0), p => CanFirstPage());
                 }
-                return firstCommand;
+                return _firstCommand;
             }
 
             set
             {
-                firstCommand = value;
+                _firstCommand = value;
             }
         }
 
@@ -80,16 +81,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (lastCommand == null)
+                if (_lastCommand == null)
                 {
-                    lastCommand = new RelayCommand(p => ChangeListView(TotalPages - 1), p => CanLastPage());
+                    _lastCommand = new RelayCommand(p => ChangeListView(TotalPages - 1), p => CanLastPage());
                 }
-                return lastCommand;
+                return _lastCommand;
             }
             
             set
             {
-                lastCommand = value;
+                _lastCommand = value;
             }
         }
 
@@ -139,12 +140,12 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                return lstDisplay;
+                return _lstDisplay;
             }
 
             set
             {
-                lstDisplay = value;
+                _lstDisplay = value;
                 OnPropertyChanged("LstDisplay");
             }
         }
@@ -180,16 +181,17 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                return lstAll;
+                return _lstAll;
             }
 
             set
             {
-                lstAll = value;
+                _lstAll = value;
             }
         }
 
         #endregion
+
         #region Funcitons
         bool CanFirstPage()
         {

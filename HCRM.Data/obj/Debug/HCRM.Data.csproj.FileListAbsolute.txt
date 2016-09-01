@@ -1,9 +1,0 @@
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\HCRM.Data.dll.config
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\HCRM.Data.dll
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\HCRM.Data.pdb
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\EntityFramework.dll
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\EntityFramework.SqlServer.dll
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\EntityFramework.xml
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\bin\Debug\EntityFramework.SqlServer.xml
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\obj\Debug\HCRM.Data.dll
-D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\obj\Debug\HCRM.Data.pdb

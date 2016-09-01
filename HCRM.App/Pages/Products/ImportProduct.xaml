@@ -34,32 +34,38 @@
                             </DataTemplate>
                         </Controls:AutoCompleteBox.ItemTemplate>
                     </Controls:AutoCompleteBox>
-                </StackPanel>                
-                <customControl:PaginDataGridView Width="Auto" />
+                </StackPanel>
+                <StackPanel DataContext="{Binding PagingViewModel}">
+                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
+                          RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False"
+                            HorizontalAlignment="Stretch"   
+                            VerticalAlignment="Stretch"
+                              Height="150"
+                          >
+                        <DataGrid.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
+                            <DataGridTemplateColumn Header="Hình ảnh">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Image}" Height="50" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Tồn kho" Binding="{Binding CountRemain}" />
+                            <DataGridTextColumn Header="Đã bán" Binding="{Binding CountSaled}" />
+                        </DataGrid.Columns>
+
+                    </DataGrid>                   
+                    <customControl:PaginDataGridView Width="Auto" />
+                </StackPanel>
+                
                 <StackPanel DataContext="{Binding CurrentItem}">
                 <TextBlock Text="Chi tiết sản phẩm"  Style="{StaticResource Heading2}" Margin="10"/>
-                <WrapPanel Orientation="Horizontal">
-                    <WrapPanel.Resources>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Width" Value="350"/>
-                            <Setter Property="Orientation" Value="Horizontal"/>
-                        </Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Width" Value="100"/>
-                            <Setter Property="Margin" Value="10 10"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Width" Value="250"/>
-                            <Setter Property="Margin" Value="10 10"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                        <Style TargetType="xctk:AutoSelectTextBox" >
-                            <Setter Property="Width" Value="250"/>
-                            <Setter Property="Margin" Value="10 10"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>                        
-                    </WrapPanel.Resources>
+                    <WrapPanel Style="{StaticResource WrapInfos}" Orientation="Horizontal">
+                    
                     <StackPanel>
                     <TextBlock Text="Mã sản phẩm" />
                     <xctk:AutoSelectTextBox Text="{Binding Code}" />

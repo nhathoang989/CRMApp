@@ -6,11 +6,43 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.xaml" />
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml"/>
+                <!--<ResourceDictionary Source="Themes/GlobalTheme.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
-           
+            <Style TargetType="xctk:AutoSelectTextBox">
+                <Setter Property="Width" Value="250"/>                
+                <Setter Property="AutoSelectBehavior" Value="OnFocus"/>
+                <Setter Property="AutoMoveFocus" Value="False"/>
+            </Style>
+            <Style TargetType="WrapPanel"
+                   x:Key="WrapInfos">
+                <Style.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Width" Value="350"/>
+                        <Setter Property="Orientation" Value="Horizontal"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="Margin" Value="10 10"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Width" Value="250"/>
+                        <Setter Property="Margin" Value="10 10"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="xctk:AutoSelectTextBox" >
+                        <Setter Property="Width" Value="250"/>
+                        <Setter Property="Margin" Value="10 10"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </Style.Resources>
+            </Style>
         </ResourceDictionary>
+        
+
     </Application.Resources>
 </Application>

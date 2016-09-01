@@ -218,6 +218,9 @@
     <Compile Include="Pages\EmployeePage.xaml.cs">
       <DependentUpon>EmployeePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Employees\ListEmployee.xaml.cs">
+      <DependentUpon>ListEmployee.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProductPage.xaml.cs">
       <DependentUpon>ProductPage.xaml</DependentUpon>
     </Compile>
@@ -303,6 +306,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\EmployeePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Employees\ListEmployee.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -417,6 +424,9 @@
       <Project>{9b53d289-5026-40af-8401-40ea51d37b28}</Project>
       <Name>HCRM.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Themes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
