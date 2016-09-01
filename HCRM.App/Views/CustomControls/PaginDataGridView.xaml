@@ -7,12 +7,12 @@
              mc:Ignorable="d"
              >
     
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 10">
             <Button Content="First" Margin="10 0" Width="80" Command="{Binding FirstCommand}"/>
             <Button Content="Previous" Margin="10 0" Width="80" Command="{Binding PreviousCommand}"/>
             <TextBlock Width="auto" Text="{Binding CurrentPageIndex}"/>
-            <TextBlock Text=" of "/>
-            <TextBlock Width="auto" Margin="10 0" Text="{Binding TotalPages}"/>
+        <TextBlock Text="of"  Margin="5 0" VerticalAlignment="Center"/>
+        <TextBlock Width="auto" Text="{Binding TotalPages}"/>
             <Button Content="Next" Margin="10 0" Width="80" Command="{Binding NextCommand}"/>
             <Button Content="Last" Margin="10 0" Width="80" Command="{Binding LastCommand}"/>
         </StackPanel>

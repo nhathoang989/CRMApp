@@ -21,13 +21,15 @@ namespace HCRM.App.ViewModels.ProductViewModels
         #region Properties
 
         //public CreateProductViewModel Model { get; private set; }
+
         private int PageSize = 5;
-        private PagingViewModel<CRM_Product,ProductViewModel> _pagingViewModel;
+        private bool _isShowDetails;
+        private PagingViewModel<CRM_Product,ProductViewModel> _pagingDataGrid;
         private ProductViewModel _currentProduct;
         private List<ProductViewModel> _products;
         private List<ProductViewModel> _listAllProduct;
         private List<ProductViewModel> currentListProduct;
-
+        private bool _isBusy;
         private IEventAggregator _eventAggregator;
         private ICommand _newProductCommand;
         
@@ -68,7 +70,7 @@ namespace HCRM.App.ViewModels.ProductViewModels
                 return "Product Page";
             }
         }
-
+        
         public List<ProductViewModel> Products
         {
             get
@@ -82,11 +84,11 @@ namespace HCRM.App.ViewModels.ProductViewModels
                 OnPropertyChanged("Products");
             }
         }
-
+        
         #endregion
 
         #region Commands
-       
+
         public ICommand NewProductCommand
         {
             get
@@ -143,9 +145,10 @@ namespace HCRM.App.ViewModels.ProductViewModels
         }
 
         async void ReFreshProducts() {
-            PagingViewModel = new PagingViewModel<CRM_Product, ProductViewModel>("api/Product","Product", PageSize);
-
+            IsBusy = true;
             CurrentListProduct = await ProductRepo.Instance.GetModelList();
+            PagingDataGrid = new PagingViewModel<CRM_Product, ProductViewModel>(CurrentListProduct, PageSize);
+            IsBusy = false;
         }
 
         public AutoCompleteFilterPredicate<object> ProductFilter
@@ -158,17 +161,49 @@ namespace HCRM.App.ViewModels.ProductViewModels
             }
         }
 
-        public PagingViewModel<CRM_Product, ProductViewModel> PagingViewModel
+        public PagingViewModel<CRM_Product, ProductViewModel> PagingDataGrid
         {
             get
             {
-                return _pagingViewModel;
+                return _pagingDataGrid;
             }
 
             set
             {
-                _pagingViewModel = value;
-                OnPropertyChanged("PagingViewModel");
+                _pagingDataGrid = value;
+                OnPropertyChanged("PagingDataGrid");
+            }
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged("IsBusy");
+            }
+        }
+
+        public bool IsShowDetails
+        {
+            get
+            {
+                if (_isShowDetails==null)
+                {
+                    return false;
+                }
+                return _isShowDetails;
+            }
+
+            set
+            {
+                _isShowDetails = value;
+                OnPropertyChanged("IsShowDetails");
             }
         }
 

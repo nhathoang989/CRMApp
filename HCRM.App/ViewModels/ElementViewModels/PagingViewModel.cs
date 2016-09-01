@@ -10,17 +10,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
     public class PagingViewModel<TModel, TView> : ObjectBase where TModel : new() where TView : new()
     {
         private BaseRepo<TModel, TView> _repo;
-        private ICommand _previousCommand;
-        private ICommand _nextCommand;
-        private ICommand _firstCommand;
-        private ICommand _lastCommand;
-        private List<TView> _lstDisplay;
-        private List<TView> _lstAll;
+        private ICommand previousCommand;
+        private ICommand nextCommand;
+        private ICommand firstCommand;
+        private ICommand lastCommand;
+        private List<TView> lstDisplay;
+        private List<TView> lstAll;
         private int _pageSize = 10;
         private int _itemCount;
         private int _currentPageIndex;
         private int _totalPage;
-
         #region Properties
 
         public ICommand PreviousCommand
@@ -28,16 +27,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
             get
             {
 
-                if (_previousCommand == null)
+                if (previousCommand == null)
                 {
-                    _previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-1),p=>CanPrevPage());
+                    previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-1),p=>CanPrevPage());
                 }
-                return _previousCommand;
+                return previousCommand;
             }
 
             set
             {
-                _previousCommand = value;
+                previousCommand = value;
             }
         }
 
@@ -47,16 +46,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (_nextCommand == null)
+                if (nextCommand == null)
                 {
-                    _nextCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex + 1), p => CanNextPage());
+                    nextCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex), p => CanNextPage());
                 }
-                return _nextCommand;
+                return nextCommand;
             }
 
             set
             {
-                _nextCommand = value;
+                nextCommand = value;
             }
         }
 
@@ -64,16 +63,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (_firstCommand == null)
+                if (firstCommand == null)
                 {
-                    _firstCommand = new RelayCommand(p => ChangeListView(0), p => CanFirstPage());
+                    firstCommand = new RelayCommand(p => ChangeListView(0), p => CanFirstPage());
                 }
-                return _firstCommand;
+                return firstCommand;
             }
 
             set
             {
-                _firstCommand = value;
+                firstCommand = value;
             }
         }
 
@@ -81,16 +80,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                if (_lastCommand == null)
+                if (lastCommand == null)
                 {
-                    _lastCommand = new RelayCommand(p => ChangeListView(TotalPages - 1), p => CanLastPage());
+                    lastCommand = new RelayCommand(p => ChangeListView(TotalPages - 1), p => CanLastPage());
                 }
-                return _lastCommand;
+                return lastCommand;
             }
             
             set
             {
-                _lastCommand = value;
+                lastCommand = value;
             }
         }
 
@@ -140,12 +139,12 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                return _lstDisplay;
+                return lstDisplay;
             }
 
             set
             {
-                _lstDisplay = value;
+                lstDisplay = value;
                 OnPropertyChanged("LstDisplay");
             }
         }
@@ -181,55 +180,56 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
-                return _lstAll;
+                return lstAll;
             }
 
             set
             {
-                _lstAll = value;
+                lstAll = value;
             }
         }
 
         #endregion
-
         #region Funcitons
         bool CanFirstPage()
         {
-            return CurrentPageIndex > 0 ;
+            return CurrentPageIndex > 1 ;
         }
         bool CanLastPage()
         {
-            return CurrentPageIndex < TotalPages - 1;
+            return CurrentPageIndex < TotalPages;
         }
         bool CanPrevPage() {
-            return CurrentPageIndex > 0;
+            return CurrentPageIndex > 1;
         }
         bool CanNextPage() {
-            return CurrentPageIndex < TotalPages - 1;
+            return CurrentPageIndex < TotalPages;
         }
 
-        async void ChangeListView(int? pageIndex) {
-            pageIndex = pageIndex.HasValue ? pageIndex : 0;
-            CurrentPageIndex = pageIndex.Value;
-            if (LstAll==null)
+        void ChangeListView(int? pageIndex) {
+            if (lstAll != null)
             {
-                LstAll = await Repo.GetModelList();
-                ItemCount = LstAll.Count;
+
+                pageIndex = pageIndex.HasValue ? pageIndex : 0;
+                CurrentPageIndex = pageIndex.Value +1;
+                LstDisplay = LstAll.Skip(pageIndex.Value * PageSize).Take(PageSize).ToList();
+
             }
-            LstDisplay = LstAll.Skip(CurrentPageIndex * PageSize).Take(PageSize).ToList();
         }
         #endregion
 
-        public PagingViewModel(string baseApiURL, string modelName)
+        public PagingViewModel(List<TView> lstView)
         {
-            Repo = new BaseRepo<TModel, TView>(baseApiURL, modelName);
+            LstAll = lstView;
+            ItemCount = lstView.Count;
             ChangeListView(0);
         }
 
-        public PagingViewModel(string baseApiURL, string modelName, int pageSize)
+        public PagingViewModel(List<TView> lstView, int pageSize)
         {
+            LstAll = lstView;
+            ItemCount = lstView.Count;
             PageSize = pageSize;
-            Repo = new BaseRepo<TModel, TView>(baseApiURL, modelName);
             ChangeListView(0);
         }
 

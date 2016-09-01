@@ -37,8 +37,6 @@ namespace HCRM.App.ViewModels
         private ICommand _saveCommand;
         private ICommand _cancelCommand;
 
-        
-
         private int _errors;
 
         public ReceiptDetailsViewModel CurrentDetails
@@ -372,6 +370,19 @@ namespace HCRM.App.ViewModels
             {
                 _lstDisplayDetails = value;
                 OnPropertyChanged("LstDisplayDetails");
+            }
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
             }
         }
 

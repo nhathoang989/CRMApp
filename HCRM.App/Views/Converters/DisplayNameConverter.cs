@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace HCRM.App.Views.Converters
 {
-    public class DisplayNameConverter : IValueConverter
+    public class DisplayNameConverter : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -20,6 +21,11 @@ namespace HCRM.App.Views.Converters
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
         {
             throw new NotImplementedException();
         }

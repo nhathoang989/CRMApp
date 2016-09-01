@@ -11,6 +11,21 @@
     <AssemblyName>HCRM.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,11 +69,10 @@
     <Compile Include="CRM_Address.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="CRM_Employee.cs">
+    <Compile Include="CRM_Customer.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityHelper.cs" />
-    <Compile Include="CRM_Customer.cs">
+    <Compile Include="CRM_Employee.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CRM_Menu.cs">
@@ -97,6 +111,7 @@
     <Compile Include="CRM_User.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityHelper.cs" />
     <Compile Include="HCRMModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -118,17 +133,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="HCRMModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HCRMModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="HCRMModel.edmx.diagram">
       <DependentUpon>HCRMModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <Content Include="HCRMModel.Context.tt">
@@ -141,9 +169,6 @@
       <DependentUpon>HCRMModel.edmx</DependentUpon>
       <LastGenOutput>HCRMModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

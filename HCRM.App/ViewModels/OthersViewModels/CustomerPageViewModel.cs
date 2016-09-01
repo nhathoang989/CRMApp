@@ -307,6 +307,20 @@ namespace HCRM.App.ViewModels.OthersViewModels
                     || (obj as CRM_Customer).Email.ToLower().Contains(searchText.ToLower());
             }
         }
+
+        public bool IsBusy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         void FilterCustomers()
         {
             Customers = CurrentListCustomer.Where(p => Filter == "" || p.Name.ToLower().Contains(Filter) || p.Email.ToLower().Contains(Filter) || p.PhoneNumber.ToLower().Contains(Filter)).ToList();

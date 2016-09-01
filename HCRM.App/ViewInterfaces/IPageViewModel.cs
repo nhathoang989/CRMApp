@@ -10,6 +10,7 @@ namespace HCRM.App.ViewInterfaces
     {
         string PageTitle { get; }
         string Key { get; }
+        bool IsBusy { get; set; }
 
     }
 }

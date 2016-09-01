@@ -227,6 +227,9 @@
     <Compile Include="Pages\Products\ImportProduct.xaml.cs">
       <DependentUpon>ImportProduct.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Products\SaleProduct.xaml.cs">
+      <DependentUpon>SaleProduct.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Prism\IEventAggregator.cs" />
     <Compile Include="Repositories\AddressRepo.cs" />
     <Compile Include="Repositories\ApiURLRepo.cs" />
@@ -269,6 +272,8 @@
     </Compile>
     <Compile Include="Views\Converters\DisplayNameConverter.cs" />
     <Compile Include="Views\Converters\EmptyStringConverter.cs" />
+    <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\IsEmptyStringConverter.cs" />
     <Compile Include="Views\Converters\FilePathConverter.cs" />
     <Compile Include="Views\Converters\NullableBoolConverter.cs" />
     <Compile Include="Views\Converters\NullableBooleanConverter.cs" />
@@ -318,6 +323,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Products\ImportProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Products\SaleProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -427,6 +436,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DB\HCRM.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DB\HCRM_log.ldf">
+      <DependentUpon>HCRM.mdf</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

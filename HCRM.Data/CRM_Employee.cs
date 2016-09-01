@@ -23,9 +23,12 @@ namespace HCRM.Data
         public int EmployeeID { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
+        public string IDCardNumber { get; set; }
+        public string ProfileFilePath { get; set; }
         public string PhoneNumber { get; set; }
         public Nullable<int> Age { get; set; }
         public string Position { get; set; }
+        public string JobDescription { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public bool IsDeleted { get; set; }

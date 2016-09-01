@@ -9,6 +9,8 @@ using Prism.Events;
 using HCRM.App.Services;
 using HCRM.App.Behaviors;
 using System.Windows.Input;
+using HCRM.Data;
+using System;
 
 namespace HCRM.App.ViewModels.OthersViewModels
 {
@@ -17,6 +19,9 @@ namespace HCRM.App.ViewModels.OthersViewModels
         #region Properties
 
         //public CreateEmployeeViewModel Model { get; private set; }
+        private PagingViewModel<CRM_Employee, EmployeeViewModel> _pagingViewModel;
+        private int PageSize = 5;
+        private bool _isBusy;
         private EmployeeViewModel _currentEmployee;
         private List<EmployeeViewModel> _employees;
         private AddressViewModel _currentAddress;
@@ -44,10 +49,10 @@ namespace HCRM.App.ViewModels.OthersViewModels
 
         private void NewEmployee()
         {
-            CurrentItem = new EmployeeViewModel();
+            CurrentEmployee = new EmployeeViewModel();
         }
 
-        public EmployeeViewModel CurrentItem
+        public EmployeeViewModel CurrentEmployee
         {
             get
             {
@@ -66,9 +71,9 @@ namespace HCRM.App.ViewModels.OthersViewModels
                     _currentEmployee = value;
                     if (value != null)
                     {
-                        if (_currentEmployee.ListAddress != null && CurrentItem.ListAddress.Count > 0)
+                        if (_currentEmployee.ListAddress != null && CurrentEmployee.ListAddress.Count > 0)
                         {
-                            CurrentAddress = CurrentItem.ListAddress.First();
+                            CurrentAddress = CurrentEmployee.ListAddress.First();
                         }
 
                     }
@@ -79,7 +84,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
                     }
                     // Publish event.  
                    
-                    OnPropertyChanged("CurrentItem");
+                    OnPropertyChanged("CurrentEmployee");
                 }
             }
         }
@@ -136,9 +141,9 @@ namespace HCRM.App.ViewModels.OthersViewModels
             get
             {
                 //return CurrentItem.ListAddress.FirstOrDefault();
-                if (CurrentItem.ListAddress != null)
+                if (CurrentEmployee.ListAddress != null)
                 {
-                    _currentAddress = CurrentItem.ListAddress.FirstOrDefault();
+                    _currentAddress = CurrentEmployee.ListAddress.FirstOrDefault();
                 }
                 return _currentAddress;
             }
@@ -177,9 +182,52 @@ namespace HCRM.App.ViewModels.OthersViewModels
             }
         }
 
+        public PagingViewModel<CRM_Employee, EmployeeViewModel> PagingViewModel
+        {
+            get
+            {
+                return _pagingViewModel;
+            }
+
+            set
+            {
+                _pagingViewModel = value;
+                OnPropertyChanged("PagingViewModel");
+            }
+        }
+
+        public int PageSize1
+        {
+            get
+            {
+                return PageSize;
+            }
+
+            set
+            {
+                PageSize = value;
+            }
+        }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+
+            set
+            {
+                _isBusy = value;
+            }
+        }
+
         async void RefreshEmployees()
         {
+            IsBusy = true;   
             CurrentListEmployee = await EmployeeRepo.Instance.GetModelList();
+            PagingViewModel = new PagingViewModel<CRM_Employee, EmployeeViewModel>(CurrentListEmployee, PageSize1);
+            IsBusy = false;            
         }
 
         #endregion

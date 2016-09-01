@@ -73,6 +73,19 @@ namespace HCRM.App.ViewModels
             }
         }
 
+        public bool IsBusy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
         private class LoginData{

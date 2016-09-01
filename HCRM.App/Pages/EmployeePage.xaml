@@ -9,12 +9,12 @@
              xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              mc:Ignorable="d" 
              >
-    <Grid>
+    <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
-        <mui:ModernTab Layout="List"  SelectedSource="/Pages/Products/ImportProduct.xaml">
+        <mui:ModernTab Layout="List"  SelectedSource="/Pages/Employees/ListEmployee.xaml">
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
-                <mui:Link DisplayName="Nhập hàng" Source="/Pages/Products/ImportProduct.xaml" />
+                <mui:Link DisplayName="Danh sách nhân viên" Source="/Pages/Employees/ListEmployee.xaml" />
             </mui:ModernTab.Links>
         </mui:ModernTab>
     </Grid>

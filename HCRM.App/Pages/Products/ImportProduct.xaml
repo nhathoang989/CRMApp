@@ -11,11 +11,19 @@
              mc:Ignorable="d" 
              >   
     <Grid>
-        <ScrollViewer>
-            <StackPanel Name="rootForm" MinWidth="500">
-                <StackPanel Orientation="Horizontal" Margin="20">
-                    <TextBlock Text="Tìm kiếm" Style="{StaticResource Heading2}"/>
-                    <Controls:AutoCompleteBox Margin="10 0" ItemsSource="{Binding Products}" 
+        <xctk:BusyIndicator Name="busyIndicator" IsBusy="{Binding IsBusy}">
+            <xctk:BusyIndicator.BusyContent>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center">Please wait...</TextBlock>
+                </StackPanel>
+            </xctk:BusyIndicator.BusyContent>
+
+            <xctk:BusyIndicator.Content>
+                <ScrollViewer>
+                    <StackPanel Name="rootForm" MinWidth="500">
+                        <StackPanel Orientation="Horizontal" Margin="20">
+                            <TextBlock Text="Tìm kiếm" Style="{StaticResource Heading2}"/>
+                            <Controls:AutoCompleteBox Margin="10 0" ItemsSource="{Binding Products}" 
                                               ValueMemberPath="Title"
                                               ItemFilter="{Binding ProductFilter}"
                                               IsTextCompletionEnabled="True"                                              
@@ -25,106 +33,119 @@
                                               VerticalAlignment="Center"
                                               Width="200"
                                               >
-                        <Controls:AutoCompleteBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Title}" />
-                                    <TextBlock Text="{Binding Material}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Controls:AutoCompleteBox.ItemTemplate>
-                    </Controls:AutoCompleteBox>
-                </StackPanel>
-                <StackPanel DataContext="{Binding PagingViewModel}">
-                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
+                                <Controls:AutoCompleteBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Title}" />
+                                            <TextBlock Text="{Binding Material}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Controls:AutoCompleteBox.ItemTemplate>
+                            </Controls:AutoCompleteBox>
+                            <Button Content="Tạo mới" Command="{Binding NewProductCommand}" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{Binding PagingDataGrid}">
+                            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
                           RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False"
                             HorizontalAlignment="Stretch"   
                             VerticalAlignment="Stretch"
-                              Height="150"
+                              MaxHeight="300"
                           >
-                        <DataGrid.InputBindings>
-                            <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
-                        </DataGrid.InputBindings>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
-                            <DataGridTemplateColumn Header="Hình ảnh">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding Image}" Height="50" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Tồn kho" Binding="{Binding CountRemain}" />
-                            <DataGridTextColumn Header="Đã bán" Binding="{Binding CountSaled}" />
-                        </DataGrid.Columns>
+                                <DataGrid.InputBindings>
+                                    <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+                                </DataGrid.InputBindings>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
+                                    <DataGridTemplateColumn Header="Hình ảnh">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding Image}" Height="50" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Tồn kho" Binding="{Binding TotalRemain}" />
+                                    <DataGridTextColumn Header="Đã bán" Binding="{Binding TotalSaled}" />
+                                </DataGrid.Columns>
 
-                    </DataGrid>                   
-                    <customControl:PaginDataGridView Width="Auto" />
-                </StackPanel>
-                
-                <StackPanel DataContext="{Binding CurrentItem}">
-                <TextBlock Text="Chi tiết sản phẩm"  Style="{StaticResource Heading2}" Margin="10"/>
-                    <WrapPanel Style="{StaticResource WrapInfos}" Orientation="Horizontal">
-                    
-                    <StackPanel>
-                    <TextBlock Text="Mã sản phẩm" />
-                    <xctk:AutoSelectTextBox Text="{Binding Code}" />
+                            </DataGrid>
+                            <customControl:PaginDataGridView Width="Auto" />
+                        </StackPanel>
+
+                        <StackPanel DataContext="{Binding CurrentItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Chi tiết sản phẩm nhập"  Style="{StaticResource Heading2}" Margin="10 20"/>                            
+                                <CheckBox IsChecked="{Binding ElementName=rootForm, Path=DataContext.IsShowDetails}"/>
+                                <TextBlock Text="Hiển thị chi tiết" Margin="10 0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Số lượng nhập" FontWeight="Bold" VerticalAlignment="Center"  Margin="10 0" />
+                                <xctk:AutoSelectTextBox Text="{Binding IImport}" />
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="10 0" />
+                                    <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left" Margin="10 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <WrapPanel Style="{StaticResource WrapInfos}" Orientation="Horizontal">
+
+                                <StackPanel>
+                                    <TextBlock Text="Mã sản phẩm" />
+                                    <xctk:AutoSelectTextBox Text="{Binding Code}" />
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Tên sản phẩm" />
+                                    <xctk:AutoSelectTextBox Text="{Binding Title}" />
+                                </StackPanel>
+                            </WrapPanel>
+                            <WrapPanel Visibility="{Binding ElementName=rootForm, Path=DataContext.IsShowDetails, Converter={converter:BoolToVisibilityConverter}}" Style="{StaticResource WrapInfos}" Orientation="Horizontal">
+                                <StackPanel>
+                                    <TextBlock Text="Xuất xứ" />
+                                    <xctk:AutoSelectTextBox Text="{Binding Source}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Quy cách"/>
+                                    <xctk:AutoSelectTextBox Text="{Binding Size}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Chất liệu" />
+                                    <xctk:AutoSelectTextBox Text="{Binding Material}" />
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Giá"/>
+                                    <xctk:AutoSelectTextBox  Text="{Binding NormalPrice}"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Chiết khấu"/>
+                                    <xctk:AutoSelectTextBox Text="{Binding Discount}"  />
+                                </StackPanel>
+                                <!--<StackPanel>
+                                    <TextBlock Text="Mô tả" VerticalAlignment="Center"  />
+                                    <xctk:AutoSelectTextBox Text="{Binding Discription}"  />
+                                </StackPanel>-->
+                                <StackPanel>
+                                    <TextBlock Text="Tồn kho" VerticalAlignment="Center"  />
+                                    <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding TotalRemain}" />
+                                </StackPanel>
+
+                                <StackPanel>                                    
+                                    <StackPanel DataContext="{Binding FileDlg}">
+                                        <TextBlock Text="Hình ảnh"/>
+                                        <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
+                                        <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
+                                    </StackPanel>                                
+                                    <Image Source="{Binding Image}" Height="100"/>
+                                </StackPanel>
+                            </WrapPanel>
+                            
+                        </StackPanel>
                     </StackPanel>
-                    
-                    <StackPanel>
-                    <TextBlock Text="Tên sản phẩm" />
-                    <xctk:AutoSelectTextBox Text="{Binding Title}" />
-                    </StackPanel>
-                    <StackPanel>
-                    <TextBlock Text="Hãng sản xuất" />
-                    <xctk:AutoSelectTextBox Text="{Binding Source}" />
-                    </StackPanel>
-                    <StackPanel>
-                    <TextBlock Text="Quy cách"/>
-                    <xctk:AutoSelectTextBox Text="{Binding Size}" />
-                    </StackPanel>
-                    <StackPanel>
-                    <TextBlock Text="Chất liệu" />
-                    <xctk:AutoSelectTextBox Text="{Binding Material}" />
-                    </StackPanel>
-                    
-                    <StackPanel>
-                    <TextBlock Text="Giá"/>
-                    <xctk:AutoSelectTextBox  Text="{Binding NormalPrice}"/>
-                    </StackPanel>
-                    
-                    <StackPanel>
-                    <TextBlock Text="Chiết khấu"/>
-                    <xctk:AutoSelectTextBox Text="{Binding Discount}"  />
-                    </StackPanel>
-                    <StackPanel>
-                            <TextBlock Text="Mô tả" VerticalAlignment="Center"  />
-                        <xctk:AutoSelectTextBox Text="{Binding Discription}"  />
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Tồn kho" VerticalAlignment="Center"  />
-                    <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding CountRemain}" />
-                    </StackPanel>
-                    
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Nhập hàng" VerticalAlignment="Center"  />
-                        <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding CountImported}" />
-                    </StackPanel>
-                    <StackPanel DataContext="{Binding FileDlg}">
-                        <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
-                        <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
-                    </StackPanel>
-                    <StackPanel>
-                    <Image Source="{Binding Image}" Height="100"/>
-                    </StackPanel>
-                </WrapPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" />
-                    <Button Content="Tạo mới" Command="{Binding ElementName=rootForm, Path=DataContext.NewProductCommand}" HorizontalAlignment="Left"/>
-                    <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left"/>
-                </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
+                </ScrollViewer>
+            </xctk:BusyIndicator.Content>
+
+        </xctk:BusyIndicator>
+       
     </Grid>
 </UserControl>

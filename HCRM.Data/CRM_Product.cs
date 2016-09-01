@@ -33,9 +33,9 @@ namespace HCRM.Data
         public double NormalPrice { get; set; }
         public double Discount { get; set; }
         public string Size { get; set; }
-        public int CountRemain { get; set; }
-        public int CountSaled { get; set; }
-        public int CountImported { get; set; }
+        public int TotalRemain { get; set; }
+        public int TotalSaled { get; set; }
+        public int TotalImported { get; set; }
         public string SubImages { get; set; }
         public string Language { get; set; }
         public string Infos { get; set; }

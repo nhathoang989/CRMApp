@@ -21,11 +21,15 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private string _name;
         private string _phoneNumber;
         private string _position;
+        private string _jobDescription;
+        private string _idCardNumber;
+        private string _profileFilePath;
         private string _email;
         private string _avatar;
         private int _employeeID;
         private int? _age;
-        FileDialogViewModel _fileDlg;
+        FileDialogViewModel _avatarFileDlg;
+        FileDialogViewModel _profileFileDlg;
 
         private AddressViewModel _currentAddress;
         List<AddressViewModel> _listAddress;
@@ -127,20 +131,20 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
-        public FileDialogViewModel FileDlg
+        public FileDialogViewModel AvatarFileDlg
         {
             get
             {
-                if (_fileDlg == null)
+                if (_avatarFileDlg == null)
                 {
-                    _fileDlg = new FileDialogViewModel();
+                    _avatarFileDlg = new FileDialogViewModel();
                 }
-                return _fileDlg;
+                return _avatarFileDlg;
             }
 
             set
             {
-                _fileDlg = value;
+                _avatarFileDlg = value;
             }
         }
 
@@ -170,7 +174,67 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 _currentAddress = value;
             }
         }
-        
+
+        public string JobDescription
+        {
+            get
+            {
+                return _jobDescription;
+            }
+
+            set
+            {
+                _jobDescription = value;
+                OnPropertyChanged("JobDescription");
+            }
+        }
+
+        public string IdCardNumber
+        {
+            get
+            {
+                return _idCardNumber;
+            }
+
+            set
+            {
+                _idCardNumber = value;
+                OnPropertyChanged("IdCardNumber");
+            }
+        }
+
+        public string ProfileFilePath
+        {
+            get
+            {
+                return _profileFilePath;
+            }
+
+            set
+            {
+                _profileFilePath = value;
+                OnPropertyChanged("ProfileFilePath");
+            }
+        }
+
+        public FileDialogViewModel ProfileFileDlg
+        {
+            get
+            {
+                if (_profileFileDlg == null)
+                {
+                    _profileFileDlg = new FileDialogViewModel();
+                }
+                return _profileFileDlg;
+            }
+
+            set
+            {
+                _profileFileDlg = value;
+                OnPropertyChanged("ProfileFileDlg");
+            }
+        }
+
         #endregion
 
         #region Funcs
@@ -181,9 +245,13 @@ namespace HCRM.App.ViewModels.ElementViewModels
         public override async Task<IRestResponse> SaveModel()
         {
             ViewToModel();
-            if (FileDlg.Info != null)
+            if (AvatarFileDlg.Info != null)
             {
-                Model.Avatar = ProductRepo.Instance.UploadFile(FileDlg.Info);
+                Model.Avatar = ProductRepo.Instance.UploadFile(AvatarFileDlg.Info);
+            }
+            if (ProfileFileDlg.Info != null)
+            {
+                Model.ProfileFilePath = ProductRepo.Instance.UploadFile(ProfileFileDlg.Info);
             }
             var result = await EmployeeRepo.Instance.SaveModel(Model);
             if (result.StatusCode== System.Net.HttpStatusCode.OK)
@@ -202,12 +270,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
         public override void ModelToView()
         {
             EmployeeID = Model.EmployeeID;
-            Name = Model.Name;
-            Avatar = common.getFullFilePath(Model.Avatar);
             Email = Model.Email;
-            Age = Model.Age;
+            Name = Model.Name;
+            IdCardNumber = Model.IDCardNumber;
+            ProfileFilePath = common.getFullFilePath(Model.ProfileFilePath);
             PhoneNumber = Model.PhoneNumber;
+            Age = Model.Age;
             Position = Model.Position;
+            JobDescription = Model.JobDescription;
+            Avatar = common.getFullFilePath(Model.Avatar);
+
             if (Model.CRM_Address != null)
             {
                 ListAddress = new List<AddressViewModel>();
@@ -227,11 +299,14 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 Model.CreatedBy = App.currUser.username;
                 Model.IsDeleted = false;
             }
-            Model.PhoneNumber = PhoneNumber;
-            Model.Name = Name;
-            Model.Position = Position;
             Model.Email = Email;
+            Model.Name = Name;
+            Model.IDCardNumber = IdCardNumber;
+            Model.PhoneNumber = PhoneNumber;
             Model.Age = Age;
+            Model.Position = Position;
+            Model.JobDescription = JobDescription;            
+            
             Model.CRM_Address = new List<CRM_Address>();
             foreach (var address in ListAddress)
             {

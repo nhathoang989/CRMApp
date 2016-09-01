@@ -6,22 +6,22 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:converter="clr-namespace:HCRM.App.Views.Converters"
+             xmlns:cv="clr-namespace:HCRM.App.Views.Converters"
              xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
               xmlns:customControl="clr-namespace:HCRM.App.Views.CustomControls" 
+             MaxWidth="1400"
              >
-    <Grid>
+    <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
-            <StackPanel>
+            <StackPanel Name="rootForm">
                 <StackPanel Orientation="Horizontal" Margin="20">
-                    <TextBlock Text="Từ khóa"/>
-                    <!--<Controls:AutoCompleteBox Text="{Binding Keyword,UpdateSourceTrigger=PropertyChanged}" 
-                                               />-->
+                    
+                    <TextBlock Text="Từ khóa"/>                    
                     <Controls:AutoCompleteBox Width="250" Margin="10 0" ItemsSource="{Binding Employees}" 
                                               ValueMemberPath="Name"
                                               ItemFilter="{Binding EmployeeFilter}"
                                               IsTextCompletionEnabled="True"                                              
-                                              SelectedItem="{Binding CurrentItem,Mode=OneWayToSource}"
+                                              SelectedItem="{Binding CurrentEmployee,Mode=OneWayToSource}"
                                               MinimumPrefixLength="2"
                                               MinimumPopulateDelay="300"
                                               VerticalAlignment="Center"
@@ -38,16 +38,46 @@
                             <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
                         </InputBindingCollection>-->
                     </Controls:AutoCompleteBox>
-                    <!--<Button Content="Search" Command="{Binding SearchCommand}"/>-->
+                    
+                    <Button Content="Tạo mới" Command="{Binding NewEmployeeCommand}" HorizontalAlignment="Left"/>
+                    
                 </StackPanel>
-                <customControl:PaginDataGridView Width="Auto" />
+                
+                <StackPanel DataContext="{Binding PagingViewModel}">
+                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentEmployee}"
+                          RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False">
+
+                        <DataGrid.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+                        </DataGrid.InputBindings>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Hình ảnh">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Avatar}" Height="50" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Họ tên" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Chức vụ" Binding="{Binding Position}" />
+                            <DataGridTextColumn Header="Công việc" Binding="{Binding JobDescription}" />
+                            
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <customControl:PaginDataGridView Width="Auto" />
+                </StackPanel>
                 <!--<ContentControl Margin="10" Content="{Binding CurrentItem}" />-->
-                <StackPanel DataContext="{Binding CurrentItem}">
+                <StackPanel DataContext="{Binding CurrentEmployee}">
                     <TextBlock Text="Thông tin nhân viên"  Style="{StaticResource Heading2}" Margin="10"/>
-                    <WrapPanel>
+                    <WrapPanel Style="{StaticResource WrapInfos}">
                         <StackPanel>
-                            <TextBlock Text="Tên nhân viên" />
+                            <TextBlock Text="Họ tên" />
                             <xctk:AutoSelectTextBox Text="{Binding Name}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="CMND" />
+                            <xctk:AutoSelectTextBox Text="{Binding IdCardNumber}" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Sô điện thoại" />
@@ -62,6 +92,10 @@
                             <xctk:AutoSelectTextBox Text="{Binding Position}" />
                         </StackPanel>
                         <StackPanel>
+                            <TextBlock Text="Công việc" />
+                            <xctk:AutoSelectTextBox MinHeight="60" TextWrapping="Wrap" Text="{Binding JobDescription}" />
+                        </StackPanel>
+                        <StackPanel>
                             <TextBlock Text="Địa chỉ" />
                             <xctk:AutoSelectTextBox Text="{Binding ElementName=rootForm, Path=DataContext.CurrentAddress.Street}" />
                         </StackPanel>
@@ -69,76 +103,34 @@
                             <TextBlock Text="Tỉnh thành" />
                             <xctk:AutoSelectTextBox Text="{Binding ElementName=rootForm, Path=DataContext.CurrentAddress.City}" />
                         </StackPanel>
-                        <StackPanel DataContext="{Binding FileDlg}">
+                        <StackPanel>
+                            <StackPanel DataContext="{Binding AvatarFileDlg}"  Width="480">
+                                <TextBlock Text="Hình ảnh"/>
+                                <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
+                                <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
+                            </StackPanel>
+                            <Image Source="{Binding Avatar}" Height="100"/>
+                        </StackPanel>
+                        <StackPanel DataContext="{Binding ProfileFileDlg}" Width="480">
+                            <TextBlock Text="Sơ yếu"/>
                             <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
                             <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
                         </StackPanel>
                         <StackPanel>
-                            <Image Source="{Binding Image}" Height="100"/>
+                            <TextBlock Margin="0">
+                                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding ProfileFilePath}" TextDecorations="{x:Null}">
+                                    <TextBlock Text="Open File" Visibility="{Binding ProfileFilePath, Converter={cv:IsEmptyStringConverter}}"/></Hyperlink>
+                            </TextBlock>
+                            <!--< Source="{Binding ProfileFilePath}" Height="100"/>-->
                         </StackPanel>
+
                     </WrapPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" />
-                        <Button Content="Tạo mới" Command="{Binding ElementName=rootForm, Path=DataContext.NewEmployeeCommand}" HorizontalAlignment="Left"/>
-                        <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left"/>
+                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                        <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="5" />
+
+                        <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left" Margin="5" />
                     </StackPanel>
                 </StackPanel>
-                <Border Visibility="Hidden" BorderBrush="Transparent" BorderThickness="0" Padding="20" DataContext="{Binding CurrentItem}">
-                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Grid.Column="0" Grid.Row="0"  Text="Tên nhân viên" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"  />
-
-                        <TextBlock Grid.Column="0" Grid.Row="1"  Text="Sô điện thoại" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="1" Grid.Row="1" Text="{Binding PhoneNumber}" Margin="5"  />
-
-                        <TextBlock Grid.Column="0" Grid.Row="2"  Text="Email" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="1" Grid.Row="2" Text="{Binding Email}" Margin="5"  />
-
-                        <TextBlock Grid.Column="2" Grid.Row="0"  Text="Chức vụ" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="3" Grid.Row="0" Text="{Binding Position}" Margin="5"  />
-
-                        <TextBlock Grid.Column="2" Grid.Row="1"  Text="Địa chỉ" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="3" Grid.Row="1" Text="{Binding ElementName=rootForm, Path=DataContext.CurrentAddress.Street}" Margin="5"  />
-
-                        <TextBlock Grid.Column="2" Grid.Row="2"  Text="Tỉnh thành" VerticalAlignment="Center" Margin="5" />
-                        <xctk:AutoSelectTextBox Grid.Column="3" Grid.Row="2" Text="{Binding ElementName=rootForm, Path=DataContext.CurrentAddress.City}" Margin="5"  />
-
-
-                        <TextBlock Grid.Column="0" Grid.Row="4"  Text="Hình ảnh" VerticalAlignment="Center" Margin="5" />
-                        <StackPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal" DataContext="{Binding FileDlg}">
-                            <TextBox Text="{Binding FileName}" Margin="5" />
-                            <Button Content="Browse" Command="{Binding OpenCommand}" Margin="10 0" Height="25" />
-                        </StackPanel>
-
-                        <Image Grid.Column="1" Grid.Row="5" Source="{Binding Avatar}" Height="100"/>
-
-                        <StackPanel Grid.Row="6" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="20 0 0 20">
-                            <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="0"/>
-                            <Button Content="Tạo mới" Command="{Binding ElementName=rootForm, Path=DataContext.NewEmployeeCommand }" HorizontalAlignment="Left" Margin="20 0"/>
-                            <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left" Margin="20 0"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
 
                 <!--<StackPanel Orientation="Horizontal" Margin="20">
                     <TextBlock Text="Filter"/>

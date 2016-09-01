@@ -40,5 +40,18 @@ namespace HCRM.App.ViewModels
                 ErrorCount = value;
             }
         }
+
+        public bool IsBusy
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

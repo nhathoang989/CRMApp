@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Nhat Hoang\Projects\FL\CRM\HCRM.Data\HCRMModel.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Nhat Hoang\Projects\GitHub\CRMApp\HCRM.Data\HCRMModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

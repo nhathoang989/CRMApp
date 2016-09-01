@@ -18,9 +18,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
         #region Properties
         private double _discount;
         private string _title;
-        private int _countRemain;
-        private int _countSaled;
-        private int _countImported;
+        private int _TotalRemain;
+        private int _TotalSaled;
+        private int _TotalImported;
         private long _productID;
         private string _image;
         private bool _isVisible;
@@ -40,6 +40,36 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private string _code;
         private string _subImages;
         private FileDialogViewModel _fileDlg;
+
+        private int _iImport;
+
+        private int _iSaled;
+        public int ISaled
+        {
+            get
+            {
+                return _iSaled;
+            }
+
+            set
+            {
+                _iSaled = value;
+                OnPropertyChanged("ISaled");
+            }
+        }
+        public int IImport
+        {
+            get
+            {
+                return _iImport;
+            }
+
+            set
+            {
+                _iImport = value;
+                OnPropertyChanged("IImport");
+            }
+        }
         public List<CRM_Product_Property> PropertyModels { get; private set; }      
         public FileDialogViewModel FileDlg
         {
@@ -86,42 +116,42 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
-        public int CountRemain
+        public int TotalRemain
         {
             get
             {
-                return _countRemain;
+                return _TotalRemain;
             }
 
             set
             {
-                _countRemain  = value; OnPropertyChanged("CountRemain");
+                _TotalRemain  = value; OnPropertyChanged("TotalRemain");
             }
         }
 
-        public int CountSaled
+        public int TotalSaled
         {
             get
             {
-                return _countSaled;
+                return _TotalSaled;
             }
 
             set
             {
-                _countSaled  = value; OnPropertyChanged("CountSaled");
+                _TotalSaled  = value; OnPropertyChanged("TotalSaled");
             }
         }
 
-        public int CountImported
+        public int TotalImported
         {
             get
             {
-                return _countImported;
+                return _TotalImported;
             }
 
             set
             {
-                _countImported  = value; OnPropertyChanged("CountImported");
+                _TotalImported  = value; OnPropertyChanged("TotalImported");
             }
         }
 
@@ -386,6 +416,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
             {
                 Model.Image = ProductRepo.Instance.UploadFile(FileDlg.Info);
             }
+
+           
+
             var result = await ProductRepo.Instance.SaveModel(Model);
             _eventAggregator.GetEvent<ItemListChanged<bool>>().Publish(result.StatusCode == System.Net.HttpStatusCode.OK);
            
@@ -404,9 +437,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
             Model.NormalPrice = NormalPrice;
             Model.Discount = Discount;
 
-            Model.CountRemain = CountRemain;
-            Model.CountRemain = CountSaled;
-            Model.CountRemain = CountImported;
+            Model.TotalImported += IImport;
+            Model.TotalSaled += ISaled;
+            Model.TotalRemain = Model.TotalImported - Model.TotalSaled;
 
             Model.SubImages = SubImages;
             Model.Infos = Infos;
@@ -437,9 +470,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
             NormalPrice = Model.NormalPrice;
             Discount = Model.Discount;
             Size = Model.Size;
-            CountRemain = Model.CountRemain;
-            CountSaled = Model.CountRemain;
-            CountImported = Model.CountRemain;
+            TotalRemain = Model.TotalRemain;
+            TotalSaled = Model.TotalSaled;
+            TotalImported = Model.TotalImported;
 
             SubImages = Model.SubImages;
             Infos = Model.Infos = Infos;
