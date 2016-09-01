@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="HCRM.WarehouseApp.Views.CustomControls.UCAutoCompleteProduct"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HCRM.WarehouseApp.Views.CustomControls"
+             mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             >
+    <StackPanel Orientation="Horizontal" Margin="20">
+        <TextBlock Text="Từ khóa"/>
+        <Controls:AutoCompleteBox Width="250" Margin="10 0" ItemsSource="{Binding Products}" 
+                                              ValueMemberPath="Title"
+                                              ItemFilter="{Binding ProductFilter}"
+                                              IsTextCompletionEnabled="True"                                              
+                                              SelectedItem="{Binding CurrentProduct,Mode=OneWayToSource}"
+                                              MinimumPrefixLength="1"
+                                              MinimumPopulateDelay="100"
+                                              VerticalAlignment="Center"                                  
+                                              >
+            <Controls:AutoCompleteBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="{Binding Material}" />
+                    </StackPanel>
+                </DataTemplate>
+            </Controls:AutoCompleteBox.ItemTemplate>
+        </Controls:AutoCompleteBox>
+    </StackPanel>    
+</UserControl>
