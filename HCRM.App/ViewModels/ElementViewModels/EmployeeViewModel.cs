@@ -259,11 +259,6 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 _eventAggregator.GetEvent<ItemListChanged<bool>>().Publish(result.StatusCode == System.Net.HttpStatusCode.OK);
 
                 Avatar = common.getFullFilePath(Model.Avatar);
-                ApiHelper.Alert("Lưu ý", "Lưu nhân viên thành công");
-            }
-            else
-            {
-                ApiHelper.Alert("Lưu ý", "Không thể lưu nhân viên");
             }
             return result;
         }

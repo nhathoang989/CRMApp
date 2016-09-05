@@ -44,32 +44,38 @@
                             </Controls:AutoCompleteBox>
                             <Button Content="Tạo mới" Command="{Binding NewProductCommand}" HorizontalAlignment="Left"/>
                         </StackPanel>
-                        <StackPanel DataContext="{Binding PagingDataGrid}">
-                            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
+                        <WrapPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                            <StackPanel DataContext="{Binding PagingDataGrid}">
+                                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
                           RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False"
                             HorizontalAlignment="Stretch"   
                             VerticalAlignment="Stretch"
                               MaxHeight="300"
                           >
-                                <DataGrid.InputBindings>
-                                    <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
-                                </DataGrid.InputBindings>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
-                                    <DataGridTemplateColumn Header="Hình ảnh">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding Image}" Height="50" />
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="Tồn kho" Binding="{Binding TotalRemain}" />
-                                    <DataGridTextColumn Header="Đã bán" Binding="{Binding TotalSaled}" />
-                                </DataGrid.Columns>
+                                    <DataGrid.InputBindings>
+                                        <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+                                    </DataGrid.InputBindings>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Tên" Binding="{Binding Title}" />
+                                        <DataGridTemplateColumn Header="Hình ảnh">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding Image}" Height="50" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="Tồn kho" Binding="{Binding TotalRemain}" />
+                                        <DataGridTextColumn Header="Đã bán" Binding="{Binding TotalSaled}" />
+                                    </DataGrid.Columns>
 
-                            </DataGrid>
-                            <customControl:PaginDataGridView Width="Auto" />
-                        </StackPanel>
+                                </DataGrid>
+                                <customControl:PaginDataGridView Width="Auto" />
+                            </StackPanel>
+                            <StackPanel>
+                                <Image Source="{Binding CurrentItem.Image}" Width="150"/>
+                            </StackPanel>
+                        </WrapPanel>
+                        
 
                         <StackPanel DataContext="{Binding CurrentItem}">
                             <TextBlock Text="Chi tiết sản phẩm nhập"  Style="{StaticResource Heading2}" Margin="0 20"/>
@@ -129,9 +135,7 @@
                                     <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
                                     <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
                                 </StackPanel>
-                                <StackPanel>
-                                    <Image Source="{Binding Image}" Height="100"/>
-                                </StackPanel>
+                                
                             </WrapPanel>
                             
                         </StackPanel>

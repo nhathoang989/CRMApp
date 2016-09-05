@@ -219,6 +219,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
             set
             {
                 _isBusy = value;
+                OnPropertyChanged("IsBusy");
             }
         }
 
