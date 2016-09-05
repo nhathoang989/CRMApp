@@ -35,6 +35,13 @@ namespace HCRM.App.Repositories
         {
             string apiURL = UrlRepo.SaveURL;
             var rsp = await ApiHelper.postApi<TModel>(model, apiURL);
+            if (rsp.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                ApiHelper.Alert("Kết quả", "Thành công");
+            }
+            else {
+                ApiHelper.Alert("Kết quả", "Thất bại");
+            }
             return rsp;
         }
                 

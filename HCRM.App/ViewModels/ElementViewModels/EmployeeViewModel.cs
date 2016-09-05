@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using HCRM.App.Helpers;
 using HCRM.Data;
 using HCRM.App.Ultilities;
 using System.Threading.Tasks;
 using HCRM.App.Repositories;
 using RestSharp;
-using System.IO;
-using System.Windows;
 using Prism.Events;
 using HCRM.App.Behaviors;
-using HCRM.App.Services;
 
 namespace HCRM.App.ViewModels.ElementViewModels
 {

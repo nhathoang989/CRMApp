@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Prism.Events;
 
 namespace HCRM.App.ViewModels
 {
@@ -31,11 +32,17 @@ namespace HCRM.App.ViewModels
         private List<EmployeeViewModel> _employees;
         private List<CRM_Customer> _customers;
         private List<ProductViewModel> _products;
-        
+        private PagingViewModel<CRM_Product, ProductViewModel> _pagingDataGrid;
+
         private ICommand _addToCartCommand;
         private ICommand _removeCommand;
         private ICommand _saveCommand;
         private ICommand _cancelCommand;
+
+        private PagingViewModel<CRM_Employee, EmployeeViewModel> _pagingViewModel;
+        private int PageSize = 5;
+        private bool _isBusy;
+        private IEventAggregator _eventAggregator;
 
         private int _errors;
 
@@ -177,21 +184,24 @@ namespace HCRM.App.ViewModels
             return ErrorCount == 0 && CurrentReceipt.ListDetails.Count > 0;
         }
         void AddToCart() {
-            common.showLoading(true);
             var details = CurrentReceipt.ListDetails.FirstOrDefault(d => d.Product.ProductID == CurrentDetails.Product.ProductID);
+            
             if (details == null)
             {
-                CurrentDetails.StrUnitPrice = common.FormatPrice(CurrentDetails.Product.NormalPrice.ToString());
+                //CurrentDetails.StrUnitPrice = common.FormatPrice(CurrentDetails.Product.NormalPrice.ToString());
+                CurrentDetails.ReducePrice = common.ReversePrice(CurrentDetails.StrReducePrice);
+                CurrentDetails.UnitPrice = SelectedProduct.NormalPrice;
+                CurrentDetails.StrUnitPrice = common.FormatPrice(SelectedProduct.NormalPrice.ToString());
                 CurrentReceipt.ListDetails.Add(CurrentDetails);
             }
             else
             {
-                details.StrReducePrice = common.FormatPrice(CurrentDetails.Product.NormalPrice.ToString());
+                //details.StrReducePrice = common.FormatPrice(CurrentDetails.Product.NormalPrice.ToString());
                 details.Quantity = CurrentDetails.Quantity;
             }
+            
             GetTotal();
             Refresh();
-            common.showLoading(false);
 
         }
         void Refresh() {
@@ -259,7 +269,7 @@ namespace HCRM.App.ViewModels
                 _selectedProduct = value;
                 if (_selectedProduct != null)
                 {
-                    var details = CurrentReceipt.ListDetails.FirstOrDefault(d => d.Product.ProductID == CurrentDetails.Product.ProductID);
+                    var details = CurrentReceipt.ListDetails.FirstOrDefault(d => d.Product.ProductID == SelectedProduct.ProductID);
                     if (details != null)
                     {
                         CurrentDetails = details;
@@ -377,12 +387,40 @@ namespace HCRM.App.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _isBusy;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _isBusy = value;
+                OnPropertyChanged("IsBusy");
+            }
+        }
+
+        public PagingViewModel<CRM_Employee, EmployeeViewModel> PagingViewModel
+        {
+            get
+            {
+                return _pagingViewModel;
+            }
+
+            set
+            {
+                _pagingViewModel = value;
+            }
+        }
+
+        public PagingViewModel<CRM_Product, ProductViewModel> PagingDataGrid
+        {
+            get
+            {
+                return _pagingDataGrid;
+            }
+
+            set
+            {
+                _pagingDataGrid = value;
+                OnPropertyChanged("PagingDataGrid");
             }
         }
 
@@ -448,16 +486,32 @@ namespace HCRM.App.ViewModels
         }
 
         #endregion
-        async void LoadModels() {
+        async void RefreshPage() {
+            IsBusy = true;
             Products = await ProductRepo.Instance.GetModelList();
             Employees = await EmployeeRepo.Instance.GetModelList();
             Customers = await CustomerRepo.GetCustomerList();
+
+            PagingDataGrid = new PagingViewModel<CRM_Product, ProductViewModel>(Products, PageSize);
+            IsBusy = false;
         }
         public SaleFormViewModel()
         {
-            LoadModels();
-            SaveReceiptDeliveryResultEvent _event = ApplicationService.Instance.EventAggregator.GetEvent<SaveReceiptDeliveryResultEvent>();
-            _event.Subscribe(SaveResult);
+            RefreshPage();
+            _eventAggregator = ApplicationService.Instance.EventAggregator;
+
+            ItemListChanged<bool> _event = ApplicationService.Instance.EventAggregator.GetEvent<ItemListChanged<bool>>();
+            _event.Subscribe(ItemsChanged);
+            //SaveReceiptDeliveryResultEvent _event = ApplicationService.Instance.EventAggregator.GetEvent<SaveReceiptDeliveryResultEvent>();
+            //_event.Subscribe(SaveResult);
+        }
+
+        private void ItemsChanged(bool isChanged)
+        {
+            if (isChanged)
+            {
+                RefreshPage();
+            }
         }
 
         private void SaveResult(bool result)

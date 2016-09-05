@@ -46,7 +46,7 @@
                         </StackPanel>
                         <WrapPanel HorizontalAlignment="Left" Orientation="Horizontal">
                             <StackPanel DataContext="{Binding PagingDataGrid}">
-                                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
+                                <DataGrid ColumnWidth="150" AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentItem}"
                           RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False"
                             HorizontalAlignment="Stretch"   
                             VerticalAlignment="Stretch"
@@ -69,10 +69,10 @@
                                     </DataGrid.Columns>
 
                                 </DataGrid>
-                                <customControl:PaginDataGridView Width="Auto" />
+                                <customControl:PaginDataGridView Width="Auto"  HorizontalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel>
-                                <Image Source="{Binding CurrentItem.Image}" Width="150"/>
+                                <Image Source="{Binding CurrentItem.Image}" Margin="20" Width="150"/>
                             </StackPanel>
                         </WrapPanel>
                         
@@ -132,7 +132,8 @@
 
                                
                                 <StackPanel DataContext="{Binding FileDlg}">
-                                    <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
+                                    <TextBlock Text="Hình ảnh"/>
+                                    <xctk:AutoSelectTextBox IsReadOnly="True" Width="130" Text="{Binding FileName}"/>
                                     <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
                                 </StackPanel>
                                 

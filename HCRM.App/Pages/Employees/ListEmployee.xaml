@@ -48,13 +48,12 @@
                     </Controls:AutoCompleteBox>
                     
                     <Button Content="Tạo mới" Command="{Binding NewEmployeeCommand}" HorizontalAlignment="Left"/>
-                    
-                </StackPanel>
+                            <Button Content="Xuất báo cáo" Width="150" Command="{Binding ExportCommand}"/>
+                        </StackPanel>
                 <WrapPanel HorizontalAlignment="Left" Orientation="Horizontal">
                     <StackPanel Grid.Column="0" DataContext="{Binding PagingViewModel}">
-                        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentEmployee}"
-                          RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False" Width="517">
-
+                                <DataGrid ColumnWidth="150" HorizontalAlignment="Left" AutoGenerateColumns="False" ItemsSource="{Binding LstDisplay}" SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentEmployee}"
+                          RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Center" >                                    
                             <DataGrid.InputBindings>
                                 <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
                             </DataGrid.InputBindings>
@@ -73,10 +72,10 @@
 
                             </DataGrid.Columns>
                         </DataGrid>
-                        <customControl:PaginDataGridView Width="Auto" />
+                        <customControl:PaginDataGridView Width="Auto" HorizontalAlignment="Center" />
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                        <Image Margin="10" Source="{Binding CurrentEmployee.Avatar}" Width="150"/>
+                        <Image Source="{Binding CurrentEmployee.Avatar}" Margin="20" Width="150"/>
                     </StackPanel>
                 </WrapPanel>
 

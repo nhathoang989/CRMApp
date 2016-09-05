@@ -37,6 +37,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private string _material;
         private double? _dealPrice;
         private double _normalPrice;
+        private string _strNormalPrice;
         private string _code;
         private string _subImages;
         private FileDialogViewModel _fileDlg;
@@ -394,6 +395,24 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
+        public string StrNormalPrice
+        {
+            get
+            {
+                return _strNormalPrice;
+            }
+
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = "0";
+                }                
+                _strNormalPrice = value;
+                OnPropertyChanged("StrNormalPrice");
+            }
+        }
+
         #endregion
 
         #region Functions
@@ -426,7 +445,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
         }
         public override void ViewToModel()
         {
-
+            Model.ProductID = ProductID;
             Model.Code = Code;
             Model.Size = Size;
             Model.Title = Title;
@@ -436,7 +455,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
             Model.DealPrice = DealPrice;
             Model.NormalPrice = NormalPrice;
             Model.Discount = Discount;
-
+            
             Model.TotalImported += IImport;
             Model.TotalSaled += ISaled;
             Model.TotalRemain = Model.TotalImported - Model.TotalSaled;
@@ -458,7 +477,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
         public override void ModelToView()
         {
-
+            ProductID = Model.ProductID;
             Code = Model.Code;
             DealPrice = Model.DealPrice;
             Title = Model.Title;
@@ -468,6 +487,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
             Description = Model.Description;
             DealPrice = Model.DealPrice;
             NormalPrice = Model.NormalPrice;
+            StrNormalPrice= common.FormatPrice(Model.NormalPrice.ToString());
             Discount = Model.Discount;
             Size = Model.Size;
             TotalRemain = Model.TotalRemain;

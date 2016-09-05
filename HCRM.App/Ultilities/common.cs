@@ -39,6 +39,10 @@ namespace HCRM.App.Ultilities
             return s1;
         }
         public static double ReversePrice(string formatedPrice) {
+            if (string.IsNullOrEmpty(formatedPrice))
+            {
+                return 0;
+            }
             return double.Parse(formatedPrice.Replace(",", string.Empty));
         }
         public static string getFullFilePath(string filePath) {

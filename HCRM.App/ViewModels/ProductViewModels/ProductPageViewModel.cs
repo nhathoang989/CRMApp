@@ -211,12 +211,7 @@ namespace HCRM.App.ViewModels.ProductViewModels
         {
             if (isChanged)
             {
-                ApiHelper.Alert("Kết quả", "Thành công");
                 ReFreshProducts();
-            }
-            else
-            {
-                ApiHelper.Alert("Kết quả", "Thất bại");
             }
         }
 

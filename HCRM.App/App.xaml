@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml"/>
                 <!--<ResourceDictionary Source="Themes/GlobalTheme.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
+            
             <Style x:Key="NormalButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="Foreground" Value="#FFFFFF" />
                 <Setter Property="Width" Value="60" />
@@ -108,9 +109,11 @@
                 <Setter Property="Width" Value="250"/>                
                 <Setter Property="AutoSelectBehavior" Value="OnFocus"/>
                 <Setter Property="AutoMoveFocus" Value="False"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
             <Style TargetType="WrapPanel"
                    x:Key="WrapInfos">
@@ -121,16 +124,19 @@
                     </Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Width" Value="100"/>
+                        <Setter Property="TextWrapping" Value="Wrap"/>
                         <Setter Property="Margin" Value="10 10"/>
                         <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                     <Style TargetType="TextBox">
                         <Setter Property="Width" Value="250"/>
+                        <Setter Property="TextWrapping" Value="Wrap"/>
                         <Setter Property="Margin" Value="10 10"/>
                         <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                     <Style TargetType="xctk:AutoSelectTextBox" >
                         <Setter Property="Width" Value="250"/>
+                        <Setter Property="TextWrapping" Value="Wrap"/>
                         <Setter Property="Margin" Value="10 10"/>
                         <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>

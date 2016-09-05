@@ -50,6 +50,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 {
                     value = "0";
                 }
+                _strReducePrice = common.FormatPrice(value);
                 OnPropertyChanged("StrReducePrice");
             }
         }

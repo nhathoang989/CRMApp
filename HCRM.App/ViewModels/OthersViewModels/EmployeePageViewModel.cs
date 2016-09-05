@@ -11,6 +11,13 @@ using HCRM.App.Behaviors;
 using System.Windows.Input;
 using HCRM.Data;
 using System;
+using HCRM.App.Helpers;
+using CodeReason.Reports;
+using System.Windows.Xps.Packaging;
+using System.Data;
+using HCRM.App.Views.CustomControls;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace HCRM.App.ViewModels.OthersViewModels
 {
@@ -27,7 +34,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
         private AddressViewModel _currentAddress;
         private List<EmployeeViewModel> _listAllEmployee;
         private List<EmployeeViewModel> currentListEmployee;
-
+        private ICommand _exportCommand;
         private IEventAggregator _eventAggregator;
         private ICommand _newEmployeeCommand;
         public ICommand NewEmployeeCommand
@@ -171,6 +178,63 @@ namespace HCRM.App.ViewModels.OthersViewModels
 
         #region Functions
 
+        void ExportPage()
+        {
+            try
+            {
+                ReportDocument reportDocument = new ReportDocument();
+                reportDocument.ImageProcessing += reportDocument_ImageProcessing;
+                StreamReader reader = new StreamReader(new FileStream(@"ReportTemplates\RPListEmployees.xaml", FileMode.Open, FileAccess.Read));
+                reportDocument.XamlData = reader.ReadToEnd();
+                reportDocument.XamlImagePath = Path.Combine(Environment.CurrentDirectory, @"ReportTemplates\");
+                reader.Close();
+
+                DateTime dateTimeStart = DateTime.Now; // start time measure here
+
+                List<ReportData> listData = new List<ReportData>();
+
+                ReportData data = new ReportData();
+                data.ReportDocumentValues.Add("PrintDate", dateTimeStart);
+                DataTable table = new DataTable("Data");
+                table.Columns.Add("Order", typeof(int));
+                table.Columns.Add("Name", typeof(string));
+                table.Columns.Add("Avatar", typeof(string));
+                table.Columns.Add("Position", typeof(string));
+              
+                foreach (var item in CurrentListEmployee)
+                {
+                    //MemoryStream ms = new MemoryStream();
+                    //BitmapImage bi = new BitmapImage();
+                    //byte[] bytArray = File.ReadAllBytes(item.Avatar);
+                    //ms.Write(bytArray, 0, bytArray.Length);
+                    //ms.Position = 0;
+                    //bi.BeginInit();
+                    //bi.StreamSource = ms;
+                    //bi.EndInit();
+                    //Image avatar = new Image();
+                    //avatar.Source = bi;
+                    table.Rows.Add(new object[] { CurrentListEmployee.IndexOf(item) + 1, item.Name, "Avatar", item.Position });
+                }
+                data.DataTables.Add(table);
+
+                listData.Add(data);
+                XpsDocument xps = reportDocument.CreateXpsDocument(listData);
+                ReportViewer rp = new ReportViewer(xps);
+                
+                rp.ShowDialog();
+
+                // show the elapsed time in window title
+                //Title += " - generated in " + (DateTime.Now - dateTimeStart).TotalMilliseconds + "ms";
+            }
+            catch(Exception ex) {  }
+        }
+
+        private void reportDocument_ImageProcessing(object sender, ImageEventArgs e)
+        {
+
+            //throw new NotImplementedException();
+        }
+
         public AutoCompleteFilterPredicate<object> EmployeeFilter
         {
             get
@@ -223,6 +287,23 @@ namespace HCRM.App.ViewModels.OthersViewModels
             }
         }
 
+        public ICommand ExportCommand
+        {
+            get
+            {
+                if (_exportCommand == null)
+                {
+                    _exportCommand = new RelayCommand(p => ExportPage());
+                }
+                return _exportCommand;
+            }
+
+            set
+            {
+                _exportCommand = value;
+            }
+        }
+
         async void RefreshEmployees()
         {
             IsBusy = true;   
@@ -246,6 +327,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
         {
             if (isChanged)
             {
+                
                 RefreshEmployees();
             }            
         }
