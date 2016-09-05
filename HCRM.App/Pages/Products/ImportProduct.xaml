@@ -72,18 +72,14 @@
                         </StackPanel>
 
                         <StackPanel DataContext="{Binding CurrentItem}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Chi tiết sản phẩm nhập"  Style="{StaticResource Heading2}" Margin="10 20"/>                            
-                                <CheckBox IsChecked="{Binding ElementName=rootForm, Path=DataContext.IsShowDetails}"/>
-                                <TextBlock Text="Hiển thị chi tiết" Margin="10 0"/>
-                            </StackPanel>
+                            <TextBlock Text="Chi tiết sản phẩm nhập"  Style="{StaticResource Heading2}" Margin="0 20"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Số lượng nhập" FontWeight="Bold" VerticalAlignment="Center"  Margin="10 0" />
                                 <xctk:AutoSelectTextBox Text="{Binding IImport}" />
                                 
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Lưu" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="10 0" />
-                                    <Button Content="Xóa" Command="{Binding RemoveCommand}" HorizontalAlignment="Left" Margin="10 0"/>
+                                    <Button Content="Lưu" Style="{StaticResource NormalButtonStyle}" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="10 0" />
+                                    <Button Content="Xóa" Style="{StaticResource RedButtonStyle}" Command="{Binding RemoveCommand}" HorizontalAlignment="Left" Margin="10 0"/>
                                 </StackPanel>
                             </StackPanel>
                             <WrapPanel Style="{StaticResource WrapInfos}" Orientation="Horizontal">
@@ -97,8 +93,6 @@
                                     <TextBlock Text="Tên sản phẩm" />
                                     <xctk:AutoSelectTextBox Text="{Binding Title}" />
                                 </StackPanel>
-                            </WrapPanel>
-                            <WrapPanel Visibility="{Binding ElementName=rootForm, Path=DataContext.IsShowDetails, Converter={converter:BoolToVisibilityConverter}}" Style="{StaticResource WrapInfos}" Orientation="Horizontal">
                                 <StackPanel>
                                     <TextBlock Text="Xuất xứ" />
                                     <xctk:AutoSelectTextBox Text="{Binding Source}" />
@@ -130,12 +124,12 @@
                                     <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding TotalRemain}" />
                                 </StackPanel>
 
-                                <StackPanel>                                    
-                                    <StackPanel DataContext="{Binding FileDlg}">
-                                        <TextBlock Text="Hình ảnh"/>
-                                        <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
-                                        <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
-                                    </StackPanel>                                
+                               
+                                <StackPanel DataContext="{Binding FileDlg}">
+                                    <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding FileName}"/>
+                                    <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
+                                </StackPanel>
+                                <StackPanel>
                                     <Image Source="{Binding Image}" Height="100"/>
                                 </StackPanel>
                             </WrapPanel>

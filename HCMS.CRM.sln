@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCRM.App", "HCRM.App\HCRM.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReason.Reports.VS2008", "CodeReason.Reports\CodeReason.Reports.VS2008.csproj", "{87A8D936-AE11-40AA-8927-A414C2225991}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCRM.WarehouseApp", "HCRM.WarehouseApp\HCRM.WarehouseApp.csproj", "{127CACCB-1CFF-46AC-8A45-309B13F9B1CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{87A8D936-AE11-40AA-8927-A414C2225991}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87A8D936-AE11-40AA-8927-A414C2225991}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87A8D936-AE11-40AA-8927-A414C2225991}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127CACCB-1CFF-46AC-8A45-309B13F9B1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127CACCB-1CFF-46AC-8A45-309B13F9B1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127CACCB-1CFF-46AC-8A45-309B13F9B1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127CACCB-1CFF-46AC-8A45-309B13F9B1CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
