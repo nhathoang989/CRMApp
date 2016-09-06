@@ -12,14 +12,22 @@ namespace HCRM.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.Linq;
     public partial class HCRMEntities : DbContext
     {
         public HCRMEntities()
             : base("name=HCRMEntities")
         {
         }
-    
+
+        //public override int SaveChanges()
+        //{
+        //    //var added = this.ChangeTracker.Entries().Where(e => e.State == System.Data.Entity.EntityState.Added);
+
+        //    // Do your thing, like changing the state to detached
+        //    return base.SaveChanges();
+        //}
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

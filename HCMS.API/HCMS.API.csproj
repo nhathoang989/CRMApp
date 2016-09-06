@@ -280,7 +280,6 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Controllers\ReceiptDeliveryController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Entities\CustomEntities.cs" />
     <Compile Include="Global.asax.cs">

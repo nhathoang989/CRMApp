@@ -4,7 +4,7 @@ using HCRM.DAL.CRM;
 
 namespace HCMS.API.Controllers.CRM
 {
-    [RoutePrefix("api/Receipt")]
+    [RoutePrefix("api/ReceiptDelivery")]
     public class ReceiptDeliveryController : BaseCRMController<CRM_Receipt_Delivery>
     {
         [HttpGet]

@@ -178,7 +178,7 @@ namespace HCRM.App.ViewModels
 
         }
         bool CanAddToCart() {            
-            return CurrentDetails.Product != null && !string.IsNullOrEmpty(CurrentDetails.Product.Code);
+            return CurrentDetails.Product != null && !string.IsNullOrEmpty(CurrentDetails.Product.Code) && CurrentDetails.Quantity<CurrentDetails.Product.TotalRemain;
         }
         bool CanSaveReceipt() {
             return ErrorCount == 0 && CurrentReceipt.ListDetails.Count > 0;
@@ -196,19 +196,24 @@ namespace HCRM.App.ViewModels
             }
             else
             {
-                //details.StrReducePrice = common.FormatPrice(CurrentDetails.Product.NormalPrice.ToString());
+                details.Quantity = CurrentDetails.Quantity;
+                details.ReducePrice = common.ReversePrice(CurrentDetails.StrReducePrice);
+                details.UnitPrice = CurrentDetails.UnitPrice;
+                details.StrUnitPrice = CurrentDetails.StrUnitPrice;
+                details.StrReducePrice = CurrentDetails.StrReducePrice;
                 details.Quantity = CurrentDetails.Quantity;
             }
-            
-            GetTotal();
+           
             Refresh();
 
         }
         void Refresh() {
+            GetTotal();
             LstDisplayDetails = new List<ReceiptDetailsViewModel>(CurrentReceipt.ListDetails);
             //CurrentDetails = new ReceiptDetailsViewModel();
         }
         void RefreshForm() {
+            CurrentReceipt = new ReceiptDeliveryViewModel();
             Refresh();
             CurrentReceipt = new ReceiptDeliveryViewModel();            
         }
@@ -278,8 +283,11 @@ namespace HCRM.App.ViewModels
                     {
                         CurrentDetails = new ReceiptDetailsViewModel();
                         CurrentDetails.Product = _selectedProduct;
+                        CurrentDetails.UnitPrice = _selectedProduct.NormalPrice;
+                        CurrentDetails.StrUnitPrice = _selectedProduct.StrNormalPrice;
                         CurrentDetails.Product.Image = common.getFullFilePath(value.Image);
                     }
+                    CurrentDetails.ProductID = _selectedProduct.ProductID;
                 }
                 OnPropertyChanged("SelectedProduct");
             }
@@ -440,9 +448,8 @@ namespace HCRM.App.ViewModels
         }
 
         async void SaveReceipt() {
-            
-            common.showLoading(true);            
-            
+
+            IsBusy = true;
             if (CurrentReceipt.TotalPaid >= CurrentReceipt.TotalMustPay)
             {
                 CurrentReceipt.IsPaid = true;                
@@ -456,22 +463,23 @@ namespace HCRM.App.ViewModels
                 CurrentReceipt.EmployeeID = SelectedEmployee.EmployeeID;
             }
 
-            Views.PrintViews.PrintPreview wd = new Views.PrintViews.PrintPreview(CurrentReceipt);
-            wd.ShowDialog();
-            //return;
+            //Views.PrintViews.PrintPreview wd = new Views.PrintViews.PrintPreview(CurrentReceipt);
+            //wd.ShowDialog();
+            ////return;
 
-            //var result = await ReceiptRepo.CreateReceipt(CurrentReceipt.Model);
+            var result = await ReceiptDeliveryRepo.Instance.SaveModel(CurrentReceipt.Model);
 
-            //if (result)
-            //{
-            //    RefreshForm();
-            //    ApiHelper.Alert("Lưu ý", "Lưu hóa đơn thành công");
-            //}
-            //else {
-            //    ApiHelper.Alert("Lưu ý", "Không thể lưu hóa đơn");
-            //}
+            if (result.StatusCode== System.Net.HttpStatusCode.OK)
+            {
+                RefreshForm();
+                //ApiHelper.Alert("Lưu ý", "Lưu hóa đơn thành công");
+            }
+            else
+            {
+                //ApiHelper.Alert("Lưu ý", "Không thể lưu hóa đơn");
+            }
 
-            common.showLoading(false);
+            IsBusy = false;
         }
 
         bool validateReceipt() {
@@ -482,6 +490,8 @@ namespace HCRM.App.ViewModels
             MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Xóa sản phẩm này khỏi danh sách?", "Lưu ý", System.Windows.MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
+                CurrentReceipt.ListDetails.Remove(CurrentDetails);
+                Refresh();
             }
         }
 

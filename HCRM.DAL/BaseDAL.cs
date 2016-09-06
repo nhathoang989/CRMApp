@@ -33,7 +33,7 @@ namespace HCRM.DAL
                 errorMsg = "";
                 using (HCRMEntities context = new HCRMEntities())
                 {
-                    context.Entry(model).State = System.Data.Entity.EntityState.Added;
+                    context.Entry(model).State = System.Data.Entity.EntityState.Added;                    
                     context.SaveChanges();
                     result = model;
                 }
@@ -62,6 +62,7 @@ namespace HCRM.DAL
             errorMsg = "";
             using (HCRMEntities context = new HCRMEntities())
             {
+                
                 return !Exists(model) ? CreateModel(model, out errorMsg) : EditModel(model, out errorMsg);
             }
         }
@@ -74,6 +75,7 @@ namespace HCRM.DAL
                 errorMsg = "";
                 using (HCRMEntities context = new HCRMEntities())
                 {
+                    context.Entry(model).State = EntityState.Detached;
                     context.Entry(model).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                     result = model;

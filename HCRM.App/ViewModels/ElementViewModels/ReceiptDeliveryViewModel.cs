@@ -304,6 +304,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
             {
                 ListDetails.Add(new ReceiptDetailsViewModel(details));
             }
+            OrderPhone = Model.OrderPhone;
+            OrderName = Model.OrderName;
+            OrderAddress = Model.OrderAddress;
             StrTotalAmount = common.FormatPrice(Model.TotalAmount.ToString());
             StrTotalReduce = common.FormatPrice(Model.TotalReduceAmount.ToString());
             StrTotalPaid = common.FormatPrice(Model.TotalPaid.ToString());
@@ -319,7 +322,11 @@ namespace HCRM.App.ViewModels.ElementViewModels
             foreach (var details in ListDetails)
             {
                 details.ViewToModel();
+                Model.CRM_Receipt_Details.Add(details.Model);
             }
+            Model.OrderAddress = OrderAddress;
+            Model.OrderName = OrderName;
+            Model.OrderPhone = OrderPhone;
             Model.TotalAmount = common.ReversePrice(StrTotalAmount);
             Model.TotalReduceAmount = common.ReversePrice(StrTotalReduce);
             Model.TotalPaid = common.ReversePrice(StrTotalPaid);

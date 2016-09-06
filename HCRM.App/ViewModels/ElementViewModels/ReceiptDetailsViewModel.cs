@@ -22,7 +22,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private double _reducePrice;
         private int _quantity;
         private long _receiptDetailsID;
-      
+        private long _productID;
         public ProductViewModel Product
         {
             get
@@ -41,6 +41,10 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
+                if (string.IsNullOrEmpty(_strReducePrice))
+                {
+                    _strReducePrice = "0";
+                }
                 return _strReducePrice;
             }
 
@@ -125,6 +129,19 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
+        public long ProductID
+        {
+            get
+            {
+                return _productID;
+            }
+
+            set
+            {
+                _productID = value;
+            }
+        }
+
 
         #endregion
 
@@ -141,11 +158,13 @@ namespace HCRM.App.ViewModels.ElementViewModels
         }
         public override void ModelToView()
         {
+            
             ReceiptDetailsID = Model.ReceiptDetailsID;
             StrUnitPrice = common.FormatPrice(Model.UnitPrice.ToString());
             StrReducePrice = common.FormatPrice(Model.ReducePrice.ToString());
             Quantity = Model.Quantity;
             Product = new ProductViewModel(Model.CRM_Product);
+            ProductID = Product.ProductID;
         }
         public override void ViewToModel()
         {
@@ -153,7 +172,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
             Model.ReducePrice = common.ReversePrice(StrReducePrice);
             Model.UnitPrice = common.ReversePrice(StrUnitPrice);
             Model.Quantity = Quantity;
-
+            Model.ProductID = ProductID;
             Product.ViewToModel();
             Model.CRM_Product = Product.Model;            
         }

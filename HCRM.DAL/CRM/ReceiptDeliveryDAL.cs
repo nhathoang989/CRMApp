@@ -24,11 +24,23 @@ namespace HCRM.DAL.CRM
         public CRM_Receipt_Delivery SaveReceipt(CRM_Receipt_Delivery receipt, out string errorMsg)
         {
             errorMsg = "";
+            var lstDetails = receipt.CRM_Receipt_Details.ToList();
+
+            //receipt.CRM_Receipt_Details = null;
             var model = SaveModel(receipt, out errorMsg);
-            foreach (var details in receipt.CRM_Receipt_Details)
+
+            foreach (var details in lstDetails)
             {
+                CRM_Product product = details.CRM_Product;
+
+                details.CRM_Product = null;
                 details.ReceiptDeliveryID = model.ReceiptID;
                 ReceiptDetailsDAL.Instance.SaveModel(details, out errorMsg);
+
+                
+                product.TotalRemain -= details.Quantity;
+                product.TotalSaled += details.Quantity;
+                ProductDAL.Instance.SaveModel(product,out errorMsg);
             }
             return model;
         }
