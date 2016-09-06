@@ -26,7 +26,7 @@ namespace HCRM.DAL.CRM
             errorMsg = "";
             var lstDetails = receipt.CRM_Receipt_Details.ToList();
 
-            //receipt.CRM_Receipt_Details = null;
+            receipt.CRM_Receipt_Details = null;
             var model = SaveModel(receipt, out errorMsg);
 
             foreach (var details in lstDetails)
