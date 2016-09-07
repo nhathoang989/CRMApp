@@ -17,6 +17,7 @@
                 <mui:Link DisplayName="home" Source="/Pages/Home.xaml" />
                 <mui:Link DisplayName="Sản phẩm" Source="/Pages/ProductPage.xaml" />
                 <mui:Link DisplayName="Nhân viên" Source="/Pages/EmployeePage.xaml" />
+                <mui:Link DisplayName="Hóa đơn" Source="/Pages/ReceiptPage.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="settings" GroupKey="settings">

@@ -1,118 +1,65 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using HCRM.Data;
 
 namespace HCRM.DAL.CRM
 {
-    public class ProviderDAL
+    public class ProviderDAL : BaseDAL<CRM_Provider>
     {
+        private static ProviderDAL _ProviderDAL;
 
-        public static bool CreateProvider(CRM_Provider model, out string errorMsg)
+        public static ProviderDAL Instance
         {
-            try
+            get
             {
-                errorMsg = "";
-                using (HCRMEntities context = new HCRMEntities())
+                if (_ProviderDAL == null)
                 {
-                    context.CRM_Provider.Add(model);
-                    context.SaveChanges();
-                    return true;
+                    _ProviderDAL = new ProviderDAL();
+
                 }
-            }
-            catch (Exception ex)
-            {
-                errorMsg = ex.Message;
-                return false;
+                return _ProviderDAL;
             }
         }
-
-        public static bool EditProvider(CRM_Provider model, out string errorMsg)
+        public CRM_Provider SaveProvider(CRM_Provider provider, out string errorMsg)
         {
             errorMsg = "";
-            bool result = false;
-            try
+            var e = SaveModel(provider, out errorMsg);
+            foreach (var address in provider.CRM_Address)
             {
-                using (HCRMEntities context = new HCRMEntities())
-                {
-                    var Provider = GetProvider(model.ProviderID);
-                    if (Provider != null)
-                    {
-                        Provider = model;
-                        context.SaveChanges();
-                        result = true; ;
-                    }
-                    else
-                    {
-                        errorMsg = "NotFound";
-                    }
-                }
+                address.ProviderID = e.ProviderID;
+                AddressDAL.Instance.SaveModel(address, out errorMsg);
             }
-            catch (Exception ex)
-            {
-                errorMsg = ex.Message;
-
-            }
-            return result;
+            return e;
         }
-
-        public static bool RemoveProvider(CRM_Provider model, out string errorMsg)
-        {
-            errorMsg = "";
-            bool result = false;
-            try
-            {
-                using (HCRMEntities context = new HCRMEntities())
-                {
-                    var Provider = GetProvider(model.ProviderID);
-                    if (Provider != null)
-                    {
-                        Provider = model;
-                        context.CRM_Provider.Remove(Provider);
-                        context.SaveChanges();
-                        result = true; ;
-                    }
-                    else
-                    {
-                        errorMsg = "NotFound";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMsg = ex.Message;
-
-            }
-            return result;
-        }
-
-        public static CRM_Provider GetProvider(long ProviderId)
-        {
-            try
-            {
-                CRM_Provider result = null;
-                using (HCRMEntities context = new HCRMEntities())
-                {
-                    result = context.CRM_Provider.First(model => model.ProviderID == ProviderId);
-                }
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static List<CRM_Provider> GetProviderList(int pageIndex, int pageSize)
+        public List<CRM_Provider> SearchProviderList(string keyword, int? pageIndex = 0, int? pageSize = 100)
         {
             using (HCRMEntities context = new HCRMEntities())
             {
-                var g = (from model in context.CRM_Provider                                                  
-                         select model).Skip(pageIndex * pageSize).Take(pageSize);
-                return g.ToList();
+                var lstResult = (from m in context.CRM_Provider
+                                 where (m.Name.Contains(keyword) || m.Email.Contains(keyword) || m.PhoneNumber.Contains(keyword))
+                                 select m).ToList();
+                lstResult.ForEach(p => context.Entry(p).State = EntityState.Detached);
+                foreach (var item in lstResult)
+                {
+                    item.CRM_Address = AddressDAL.Instance.FindBy(a => a.ProviderID == item.ProviderID, c => c.AddressID, "asc", pageIndex, pageSize);
+                }
+                return lstResult;
             }
         }
+
+        public List<CRM_Provider> GetProviderList(int? pageIndex = 0, int? pageSize = 100)
+        {
+            using (HCRMEntities context = new HCRMEntities())
+            {
+                var lstResult = context.CRM_Provider.OrderBy(e => e.Name).Include(e => e.CRM_Address);
+                if (pageSize.HasValue)
+                {
+                    lstResult = lstResult.Skip(pageIndex.Value * pageSize.Value).Take(pageSize.Value);
+                }
+                return lstResult.ToList();
+            }
+        }
+
     }
 }

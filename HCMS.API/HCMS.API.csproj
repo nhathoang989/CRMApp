@@ -272,8 +272,10 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\CRM\BaseCRMController.cs" />
+    <Compile Include="Controllers\CRM\ProviderController.cs" />
     <Compile Include="Controllers\CRM\CustomerController.cs" />
     <Compile Include="Controllers\CRM\AddressController.cs" />
+    <Compile Include="Controllers\CRM\ReceiptImportController.cs" />
     <Compile Include="Controllers\CRM\ReceiptDeliveryController.cs" />
     <Compile Include="Controllers\CRM\ProductController.cs" />
     <Compile Include="Controllers\CRM\EmployeeController.cs" />

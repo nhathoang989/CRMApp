@@ -1,0 +1,68 @@
+﻿<mui:ModernDialog x:Class="HCRM.App.Pages.Popups.ProductDetails"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                  mc:Ignorable="d"
+                  Padding="0"
+                  Title="Chi tiết sản phẩm">
+
+    <!-- Note: ModernDialog buttons are defined in the constructor of the code behind class -->
+    
+        <ScrollViewer>
+            <WrapPanel MinWidth="650" Style="{StaticResource WrapInfos}" Orientation="Horizontal">
+
+                <StackPanel>
+                    <TextBlock Text="Mã sản phẩm" />
+                    <xctk:AutoSelectTextBox Text="{Binding Code}" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Tên sản phẩm" />
+                    <xctk:AutoSelectTextBox Text="{Binding Title}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Xuất xứ" />
+                    <xctk:AutoSelectTextBox Text="{Binding Source}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Quy cách"/>
+                    <xctk:AutoSelectTextBox Text="{Binding Size}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Chất liệu" />
+                    <xctk:AutoSelectTextBox Text="{Binding Material}" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Giá"/>
+                <xctk:AutoSelectTextBox  Text="{Binding StrNormalPrice, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Chiết khấu"/>
+                    <xctk:AutoSelectTextBox Text="{Binding Discount}"  />
+                </StackPanel>
+            <!--<StackPanel>
+                    <TextBlock Text="Mô tả" VerticalAlignment="Center"  />
+                    <xctk:AutoSelectTextBox Text="{Binding Discription}"  />
+                </StackPanel>-->
+                <StackPanel>
+                    <TextBlock Text="Tồn kho" VerticalAlignment="Center"  />
+                    <xctk:AutoSelectTextBox IsReadOnly="True" Text="{Binding TotalRemain}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Width="auto">
+                <StackPanel DataContext="{Binding FileDlg}">
+                    <TextBlock Text="Hình ảnh"/>
+                    <xctk:AutoSelectTextBox IsReadOnly="True" Width="80" Text="{Binding FileName}"/>
+                    <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
+                </StackPanel>
+                <Image Source="{Binding Image}" Margin="20" Height="150"/>            
+                    
+                </StackPanel>
+            </WrapPanel>
+        </ScrollViewer>
+
+</mui:ModernDialog>

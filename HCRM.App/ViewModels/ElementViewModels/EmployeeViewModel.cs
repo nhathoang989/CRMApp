@@ -315,10 +315,19 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
+        public override void Preview()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         public EmployeeViewModel(CRM_Employee model) : base("api/Employee", "Employee")
         {
+            if (model==null)
+            {
+                model = new CRM_Employee();
+            }
             Model = model;
             ModelToView();
         }

@@ -22,6 +22,16 @@ namespace HCMS.API.Controllers.CRM
         {
             string direction = "desc";
             var lstReceipt = ReceiptDeliveryDAL.Instance.GetModelList(e => e.CreatedDate, direction, pageIndex, pageSize);
+            foreach (var receipt in lstReceipt)
+            {
+                receipt.CRM_Receipt_Details =  ReceiptDetailsDAL.Instance.GetModelListBy(d => d.ReceiptDeliveryID == receipt.ReceiptID, d => d.ReceiptDetailsID, "desc", null, null);
+                foreach (var details in receipt.CRM_Receipt_Details)
+                {
+                    details.CRM_Product = ProductDAL.Instance.GetSingleModel(p => p.ProductID == details.ProductID);
+                }
+                receipt.CRM_Employee = EmployeeDAL.Instance.GetSingleModel(e => e.EmployeeID == receipt.EmployeeID);
+                receipt.CRM_Customer = CustomerDAL.Instance.GetSingleModel(e => e.CustomerID == receipt.CustomerID);
+            }
             return Ok(lstReceipt);
 
         }

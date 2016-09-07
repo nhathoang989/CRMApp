@@ -60,11 +60,15 @@ namespace HCRM.DAL
         public T SaveModel(T model, out string errorMsg)
         {
             errorMsg = "";
-            using (HCRMEntities context = new HCRMEntities())
+            if (model != null)
             {
-                
-                return !Exists(model) ? CreateModel(model, out errorMsg) : EditModel(model, out errorMsg);
+                using (HCRMEntities context = new HCRMEntities())
+                {
+                    return !Exists(model) ? CreateModel(model, out errorMsg) : EditModel(model, out errorMsg);
+                }
             }
+            errorMsg = "Not Found";
+            return null;
         }
 
         public T EditModel(T model, out string errorMsg)
@@ -75,7 +79,6 @@ namespace HCRM.DAL
                 errorMsg = "";
                 using (HCRMEntities context = new HCRMEntities())
                 {
-                    context.Entry(model).State = EntityState.Detached;
                     context.Entry(model).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                     result = model;
@@ -106,7 +109,11 @@ namespace HCRM.DAL
             using (HCRMEntities context = new HCRMEntities())
             {
                 T query = context.Set<T>().Where(predicate).FirstOrDefault();
-                context.Entry(query).State = System.Data.Entity.EntityState.Detached;
+                if (query!=null)
+                {
+                    context.Entry(query).State = System.Data.Entity.EntityState.Detached;
+                }
+                
                 return query;
             }
         }        
@@ -258,6 +265,40 @@ namespace HCRM.DAL
         }
 
         public List<T> GetModelListBy(Expression<Func<T, bool>> condition, Expression<Func<T, object>> orderBy, string direction, int? pageIndex, int? pageSize)
+        {
+            using (HCRMEntities context = new HCRMEntities())
+            {
+                List<T> lstResult = new List<T>();
+                switch (direction)
+                {
+                    case "desc":
+                        if (pageSize.HasValue)
+                        {
+                            lstResult = context.Set<T>().Where(condition).OrderByDescending(orderBy).Skip(pageIndex.Value * pageSize.Value).Take(pageSize.Value).ToList();
+
+                        }
+                        else
+                        {
+                            lstResult = context.Set<T>().Where(condition).OrderByDescending(orderBy).ToList();
+                        }
+                        break;
+                    default:
+                        if (pageSize.HasValue)
+                        {
+                            lstResult = context.Set<T>().Where(condition).OrderBy(orderBy).Skip(pageIndex.Value * pageSize.Value).Take(pageSize.Value).ToList();
+
+                        }
+                        else
+                        {
+                            lstResult = context.Set<T>().Where(condition).OrderBy(orderBy).ToList();
+                        }
+                        break;
+                }
+                lstResult.ForEach(p => context.Entry(p).State = EntityState.Detached);
+                return lstResult;
+            }
+        }
+        public List<T> GetModelListBy(Expression<Func<T, bool>> condition, Expression<Func<T, long>> orderBy, string direction, int? pageIndex, int? pageSize)
         {
             using (HCRMEntities context = new HCRMEntities())
             {

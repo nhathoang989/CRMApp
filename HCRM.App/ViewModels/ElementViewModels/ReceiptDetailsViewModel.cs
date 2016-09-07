@@ -27,6 +27,10 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
+                if (_product==null)
+                {
+                    _product = new ProductViewModel();
+                }
                 return _product;
             }
 
@@ -50,11 +54,16 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (common.CheckIsPrice(value))
                 {
-                    value = "0";
+                    _strReducePrice = common.FormatPrice(value);
+                    ReducePrice = double.Parse(value.Replace(",", string.Empty));
                 }
-                _strReducePrice = common.FormatPrice(value);
+                else
+                {
+                    _strReducePrice = "0";
+                    ReducePrice = 0;
+                }
                 OnPropertyChanged("StrReducePrice");
             }
         }
@@ -68,8 +77,15 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
             set
             {
-                _strUnitPrice = common.FormatPrice(value);
-                UnitPrice = double.Parse(value.Replace(",", string.Empty));
+                if (common.CheckIsPrice(value))
+                {
+                    _strUnitPrice = common.FormatPrice(value);
+                    UnitPrice = double.Parse(value.Replace(",", string.Empty));
+                }
+                else {
+                    _strUnitPrice = "0";
+                    UnitPrice = 0;
+                }
                 OnPropertyChanged("StrUnitPrice");
             }
         }
@@ -111,7 +127,14 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
             set
             {
-                _quantity = value;
+                if (value > Product.TotalRemain)
+                {
+                    _quantity = Product.TotalRemain;
+                }
+                else {
+                    _quantity = value;
+                }
+                
                 OnPropertyChanged("Quantity");
             }
         }
@@ -183,6 +206,11 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 IRestResponse result = await BaseRepo.RemoveModel(Model);
                 _eventAggregator.GetEvent<ItemListChanged<bool>>().Publish(result.StatusCode == System.Net.HttpStatusCode.OK);
             }
+        }
+
+        public override void Preview()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

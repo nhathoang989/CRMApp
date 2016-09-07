@@ -56,7 +56,7 @@ namespace HCRM.App.Views.PrintViews
                 
                 dialog.PrintVisual(printGrid, "A WPF printing");
 
-                ApplicationService.Instance.EventAggregator.GetEvent<SaveReceiptDeliveryResultEvent>().Publish(result);
+                ApplicationService.Instance.EventAggregator.GetEvent<PrintReceiptEvent<bool>>().Publish(result);
             }
             this.Close();
         }

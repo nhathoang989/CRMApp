@@ -13,13 +13,13 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 10">
         
-            <Button Content="First" Margin="10 0" Width="100" Command="{Binding FirstCommand}"/>
-            <Button Content="Previous" Margin="10 0" Width="100" Command="{Binding PreviousCommand}"/>
+            <Button Content="First" Margin="10 0" Width="85" Command="{Binding FirstCommand}"/>
+            <Button Content="Previous" Margin="10 0" Width="85" Command="{Binding PreviousCommand}"/>
             <TextBlock Width="auto" Text="{Binding CurrentPageIndex}"/>
         <TextBlock Text="of"  Margin="5 0" VerticalAlignment="Center"/>
         <TextBlock Width="auto" Text="{Binding TotalPages}"/>
-        <Button Content="Next" Margin="10 0" Width="100" Command="{Binding NextCommand}"/>
-        <Button Content="Last" Margin="10 0" Width="100" Command="{Binding LastCommand}"/>
+        <Button Content="Next" Margin="10 0" Width="85" Command="{Binding NextCommand}"/>
+        <Button Content="Last" Margin="10 0" Width="85" Command="{Binding LastCommand}"/>
         </StackPanel>        
     </StackPanel>
 </UserControl>

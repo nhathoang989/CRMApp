@@ -30,7 +30,7 @@ namespace HCRM.App.ViewModels.ProductViewModels
         private List<ProductViewModel> _listAllProduct;
         private List<ProductViewModel> currentListProduct;
         private bool _isBusy;
-        private IEventAggregator _eventAggregator;
+        private IEventAggregator _eventHandler;
         private ICommand _newProductCommand;
         
         public ProductViewModel CurrentItem
@@ -38,7 +38,7 @@ namespace HCRM.App.ViewModels.ProductViewModels
             get {
                 if (_currentProduct==null)
                 {
-                    _currentProduct = new ProductViewModel();
+                    _currentProduct = new ProductViewModel(EventHandler);
                 }
                 return _currentProduct;
 
@@ -141,7 +141,8 @@ namespace HCRM.App.ViewModels.ProductViewModels
 
         private void NewProduct()
         {
-            CurrentItem = new ProductViewModel();
+            CurrentItem = new ProductViewModel(EventHandler);
+            CurrentItem.Preview();
         }
 
         async void ReFreshProducts() {
@@ -156,8 +157,8 @@ namespace HCRM.App.ViewModels.ProductViewModels
             get
             {
                 return (searchText, obj) =>
-                    (obj as ProductViewModel).Title.ToLower().Contains(searchText.ToLower())
-                    || (obj as ProductViewModel).Code.ToLower().Contains(searchText.ToLower());
+                    (obj as ProductViewModel).Title.Contains(searchText)
+                    || (obj as ProductViewModel).Code.Contains(searchText);
             }
         }
 
@@ -193,7 +194,7 @@ namespace HCRM.App.ViewModels.ProductViewModels
         {
             get
             {
-                if (_isShowDetails==null)
+                if (_isShowDetails)
                 {
                     return false;
                 }
@@ -207,7 +208,24 @@ namespace HCRM.App.ViewModels.ProductViewModels
             }
         }
 
-        private void ItemsChanged(bool isChanged)
+        public IEventAggregator EventHandler
+        {
+            get
+            {
+                if (_eventHandler==null)
+                {
+                    _eventHandler = ApplicationService.Instance.GlobalEventAggregator;
+                }
+                return _eventHandler;
+            }
+
+            set
+            {
+                _eventHandler = value;
+            }
+        }
+
+        private void ProductChanged(bool isChanged)
         {
             if (isChanged)
             {
@@ -220,10 +238,10 @@ namespace HCRM.App.ViewModels.ProductViewModels
         {
 
             ReFreshProducts();
-            _eventAggregator = ApplicationService.Instance.EventAggregator;
+            EventHandler = ApplicationService.Instance.GlobalEventAggregator;
 
-            ItemListChanged<bool> _event = ApplicationService.Instance.EventAggregator.GetEvent<ItemListChanged<bool>>();
-            _event.Subscribe(ItemsChanged);
+            ProductListChanged _event = ApplicationService.Instance.GlobalEventAggregator.GetEvent<ProductListChanged>();
+            _event.Subscribe(ProductChanged);
 
         }
     }

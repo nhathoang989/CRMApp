@@ -96,10 +96,10 @@
     <Compile Include="CRM_Receipt_Details.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="CRM_Receipt_Return.cs">
+    <Compile Include="CRM_Receipt_Import.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="CRM_Receipt_Warehouse.cs">
+    <Compile Include="CRM_Receipt_Return.cs">
       <DependentUpon>HCRMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CRM_Role_Menu.cs">

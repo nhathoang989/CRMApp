@@ -11,7 +11,7 @@
              >
     <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
-        <mui:ModernTab Layout="List"  SelectedSource="/Pages/Employees/ListEmployee.xaml">
+        <mui:ModernTab Layout="List" Style="{StaticResource SideMenuLink}"  SelectedSource="/Pages/Employees/ListEmployee.xaml">
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
                 <mui:Link DisplayName="Danh sách nhân viên" Source="/Pages/Employees/ListEmployee.xaml" />

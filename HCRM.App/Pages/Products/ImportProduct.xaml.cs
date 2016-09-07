@@ -1,17 +1,16 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace HCRM.App.Pages.Products
 {
     /// <summary>
-    /// Interaction logic for ImportProduct.xaml
+    /// Interaction logic for SaleProduct.xaml
     /// </summary>
     public partial class ImportProduct : UserControl
     {
         public ImportProduct()
         {
             InitializeComponent();
-            DataContext = new ViewModels.ProductViewModels.ProductPageViewModel();
+            DataContext = new ViewModels.ImportFormViewModel();
         }
     }
 }

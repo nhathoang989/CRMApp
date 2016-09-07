@@ -1,0 +1,9 @@
+﻿<Window x:Class="HCRM.App.Views.CustomControls.ReportViewer"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:HCRM.App.Views.CustomControls"
+    Title="CodeReason Reports - Barcode Report" Height="600" Width="600" WindowState="Maximized" Activated="ModernWindow_Activated">
+    <Grid>
+        <local:MyDocumentViewer x:Name="documentViewer" />
+    </Grid>
+</Window>

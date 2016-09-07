@@ -13,6 +13,11 @@ namespace HCRM.App.Ultilities
 {
     class common
     {
+        public static bool CheckIsPrice(string number) {
+            number = number.Replace(",", "");                
+            Regex rgx = new Regex("^(0|[1-9][0-9]*)$");
+            return rgx.IsMatch(number);
+        }
         public static bool ConfirmDialog(string _Message, string _Title)
         {
             var dlg = new ModernDialog

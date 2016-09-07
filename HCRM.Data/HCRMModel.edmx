@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HCRMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HCRMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CRM_Address">
           <Key>
             <PropertyRef Name="AddressID" />
@@ -131,7 +131,7 @@
             <PropertyRef Name="ReceiptID" />
           </Key>
           <Property Name="ReceiptID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="OrderName" Type="nvarchar(max)" />
           <Property Name="OrderAddress" Type="nvarchar(max)" />
           <Property Name="OrderPhone" Type="nvarchar" MaxLength="50" />
@@ -160,18 +160,37 @@
           <Property Name="ReceiptDetailsID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ReceiptDeliveryID" Type="bigint" />
           <Property Name="ReceiptReturnID" Type="bigint" />
-          <Property Name="ReceiptWarehouseID" Type="bigint" />
+          <Property Name="ReceiptImportID" Type="bigint" />
           <Property Name="ProductID" Type="bigint" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="ReducePrice" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CRM_Receipt_Import">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+          </Key>
+          <Property Name="ReceiptID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalReduceAmount" Type="float" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="TotalPaid" Type="float" />
+          <Property Name="TotalRemain" Type="float" />
+          <Property Name="IsPaid" Type="bit" Nullable="false" />
+          <Property Name="IsReceived" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="250" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="FormPayment" Type="nvarchar" MaxLength="250" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
         </EntityType>
         <EntityType Name="CRM_Receipt_Return">
           <Key>
             <PropertyRef Name="ReceiptID" />
           </Key>
           <Property Name="ReceiptID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="Price" Type="float" />
           <Property Name="Total" Type="float" />
           <Property Name="IsPaid" Type="bit" Nullable="false" />
@@ -182,22 +201,7 @@
           <Property Name="UserID" Type="bigint" />
           <Property Name="DeliveryReceiptID" Type="bigint" />
           <Property Name="CustomerID" Type="int" />
-        </EntityType>
-        <EntityType Name="CRM_Receipt_Warehouse">
-          <Key>
-            <PropertyRef Name="ReceiptID" />
-          </Key>
-          <Property Name="ReceiptID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreatedDate" Type="datetime" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Total" Type="float" />
-          <Property Name="IsPaid" Type="bit" Nullable="false" />
-          <Property Name="IsReceived" Type="bit" Nullable="false" />
-          <Property Name="Status" Type="nvarchar" MaxLength="250" />
-          <Property Name="IsDeleted" Type="bit" />
-          <Property Name="FormPayment" Type="nvarchar" MaxLength="250" />
-          <Property Name="UserId" Type="bigint" Nullable="false" />
-          <Property Name="ProviderID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
         </EntityType>
         <EntityType Name="CRM_Role_Menu">
           <Key>
@@ -296,6 +300,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CRM_Receipt_Delivery_CRM_Employee">
+          <End Role="CRM_Employee" Type="Self.CRM_Employee" Multiplicity="0..1" />
+          <End Role="CRM_Receipt_Delivery" Type="Self.CRM_Receipt_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Delivery">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CRM_Receipt_Details_CRM_Product">
           <End Role="CRM_Product" Type="Self.CRM_Product" Multiplicity="1" />
           <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
@@ -320,6 +336,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Import">
+          <End Role="CRM_Receipt_Import" Type="Self.CRM_Receipt_Import" Multiplicity="0..1" />
+          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Receipt_Import">
+              <PropertyRef Name="ReceiptID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Details">
+              <PropertyRef Name="ReceiptImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Return">
           <End Role="CRM_Receipt_Return" Type="Self.CRM_Receipt_Return" Multiplicity="0..1" />
           <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
@@ -332,15 +360,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Warehouse">
-          <End Role="CRM_Receipt_Warehouse" Type="Self.CRM_Receipt_Warehouse" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+        <Association Name="FK_CRM_Receipt_Import_CRM_Employee">
+          <End Role="CRM_Employee" Type="Self.CRM_Employee" Multiplicity="0..1" />
+          <End Role="CRM_Receipt_Import" Type="Self.CRM_Receipt_Import" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CRM_Receipt_Warehouse">
-              <PropertyRef Name="ReceiptID" />
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
             </Principal>
-            <Dependent Role="CRM_Receipt_Details">
-              <PropertyRef Name="ReceiptWarehouseID" />
+            <Dependent Role="CRM_Receipt_Import">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CRM_Receipt_Import_CRM_Provider">
+          <End Role="CRM_Provider" Type="Self.CRM_Provider" Multiplicity="0..1" />
+          <End Role="CRM_Receipt_Import" Type="Self.CRM_Receipt_Import" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Import">
+              <PropertyRef Name="ProviderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -356,15 +396,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CRM_Receipt_Warehouse_CRM_Provider">
-          <End Role="CRM_Provider" Type="Self.CRM_Provider" Multiplicity="1" />
-          <End Role="CRM_Receipt_Warehouse" Type="Self.CRM_Receipt_Warehouse" Multiplicity="*" />
+        <Association Name="FK_CRM_Receipt_Return_CRM_Employee">
+          <End Role="CRM_Employee" Type="Self.CRM_Employee" Multiplicity="0..1" />
+          <End Role="CRM_Receipt_Return" Type="Self.CRM_Receipt_Return" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CRM_Provider">
-              <PropertyRef Name="ProviderID" />
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
             </Principal>
-            <Dependent Role="CRM_Receipt_Warehouse">
-              <PropertyRef Name="ProviderID" />
+            <Dependent Role="CRM_Receipt_Return">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -391,8 +431,8 @@
           <EntitySet Name="CRM_Provider" EntityType="Self.CRM_Provider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_Receipt_Delivery" EntityType="Self.CRM_Receipt_Delivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_Receipt_Details" EntityType="Self.CRM_Receipt_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CRM_Receipt_Import" EntityType="Self.CRM_Receipt_Import" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_Receipt_Return" EntityType="Self.CRM_Receipt_Return" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CRM_Receipt_Warehouse" EntityType="Self.CRM_Receipt_Warehouse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_Role_Menu" EntityType="Self.CRM_Role_Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_Tags" EntityType="Self.CRM_Tags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CRM_User" EntityType="Self.CRM_User" Schema="dbo" store:Type="Tables" />
@@ -417,6 +457,10 @@
             <End Role="CRM_Customer" EntitySet="CRM_Customer" />
             <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
           </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Delivery_CRM_Employee" Association="Self.FK_CRM_Receipt_Delivery_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
+          </AssociationSet>
           <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Product" Association="Self.FK_CRM_Receipt_Details_CRM_Product">
             <End Role="CRM_Product" EntitySet="CRM_Product" />
             <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
@@ -425,32 +469,117 @@
             <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
             <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
           </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Import" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Import">
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
+            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          </AssociationSet>
           <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Return" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Return">
             <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
             <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
           </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Warehouse" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Warehouse">
-            <End Role="CRM_Receipt_Warehouse" EntitySet="CRM_Receipt_Warehouse" />
-            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          <AssociationSet Name="FK_CRM_Receipt_Import_CRM_Employee" Association="Self.FK_CRM_Receipt_Import_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Import_CRM_Provider" Association="Self.FK_CRM_Receipt_Import_CRM_Provider">
+            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
           </AssociationSet>
           <AssociationSet Name="FK_CRM_Receipt_Return_CRM_Customer" Association="Self.FK_CRM_Receipt_Return_CRM_Customer">
             <End Role="CRM_Customer" EntitySet="CRM_Customer" />
             <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
           </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Warehouse_CRM_Provider" Association="Self.FK_CRM_Receipt_Warehouse_CRM_Provider">
-            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
-            <End Role="CRM_Receipt_Warehouse" EntitySet="CRM_Receipt_Warehouse" />
+          <AssociationSet Name="FK_CRM_Receipt_Return_CRM_Employee" Association="Self.FK_CRM_Receipt_Return_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
           </AssociationSet>
           <AssociationSet Name="FK_CRM_Role_Menu_CRM_Menu" Association="Self.FK_CRM_Role_Menu_CRM_Menu">
             <End Role="CRM_Menu" EntitySet="CRM_Menu" />
             <End Role="CRM_Role_Menu" EntitySet="CRM_Role_Menu" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HCRMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HCRMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CRM_Address" EntityType="HCRMModel.CRM_Address" />
+          <EntitySet Name="CRM_Customer" EntityType="HCRMModel.CRM_Customer" />
+          <EntitySet Name="CRM_Employee" EntityType="HCRMModel.CRM_Employee" />
+          <EntitySet Name="CRM_Menu" EntityType="HCRMModel.CRM_Menu" />
+          <EntitySet Name="CRM_Product" EntityType="HCRMModel.CRM_Product" />
+          <EntitySet Name="CRM_Product_Details_Template" EntityType="HCRMModel.CRM_Product_Details_Template" />
+          <EntitySet Name="CRM_Product_Property" EntityType="HCRMModel.CRM_Product_Property" />
+          <EntitySet Name="CRM_Provider" EntityType="HCRMModel.CRM_Provider" />
+          <EntitySet Name="CRM_Receipt_Delivery" EntityType="HCRMModel.CRM_Receipt_Delivery" />
+          <EntitySet Name="CRM_Receipt_Details" EntityType="HCRMModel.CRM_Receipt_Details" />
+          <EntitySet Name="CRM_Receipt_Return" EntityType="HCRMModel.CRM_Receipt_Return" />
+          <EntitySet Name="CRM_Role_Menu" EntityType="HCRMModel.CRM_Role_Menu" />
+          <EntitySet Name="CRM_Tags" EntityType="HCRMModel.CRM_Tags" />
+          <EntitySet Name="CRM_User" EntityType="HCRMModel.CRM_User" />
+          <EntitySet Name="sysdiagrams" EntityType="HCRMModel.sysdiagram" />
+          <AssociationSet Name="FK_CRM_Address_CRM_Customer" Association="HCRMModel.FK_CRM_Address_CRM_Customer">
+            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
+            <End Role="CRM_Address" EntitySet="CRM_Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Address_CRM_Employee" Association="HCRMModel.FK_CRM_Address_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Address" EntitySet="CRM_Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Address_CRM_Provider" Association="HCRMModel.FK_CRM_Address_CRM_Provider">
+            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
+            <End Role="CRM_Address" EntitySet="CRM_Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Delivery_CRM_Customer" Association="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Customer">
+            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
+            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Return_CRM_Customer" Association="HCRMModel.FK_CRM_Receipt_Return_CRM_Customer">
+            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
+            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Delivery_CRM_Employee" Association="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Return_CRM_Employee" Association="HCRMModel.FK_CRM_Receipt_Return_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Role_Menu_CRM_Menu" Association="HCRMModel.FK_CRM_Role_Menu_CRM_Menu">
+            <End Role="CRM_Menu" EntitySet="CRM_Menu" />
+            <End Role="CRM_Role_Menu" EntitySet="CRM_Role_Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Product_Property_CRM_Products" Association="HCRMModel.FK_CRM_Product_Property_CRM_Products">
+            <End Role="CRM_Product" EntitySet="CRM_Product" />
+            <End Role="CRM_Product_Property" EntitySet="CRM_Product_Property" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Product" Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Product">
+            <End Role="CRM_Product" EntitySet="CRM_Product" />
+            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Delivery" Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Delivery">
+            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
+            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Return" Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Return">
+            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
+            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          </AssociationSet>
+          <EntitySet Name="CRM_Receipt_Import" EntityType="HCRMModel.CRM_Receipt_Import" />
+          <AssociationSet Name="FK_CRM_Receipt_Import_CRM_Employee" Association="HCRMModel.FK_CRM_Receipt_Import_CRM_Employee">
+            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Import_CRM_Provider" Association="HCRMModel.FK_CRM_Receipt_Import_CRM_Provider">
+            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Import" Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Import">
+            <End Role="CRM_Receipt_Import" EntitySet="CRM_Receipt_Import" />
+            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="CRM_Address">
           <Key>
             <PropertyRef Name="AddressID" />
@@ -463,9 +592,9 @@
           <Property Name="CustomerID" Type="Int32" />
           <Property Name="ProviderID" Type="Int32" />
           <Property Name="EmployeeID" Type="Int32" />
-          <NavigationProperty Name="CRM_Customer" Relationship="Self.FK_CRM_Address_CRM_Customer" FromRole="CRM_Address" ToRole="CRM_Customer" />
-          <NavigationProperty Name="CRM_Employee" Relationship="Self.FK_CRM_Address_CRM_Employee" FromRole="CRM_Address" ToRole="CRM_Employee" />
-          <NavigationProperty Name="CRM_Provider" Relationship="Self.FK_CRM_Address_CRM_Provider" FromRole="CRM_Address" ToRole="CRM_Provider" />
+          <NavigationProperty Name="CRM_Customer" Relationship="HCRMModel.FK_CRM_Address_CRM_Customer" FromRole="CRM_Address" ToRole="CRM_Customer" />
+          <NavigationProperty Name="CRM_Employee" Relationship="HCRMModel.FK_CRM_Address_CRM_Employee" FromRole="CRM_Address" ToRole="CRM_Employee" />
+          <NavigationProperty Name="CRM_Provider" Relationship="HCRMModel.FK_CRM_Address_CRM_Provider" FromRole="CRM_Address" ToRole="CRM_Provider" />
         </EntityType>
         <EntityType Name="CRM_Customer">
           <Key>
@@ -479,9 +608,9 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Avatar" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CRM_Address" Relationship="Self.FK_CRM_Address_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Address" />
-          <NavigationProperty Name="CRM_Receipt_Delivery" Relationship="Self.FK_CRM_Receipt_Delivery_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Receipt_Delivery" />
-          <NavigationProperty Name="CRM_Receipt_Return" Relationship="Self.FK_CRM_Receipt_Return_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Receipt_Return" />
+          <NavigationProperty Name="CRM_Address" Relationship="HCRMModel.FK_CRM_Address_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Address" />
+          <NavigationProperty Name="CRM_Receipt_Delivery" Relationship="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Receipt_Delivery" />
+          <NavigationProperty Name="CRM_Receipt_Return" Relationship="HCRMModel.FK_CRM_Receipt_Return_CRM_Customer" FromRole="CRM_Customer" ToRole="CRM_Receipt_Return" />
         </EntityType>
         <EntityType Name="CRM_Employee">
           <Key>
@@ -500,20 +629,23 @@
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="Avatar" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CRM_Address" Relationship="Self.FK_CRM_Address_CRM_Employee" FromRole="CRM_Employee" ToRole="CRM_Address" />
+          <NavigationProperty Name="CRM_Address" Relationship="HCRMModel.FK_CRM_Address_CRM_Employee" FromRole="CRM_Employee" ToRole="CRM_Address" />
+          <NavigationProperty Name="CRM_Receipt_Delivery" Relationship="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Employee" FromRole="CRM_Employee" ToRole="CRM_Receipt_Delivery" />
+          <NavigationProperty Name="CRM_Receipt_Return" Relationship="HCRMModel.FK_CRM_Receipt_Return_CRM_Employee" FromRole="CRM_Employee" ToRole="CRM_Receipt_Return" />
+          <NavigationProperty Name="CRM_Receipt_Import" Relationship="HCRMModel.FK_CRM_Receipt_Import_CRM_Employee" FromRole="CRM_Employee" ToRole="CRM_Receipt_Import" />
         </EntityType>
         <EntityType Name="CRM_Menu">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Path" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Level" Type="Int16" Nullable="false" />
           <Property Name="ParentID" Type="Int32" />
-          <NavigationProperty Name="CRM_Role_Menu" Relationship="Self.FK_CRM_Role_Menu_CRM_Menu" FromRole="CRM_Menu" ToRole="CRM_Role_Menu" />
+          <NavigationProperty Name="CRM_Role_Menu" Relationship="HCRMModel.FK_CRM_Role_Menu_CRM_Menu" FromRole="CRM_Menu" ToRole="CRM_Role_Menu" />
         </EntityType>
         <EntityType Name="CRM_Product">
           <Key>
@@ -521,7 +653,7 @@
           </Key>
           <Property Name="ProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Source" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Material" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
@@ -541,20 +673,20 @@
           <Property Name="CateId" Type="Int32" />
           <Property Name="DisplayOrder" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="IsVisible" Type="Boolean" Nullable="false" />
           <Property Name="IsDraft" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CRM_Product_Property" Relationship="Self.FK_CRM_Product_Property_CRM_Products" FromRole="CRM_Product" ToRole="CRM_Product_Property" />
-          <NavigationProperty Name="CRM_Receipt_Details" Relationship="Self.FK_CRM_Receipt_Details_CRM_Product" FromRole="CRM_Product" ToRole="CRM_Receipt_Details" />
+          <NavigationProperty Name="CRM_Product_Property" Relationship="HCRMModel.FK_CRM_Product_Property_CRM_Products" FromRole="CRM_Product" ToRole="CRM_Product_Property" />
+          <NavigationProperty Name="CRM_Receipt_Details" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Product" FromRole="CRM_Product" ToRole="CRM_Receipt_Details" />
         </EntityType>
         <EntityType Name="CRM_Product_Details_Template">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Template" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Template" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CateID" Type="Int32" />
         </EntityType>
         <EntityType Name="CRM_Product_Property">
@@ -563,12 +695,12 @@
           </Key>
           <Property Name="PropertyID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int64" Nullable="false" />
-          <Property Name="Roles" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Key" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Roles" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DoubleValue" Type="Double" />
           <Property Name="IntValue" Type="Int32" />
-          <NavigationProperty Name="CRM_Product" Relationship="Self.FK_CRM_Product_Property_CRM_Products" FromRole="CRM_Product_Property" ToRole="CRM_Product" />
+          <NavigationProperty Name="CRM_Product" Relationship="HCRMModel.FK_CRM_Product_Property_CRM_Products" FromRole="CRM_Product_Property" ToRole="CRM_Product" />
         </EntityType>
         <EntityType Name="CRM_Provider">
           <Key>
@@ -582,15 +714,15 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Avatar" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CRM_Address" Relationship="Self.FK_CRM_Address_CRM_Provider" FromRole="CRM_Provider" ToRole="CRM_Address" />
-          <NavigationProperty Name="CRM_Receipt_Warehouse" Relationship="Self.FK_CRM_Receipt_Warehouse_CRM_Provider" FromRole="CRM_Provider" ToRole="CRM_Receipt_Warehouse" />
+          <NavigationProperty Name="CRM_Address" Relationship="HCRMModel.FK_CRM_Address_CRM_Provider" FromRole="CRM_Provider" ToRole="CRM_Address" />
+          <NavigationProperty Name="CRM_Receipt_Import" Relationship="HCRMModel.FK_CRM_Receipt_Import_CRM_Provider" FromRole="CRM_Provider" ToRole="CRM_Receipt_Import" />
         </EntityType>
         <EntityType Name="CRM_Receipt_Delivery">
           <Key>
             <PropertyRef Name="ReceiptID" />
           </Key>
           <Property Name="ReceiptID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="OrderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OrderAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OrderPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -611,8 +743,9 @@
           <Property Name="FormPayment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="CustomerID" Type="Int32" />
-          <NavigationProperty Name="CRM_Customer" Relationship="Self.FK_CRM_Receipt_Delivery_CRM_Customer" FromRole="CRM_Receipt_Delivery" ToRole="CRM_Customer" />
-          <NavigationProperty Name="CRM_Receipt_Details" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" FromRole="CRM_Receipt_Delivery" ToRole="CRM_Receipt_Details" />
+          <NavigationProperty Name="CRM_Customer" Relationship="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Customer" FromRole="CRM_Receipt_Delivery" ToRole="CRM_Customer" />
+          <NavigationProperty Name="CRM_Employee" Relationship="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Employee" FromRole="CRM_Receipt_Delivery" ToRole="CRM_Employee" />
+          <NavigationProperty Name="CRM_Receipt_Details" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" FromRole="CRM_Receipt_Delivery" ToRole="CRM_Receipt_Details" />
         </EntityType>
         <EntityType Name="CRM_Receipt_Details">
           <Key>
@@ -621,22 +754,22 @@
           <Property Name="ReceiptDetailsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ReceiptDeliveryID" Type="Int64" />
           <Property Name="ReceiptReturnID" Type="Int64" />
-          <Property Name="ReceiptWarehouseID" Type="Int64" />
+          <Property Name="ReceiptImportID" Type="Int64" />
           <Property Name="ProductID" Type="Int64" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="UnitPrice" Type="Double" Nullable="false" />
           <Property Name="ReducePrice" Type="Double" Nullable="false" />
-          <NavigationProperty Name="CRM_Product" Relationship="Self.FK_CRM_Receipt_Details_CRM_Product" FromRole="CRM_Receipt_Details" ToRole="CRM_Product" />
-          <NavigationProperty Name="CRM_Receipt_Delivery" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Delivery" />
-          <NavigationProperty Name="CRM_Receipt_Return" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Return" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Return" />
-          <NavigationProperty Name="CRM_Receipt_Warehouse" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Warehouse" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Warehouse" />
+          <NavigationProperty Name="CRM_Product" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Product" FromRole="CRM_Receipt_Details" ToRole="CRM_Product" />
+          <NavigationProperty Name="CRM_Receipt_Delivery" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Delivery" />
+          <NavigationProperty Name="CRM_Receipt_Return" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Return" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Return" />
+          <NavigationProperty Name="CRM_Receipt_Import" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Import" FromRole="CRM_Receipt_Details" ToRole="CRM_Receipt_Import" />
         </EntityType>
         <EntityType Name="CRM_Receipt_Return">
           <Key>
             <PropertyRef Name="ReceiptID" />
           </Key>
           <Property Name="ReceiptID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Price" Type="Double" />
           <Property Name="Total" Type="Double" />
           <Property Name="IsPaid" Type="Boolean" Nullable="false" />
@@ -647,35 +780,19 @@
           <Property Name="UserID" Type="Int64" />
           <Property Name="DeliveryReceiptID" Type="Int64" />
           <Property Name="CustomerID" Type="Int32" />
-          <NavigationProperty Name="CRM_Customer" Relationship="Self.FK_CRM_Receipt_Return_CRM_Customer" FromRole="CRM_Receipt_Return" ToRole="CRM_Customer" />
-          <NavigationProperty Name="CRM_Receipt_Details" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Return" FromRole="CRM_Receipt_Return" ToRole="CRM_Receipt_Details" />
-        </EntityType>
-        <EntityType Name="CRM_Receipt_Warehouse">
-          <Key>
-            <PropertyRef Name="ReceiptID" />
-          </Key>
-          <Property Name="ReceiptID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="Total" Type="Double" />
-          <Property Name="IsPaid" Type="Boolean" Nullable="false" />
-          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsDeleted" Type="Boolean" />
-          <Property Name="FormPayment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="ProviderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CRM_Provider" Relationship="Self.FK_CRM_Receipt_Warehouse_CRM_Provider" FromRole="CRM_Receipt_Warehouse" ToRole="CRM_Provider" />
-          <NavigationProperty Name="CRM_Receipt_Details" Relationship="Self.FK_CRM_Receipt_Details_CRM_Receipt_Warehouse" FromRole="CRM_Receipt_Warehouse" ToRole="CRM_Receipt_Details" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="CRM_Customer" Relationship="HCRMModel.FK_CRM_Receipt_Return_CRM_Customer" FromRole="CRM_Receipt_Return" ToRole="CRM_Customer" />
+          <NavigationProperty Name="CRM_Employee" Relationship="HCRMModel.FK_CRM_Receipt_Return_CRM_Employee" FromRole="CRM_Receipt_Return" ToRole="CRM_Employee" />
+          <NavigationProperty Name="CRM_Receipt_Details" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Return" FromRole="CRM_Receipt_Return" ToRole="CRM_Receipt_Details" />
         </EntityType>
         <EntityType Name="CRM_Role_Menu">
           <Key>
             <PropertyRef Name="Role" />
             <PropertyRef Name="MenuID" />
           </Key>
-          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MenuID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CRM_Menu" Relationship="Self.FK_CRM_Role_Menu_CRM_Menu" FromRole="CRM_Role_Menu" ToRole="CRM_Menu" />
+          <NavigationProperty Name="CRM_Menu" Relationship="HCRMModel.FK_CRM_Role_Menu_CRM_Menu" FromRole="CRM_Role_Menu" ToRole="CRM_Menu" />
         </EntityType>
         <EntityType Name="CRM_Tags">
           <Key>
@@ -684,7 +801,7 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="EditedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="IsView" Type="Boolean" />
           <Property Name="SEOKeyWords" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -692,7 +809,7 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Roles" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -700,15 +817,15 @@
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_CRM_Address_CRM_Customer">
-          <End Role="CRM_Customer" Type="Self.CRM_Customer" Multiplicity="0..1" />
-          <End Role="CRM_Address" Type="Self.CRM_Address" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Customer" Role="CRM_Customer" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Address" Role="CRM_Address" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Customer">
               <PropertyRef Name="CustomerID" />
@@ -719,8 +836,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Address_CRM_Employee">
-          <End Role="CRM_Employee" Type="Self.CRM_Employee" Multiplicity="0..1" />
-          <End Role="CRM_Address" Type="Self.CRM_Address" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Employee" Role="CRM_Employee" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Address" Role="CRM_Address" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Employee">
               <PropertyRef Name="EmployeeID" />
@@ -731,8 +848,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Address_CRM_Provider">
-          <End Role="CRM_Provider" Type="Self.CRM_Provider" Multiplicity="0..1" />
-          <End Role="CRM_Address" Type="Self.CRM_Address" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Provider" Role="CRM_Provider" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Address" Role="CRM_Address" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Provider">
               <PropertyRef Name="ProviderID" />
@@ -743,8 +860,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Receipt_Delivery_CRM_Customer">
-          <End Role="CRM_Customer" Type="Self.CRM_Customer" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Delivery" Type="Self.CRM_Receipt_Delivery" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Customer" Role="CRM_Customer" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Delivery" Role="CRM_Receipt_Delivery" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Customer">
               <PropertyRef Name="CustomerID" />
@@ -755,8 +872,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Receipt_Return_CRM_Customer">
-          <End Role="CRM_Customer" Type="Self.CRM_Customer" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Return" Type="Self.CRM_Receipt_Return" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Customer" Role="CRM_Customer" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Return" Role="CRM_Receipt_Return" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Customer">
               <PropertyRef Name="CustomerID" />
@@ -766,9 +883,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CRM_Receipt_Delivery_CRM_Employee">
+          <End Type="HCRMModel.CRM_Employee" Role="CRM_Employee" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Delivery" Role="CRM_Receipt_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Delivery">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CRM_Receipt_Return_CRM_Employee">
+          <End Type="HCRMModel.CRM_Employee" Role="CRM_Employee" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Return" Role="CRM_Receipt_Return" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Return">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CRM_Role_Menu_CRM_Menu">
-          <End Role="CRM_Menu" Type="Self.CRM_Menu" Multiplicity="1" />
-          <End Role="CRM_Role_Menu" Type="Self.CRM_Role_Menu" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Menu" Role="CRM_Menu" Multiplicity="1" />
+          <End Type="HCRMModel.CRM_Role_Menu" Role="CRM_Role_Menu" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Menu">
               <PropertyRef Name="ID" />
@@ -779,8 +920,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Product_Property_CRM_Products">
-          <End Role="CRM_Product" Type="Self.CRM_Product" Multiplicity="1" />
-          <End Role="CRM_Product_Property" Type="Self.CRM_Product_Property" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Product" Role="CRM_Product" Multiplicity="1" />
+          <End Type="HCRMModel.CRM_Product_Property" Role="CRM_Product_Property" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Product">
               <PropertyRef Name="ProductID" />
@@ -791,8 +932,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Receipt_Details_CRM_Product">
-          <End Role="CRM_Product" Type="Self.CRM_Product" Multiplicity="1" />
-          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Product" Role="CRM_Product" Multiplicity="1" />
+          <End Type="HCRMModel.CRM_Receipt_Details" Role="CRM_Receipt_Details" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Product">
               <PropertyRef Name="ProductID" />
@@ -802,21 +943,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CRM_Receipt_Warehouse_CRM_Provider">
-          <End Role="CRM_Provider" Type="Self.CRM_Provider" Multiplicity="1" />
-          <End Role="CRM_Receipt_Warehouse" Type="Self.CRM_Receipt_Warehouse" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CRM_Provider">
-              <PropertyRef Name="ProviderID" />
-            </Principal>
-            <Dependent Role="CRM_Receipt_Warehouse">
-              <PropertyRef Name="ProviderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Delivery">
-          <End Role="CRM_Receipt_Delivery" Type="Self.CRM_Receipt_Delivery" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Receipt_Delivery" Role="CRM_Receipt_Delivery" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Details" Role="CRM_Receipt_Details" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Receipt_Delivery">
               <PropertyRef Name="ReceiptID" />
@@ -827,8 +956,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Return">
-          <End Role="CRM_Receipt_Return" Type="Self.CRM_Receipt_Return" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+          <End Type="HCRMModel.CRM_Receipt_Return" Role="CRM_Receipt_Return" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Details" Role="CRM_Receipt_Details" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CRM_Receipt_Return">
               <PropertyRef Name="ReceiptID" />
@@ -838,85 +967,65 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Warehouse">
-          <End Role="CRM_Receipt_Warehouse" Type="Self.CRM_Receipt_Warehouse" Multiplicity="0..1" />
-          <End Role="CRM_Receipt_Details" Type="Self.CRM_Receipt_Details" Multiplicity="*" />
+        <EntityType Name="CRM_Receipt_Import">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+          </Key>
+          <Property Name="ReceiptID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalReduceAmount" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="TotalPaid" Type="Double" />
+          <Property Name="TotalRemain" Type="Double" />
+          <Property Name="IsPaid" Type="Boolean" Nullable="false" />
+          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="FormPayment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <NavigationProperty Name="CRM_Employee" Relationship="HCRMModel.FK_CRM_Receipt_Import_CRM_Employee" FromRole="CRM_Receipt_Import" ToRole="CRM_Employee" />
+          <NavigationProperty Name="CRM_Provider" Relationship="HCRMModel.FK_CRM_Receipt_Import_CRM_Provider" FromRole="CRM_Receipt_Import" ToRole="CRM_Provider" />
+          <NavigationProperty Name="CRM_Receipt_Details" Relationship="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Import" FromRole="CRM_Receipt_Import" ToRole="CRM_Receipt_Details" />
+        </EntityType>
+        <Association Name="FK_CRM_Receipt_Import_CRM_Employee">
+          <End Type="HCRMModel.CRM_Employee" Role="CRM_Employee" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Import" Role="CRM_Receipt_Import" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CRM_Receipt_Warehouse">
-              <PropertyRef Name="ReceiptID" />
+            <Principal Role="CRM_Employee">
+              <PropertyRef Name="EmployeeID" />
             </Principal>
-            <Dependent Role="CRM_Receipt_Details">
-              <PropertyRef Name="ReceiptWarehouseID" />
+            <Dependent Role="CRM_Receipt_Import">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="HCRMEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CRM_Address" EntityType="Self.CRM_Address" />
-          <EntitySet Name="CRM_Customer" EntityType="Self.CRM_Customer" />
-          <EntitySet Name="CRM_Employee" EntityType="Self.CRM_Employee" />
-          <EntitySet Name="CRM_Menu" EntityType="Self.CRM_Menu" />
-          <EntitySet Name="CRM_Product" EntityType="Self.CRM_Product" />
-          <EntitySet Name="CRM_Product_Details_Template" EntityType="Self.CRM_Product_Details_Template" />
-          <EntitySet Name="CRM_Product_Property" EntityType="Self.CRM_Product_Property" />
-          <EntitySet Name="CRM_Provider" EntityType="Self.CRM_Provider" />
-          <EntitySet Name="CRM_Receipt_Delivery" EntityType="Self.CRM_Receipt_Delivery" />
-          <EntitySet Name="CRM_Receipt_Details" EntityType="Self.CRM_Receipt_Details" />
-          <EntitySet Name="CRM_Receipt_Return" EntityType="Self.CRM_Receipt_Return" />
-          <EntitySet Name="CRM_Receipt_Warehouse" EntityType="Self.CRM_Receipt_Warehouse" />
-          <EntitySet Name="CRM_Role_Menu" EntityType="Self.CRM_Role_Menu" />
-          <EntitySet Name="CRM_Tags" EntityType="Self.CRM_Tags" />
-          <EntitySet Name="CRM_User" EntityType="Self.CRM_User" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <AssociationSet Name="FK_CRM_Address_CRM_Customer" Association="Self.FK_CRM_Address_CRM_Customer">
-            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
-            <End Role="CRM_Address" EntitySet="CRM_Address" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Address_CRM_Employee" Association="Self.FK_CRM_Address_CRM_Employee">
-            <End Role="CRM_Employee" EntitySet="CRM_Employee" />
-            <End Role="CRM_Address" EntitySet="CRM_Address" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Address_CRM_Provider" Association="Self.FK_CRM_Address_CRM_Provider">
-            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
-            <End Role="CRM_Address" EntitySet="CRM_Address" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Delivery_CRM_Customer" Association="Self.FK_CRM_Receipt_Delivery_CRM_Customer">
-            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
-            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Return_CRM_Customer" Association="Self.FK_CRM_Receipt_Return_CRM_Customer">
-            <End Role="CRM_Customer" EntitySet="CRM_Customer" />
-            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Role_Menu_CRM_Menu" Association="Self.FK_CRM_Role_Menu_CRM_Menu">
-            <End Role="CRM_Menu" EntitySet="CRM_Menu" />
-            <End Role="CRM_Role_Menu" EntitySet="CRM_Role_Menu" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Product_Property_CRM_Products" Association="Self.FK_CRM_Product_Property_CRM_Products">
-            <End Role="CRM_Product" EntitySet="CRM_Product" />
-            <End Role="CRM_Product_Property" EntitySet="CRM_Product_Property" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Product" Association="Self.FK_CRM_Receipt_Details_CRM_Product">
-            <End Role="CRM_Product" EntitySet="CRM_Product" />
-            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Warehouse_CRM_Provider" Association="Self.FK_CRM_Receipt_Warehouse_CRM_Provider">
-            <End Role="CRM_Provider" EntitySet="CRM_Provider" />
-            <End Role="CRM_Receipt_Warehouse" EntitySet="CRM_Receipt_Warehouse" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Delivery" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Delivery">
-            <End Role="CRM_Receipt_Delivery" EntitySet="CRM_Receipt_Delivery" />
-            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Return" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Return">
-            <End Role="CRM_Receipt_Return" EntitySet="CRM_Receipt_Return" />
-            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CRM_Receipt_Details_CRM_Receipt_Warehouse" Association="Self.FK_CRM_Receipt_Details_CRM_Receipt_Warehouse">
-            <End Role="CRM_Receipt_Warehouse" EntitySet="CRM_Receipt_Warehouse" />
-            <End Role="CRM_Receipt_Details" EntitySet="CRM_Receipt_Details" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        <Association Name="FK_CRM_Receipt_Import_CRM_Provider">
+          <End Type="HCRMModel.CRM_Provider" Role="CRM_Provider" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Import" Role="CRM_Receipt_Import" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Import">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CRM_Receipt_Details_CRM_Receipt_Import">
+          <End Type="HCRMModel.CRM_Receipt_Import" Role="CRM_Receipt_Import" Multiplicity="0..1" />
+          <End Type="HCRMModel.CRM_Receipt_Details" Role="CRM_Receipt_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM_Receipt_Import">
+              <PropertyRef Name="ReceiptID" />
+            </Principal>
+            <Dependent Role="CRM_Receipt_Details">
+              <PropertyRef Name="ReceiptImportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -925,246 +1034,250 @@
           <EntitySetMapping Name="CRM_Address">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Address">
               <MappingFragment StoreEntitySet="CRM_Address">
-                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Street" ColumnName="Street" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Customer">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Customer">
               <MappingFragment StoreEntitySet="CRM_Customer">
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Employee">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Employee">
               <MappingFragment StoreEntitySet="CRM_Employee">
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IDCardNumber" ColumnName="IDCardNumber" />
-                <ScalarProperty Name="ProfileFilePath" ColumnName="ProfileFilePath" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Age" ColumnName="Age" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="JobDescription" ColumnName="JobDescription" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="JobDescription" ColumnName="JobDescription" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ProfileFilePath" ColumnName="ProfileFilePath" />
+                <ScalarProperty Name="IDCardNumber" ColumnName="IDCardNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Menu">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Menu">
               <MappingFragment StoreEntitySet="CRM_Menu">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Icon" ColumnName="Icon" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Product">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Product">
               <MappingFragment StoreEntitySet="CRM_Product">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="Material" ColumnName="Material" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="FullDetails" ColumnName="FullDetails" />
-                <ScalarProperty Name="DealPrice" ColumnName="DealPrice" />
-                <ScalarProperty Name="NormalPrice" ColumnName="NormalPrice" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="TotalRemain" ColumnName="TotalRemain" />
-                <ScalarProperty Name="TotalSaled" ColumnName="TotalSaled" />
-                <ScalarProperty Name="TotalImported" ColumnName="TotalImported" />
-                <ScalarProperty Name="SubImages" ColumnName="SubImages" />
-                <ScalarProperty Name="Language" ColumnName="Language" />
-                <ScalarProperty Name="Infos" ColumnName="Infos" />
-                <ScalarProperty Name="Views" ColumnName="Views" />
-                <ScalarProperty Name="CateId" ColumnName="CateId" />
-                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
                 <ScalarProperty Name="IsDraft" ColumnName="IsDraft" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="CateId" ColumnName="CateId" />
+                <ScalarProperty Name="Views" ColumnName="Views" />
+                <ScalarProperty Name="Infos" ColumnName="Infos" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+                <ScalarProperty Name="SubImages" ColumnName="SubImages" />
+                <ScalarProperty Name="TotalImported" ColumnName="TotalImported" />
+                <ScalarProperty Name="TotalSaled" ColumnName="TotalSaled" />
+                <ScalarProperty Name="TotalRemain" ColumnName="TotalRemain" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="NormalPrice" ColumnName="NormalPrice" />
+                <ScalarProperty Name="DealPrice" ColumnName="DealPrice" />
+                <ScalarProperty Name="FullDetails" ColumnName="FullDetails" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Material" ColumnName="Material" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Product_Details_Template">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Product_Details_Template">
               <MappingFragment StoreEntitySet="CRM_Product_Details_Template">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Template" ColumnName="Template" />
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
+                <ScalarProperty Name="Template" ColumnName="Template" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Product_Property">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Product_Property">
               <MappingFragment StoreEntitySet="CRM_Product_Property">
-                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Roles" ColumnName="Roles" />
-                <ScalarProperty Name="Key" ColumnName="Key" />
-                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
-                <ScalarProperty Name="DoubleValue" ColumnName="DoubleValue" />
                 <ScalarProperty Name="IntValue" ColumnName="IntValue" />
+                <ScalarProperty Name="DoubleValue" ColumnName="DoubleValue" />
+                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Provider">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Provider">
               <MappingFragment StoreEntitySet="CRM_Provider">
-                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Receipt_Delivery">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Receipt_Delivery">
               <MappingFragment StoreEntitySet="CRM_Receipt_Delivery">
-                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="OrderName" ColumnName="OrderName" />
-                <ScalarProperty Name="OrderAddress" ColumnName="OrderAddress" />
-                <ScalarProperty Name="OrderPhone" ColumnName="OrderPhone" />
-                <ScalarProperty Name="ReceiveName" ColumnName="ReceiveName" />
-                <ScalarProperty Name="ReceiveAddress" ColumnName="ReceiveAddress" />
-                <ScalarProperty Name="ReceivePhone" ColumnName="ReceivePhone" />
-                <ScalarProperty Name="Shipping" ColumnName="Shipping" />
-                <ScalarProperty Name="TotalReduceAmount" ColumnName="TotalReduceAmount" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="TotalPaid" ColumnName="TotalPaid" />
-                <ScalarProperty Name="TotalRemain" ColumnName="TotalRemain" />
-                <ScalarProperty Name="IsOrdered" ColumnName="IsOrdered" />
-                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
-                <ScalarProperty Name="IsDeliveried" ColumnName="IsDeliveried" />
-                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="FormPayment" ColumnName="FormPayment" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FormPayment" ColumnName="FormPayment" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsDeliveried" ColumnName="IsDeliveried" />
+                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+                <ScalarProperty Name="IsOrdered" ColumnName="IsOrdered" />
+                <ScalarProperty Name="TotalRemain" ColumnName="TotalRemain" />
+                <ScalarProperty Name="TotalPaid" ColumnName="TotalPaid" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="TotalReduceAmount" ColumnName="TotalReduceAmount" />
+                <ScalarProperty Name="Shipping" ColumnName="Shipping" />
+                <ScalarProperty Name="ReceivePhone" ColumnName="ReceivePhone" />
+                <ScalarProperty Name="ReceiveAddress" ColumnName="ReceiveAddress" />
+                <ScalarProperty Name="ReceiveName" ColumnName="ReceiveName" />
+                <ScalarProperty Name="OrderPhone" ColumnName="OrderPhone" />
+                <ScalarProperty Name="OrderAddress" ColumnName="OrderAddress" />
+                <ScalarProperty Name="OrderName" ColumnName="OrderName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Receipt_Details">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Receipt_Details">
               <MappingFragment StoreEntitySet="CRM_Receipt_Details">
-                <ScalarProperty Name="ReceiptDetailsID" ColumnName="ReceiptDetailsID" />
-                <ScalarProperty Name="ReceiptDeliveryID" ColumnName="ReceiptDeliveryID" />
-                <ScalarProperty Name="ReceiptReturnID" ColumnName="ReceiptReturnID" />
-                <ScalarProperty Name="ReceiptWarehouseID" ColumnName="ReceiptWarehouseID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="ReducePrice" ColumnName="ReducePrice" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ReceiptImportID" ColumnName="ReceiptImportID" />
+                <ScalarProperty Name="ReceiptReturnID" ColumnName="ReceiptReturnID" />
+                <ScalarProperty Name="ReceiptDeliveryID" ColumnName="ReceiptDeliveryID" />
+                <ScalarProperty Name="ReceiptDetailsID" ColumnName="ReceiptDetailsID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Receipt_Return">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Receipt_Return">
               <MappingFragment StoreEntitySet="CRM_Receipt_Return">
-                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
-                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="FormPayment" ColumnName="FormPayment" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="DeliveryReceiptID" ColumnName="DeliveryReceiptID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CRM_Receipt_Warehouse">
-            <EntityTypeMapping TypeName="HCRMModel.CRM_Receipt_Warehouse">
-              <MappingFragment StoreEntitySet="CRM_Receipt_Warehouse">
-                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
-                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DeliveryReceiptID" ColumnName="DeliveryReceiptID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="FormPayment" ColumnName="FormPayment" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Role_Menu">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Role_Menu">
               <MappingFragment StoreEntitySet="CRM_Role_Menu">
-                <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_Tags">
             <EntityTypeMapping TypeName="HCRMModel.CRM_Tags">
               <MappingFragment StoreEntitySet="CRM_Tags">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="IsView" ColumnName="IsView" />
                 <ScalarProperty Name="SEOKeyWords" ColumnName="SEOKeyWords" />
+                <ScalarProperty Name="IsView" ColumnName="IsView" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CRM_User">
             <EntityTypeMapping TypeName="HCRMModel.CRM_User">
               <MappingFragment StoreEntitySet="CRM_User">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="HCRMModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CRM_Receipt_Import">
+            <EntityTypeMapping TypeName="HCRMModel.CRM_Receipt_Import">
+              <MappingFragment StoreEntitySet="CRM_Receipt_Import">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FormPayment" ColumnName="FormPayment" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+                <ScalarProperty Name="TotalRemain" ColumnName="TotalRemain" />
+                <ScalarProperty Name="TotalPaid" ColumnName="TotalPaid" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="TotalReduceAmount" ColumnName="TotalReduceAmount" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

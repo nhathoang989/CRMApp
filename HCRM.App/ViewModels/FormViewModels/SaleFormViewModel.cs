@@ -1,20 +1,18 @@
 ﻿using HCRM.Data;
 using HCRM.App.Behaviors;
 using HCRM.App.Framework;
-using HCRM.App.Helpers;
 using HCRM.App.Repositories;
 using HCRM.App.Services;
 using HCRM.App.Ultilities;
 using HCRM.App.ViewInterfaces;
 using HCRM.App.ViewModels.ElementViewModels;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Prism.Events;
+using System;
 
 namespace HCRM.App.ViewModels
 {
@@ -27,10 +25,10 @@ namespace HCRM.App.ViewModels
         private List<ReceiptDetailsViewModel> _lstDisplayDetails;
         private ProductViewModel _selectedProduct;
         private EmployeeViewModel _selectedEmployee;
-        private CRM_Customer _selectedCustomer;
+        private CustomerViewModel _selectedCustomer;
 
         private List<EmployeeViewModel> _employees;
-        private List<CRM_Customer> _customers;
+        private List<CustomerViewModel> _customers;
         private List<ProductViewModel> _products;
         private PagingViewModel<CRM_Product, ProductViewModel> _pagingDataGrid;
 
@@ -42,7 +40,7 @@ namespace HCRM.App.ViewModels
         private PagingViewModel<CRM_Employee, EmployeeViewModel> _pagingViewModel;
         private int PageSize = 5;
         private bool _isBusy;
-        private IEventAggregator _eventAggregator;
+        private IEventAggregator _saleEventAggregator;
 
         private int _errors;
 
@@ -60,7 +58,7 @@ namespace HCRM.App.ViewModels
             set
             {
 
-                _currentDetails = value;
+                _currentDetails = value;         
                 OnPropertyChanged("CurrentDetails");
             }
         }        
@@ -103,7 +101,7 @@ namespace HCRM.App.ViewModels
                 _saveCommand = value;
             }
         }
-
+       
         public ICommand RemoveCommand
         {
             get
@@ -111,7 +109,8 @@ namespace HCRM.App.ViewModels
                 if (_removeCommand == null)
                 {
                     _removeCommand = new RelayCommand(
-                        p => RemoveDetails()
+                        p => RemoveDetails(),
+                        p=>CanRemove()
                         );
                 }
                 return _removeCommand;
@@ -121,6 +120,11 @@ namespace HCRM.App.ViewModels
             {
                 _removeCommand = value;
             }
+        }
+
+        private bool CanRemove()
+        {
+            return CurrentReceipt.ListDetails.Contains(CurrentDetails);
         }
 
         public ICommand CancelCommand
@@ -178,7 +182,7 @@ namespace HCRM.App.ViewModels
 
         }
         bool CanAddToCart() {            
-            return CurrentDetails.Product != null && !string.IsNullOrEmpty(CurrentDetails.Product.Code) && CurrentDetails.Quantity<CurrentDetails.Product.TotalRemain;
+            return CurrentDetails.Product != null && !string.IsNullOrEmpty(CurrentDetails.Product.Code) && CurrentDetails.Quantity<=CurrentDetails.Product.TotalRemain;
         }
         bool CanSaveReceipt() {
             return ErrorCount == 0 && CurrentReceipt.ListDetails.Count > 0;
@@ -204,17 +208,17 @@ namespace HCRM.App.ViewModels
                 details.Quantity = CurrentDetails.Quantity;
             }
            
-            Refresh();
+            RefreshReceiptValues();
 
         }
-        void Refresh() {
+        void RefreshReceiptValues() {
             GetTotal();
             LstDisplayDetails = new List<ReceiptDetailsViewModel>(CurrentReceipt.ListDetails);
             //CurrentDetails = new ReceiptDetailsViewModel();
         }
         void RefreshForm() {
             CurrentReceipt = new ReceiptDeliveryViewModel();
-            Refresh();
+            RefreshReceiptValues();
             CurrentReceipt = new ReceiptDeliveryViewModel();            
         }
         #region Filters
@@ -223,8 +227,8 @@ namespace HCRM.App.ViewModels
             get
             {
                 return (searchText, obj) =>
-                    (obj as ProductViewModel).Title.Contains(searchText)
-                    || (obj as ProductViewModel).Code.Contains(searchText);
+                     (!string.IsNullOrEmpty((obj as ProductViewModel).Title) && (obj as ProductViewModel).Title.ToLower().Contains(searchText.ToLower()))
+                    || (!string.IsNullOrEmpty((obj as ProductViewModel).Code) && (obj as ProductViewModel).Code.ToLower().Contains(searchText.ToLower()));
             }
         }
         public AutoCompleteFilterPredicate<object> EmployeeFilter
@@ -232,8 +236,8 @@ namespace HCRM.App.ViewModels
             get
             {
                 return (searchText, obj) =>
-                   (obj as EmployeeViewModel).Name.Contains(searchText)
-                   || (obj as EmployeeViewModel).PhoneNumber.Contains(searchText);
+                   (!string.IsNullOrEmpty((obj as EmployeeViewModel).Name) && (obj as EmployeeViewModel).Name.ToLower().Contains(searchText))
+                   || (!string.IsNullOrEmpty((obj as EmployeeViewModel).PhoneNumber) && (obj as EmployeeViewModel).PhoneNumber.ToLower().Contains(searchText));
             }
         }
         public AutoCompleteFilterPredicate<object> CustomerFilter
@@ -241,9 +245,9 @@ namespace HCRM.App.ViewModels
             get
             {
                 return (searchText, obj) =>
-                    (obj as CRM_Customer).Name.ToLower().Contains(searchText.ToLower())
-                    || (obj as CRM_Customer).PhoneNumber.Contains(searchText.ToLower())
-                    || (obj as CRM_Customer).Email.ToLower().Contains(searchText.ToLower());
+                    (!string.IsNullOrEmpty((obj as CustomerViewModel).Name) && (obj as CustomerViewModel).Name.ToLower().Contains(searchText.ToLower()))
+                    || (!string.IsNullOrEmpty((obj as CustomerViewModel).PhoneNumber) && (obj as CustomerViewModel).PhoneNumber.Contains(searchText.ToLower()))
+                    || (!string.IsNullOrEmpty((obj as CustomerViewModel).Email) && (obj as CustomerViewModel).Email.ToLower().Contains(searchText.ToLower()));
             }
         }
         #endregion
@@ -293,7 +297,7 @@ namespace HCRM.App.ViewModels
             }
         }
 
-        public List<CRM_Customer> Customers
+        public List<CustomerViewModel> Customers
         {
             get
             {
@@ -331,11 +335,12 @@ namespace HCRM.App.ViewModels
             set
             {
               _selectedEmployee = value;
+                CurrentReceipt.Employee = _selectedEmployee;
                 OnPropertyChanged("SelectedEmployee");
             }
         }
 
-        public CRM_Customer SelectedCustomer
+        public CustomerViewModel SelectedCustomer
         {
             get
             {
@@ -347,12 +352,13 @@ namespace HCRM.App.ViewModels
                 _selectedCustomer = value;
                 if (value!=null)
                 {
-                    CurrentReceipt.OrderName = value.Name;
-                    if (value.CRM_Address!=null && value.CRM_Address.Count>0)
+                    CurrentReceipt.Customer = _selectedCustomer;
+                    CurrentReceipt.ReceiveName = value.Name;
+                    if (value.ListAddress != null && value.ListAddress.Count>0)
                     {
-                        CurrentReceipt.OrderAddress = value.CRM_Address.First().Street;
+                        CurrentReceipt.ReceiveAddress = value.ListAddress.First().Street;
                     }
-                    CurrentReceipt.OrderPhone = value.PhoneNumber;
+                    CurrentReceipt.ReceivePhone = value.PhoneNumber;
                     
                 }
                 OnPropertyChanged("SelectedCustomer");
@@ -432,6 +438,36 @@ namespace HCRM.App.ViewModels
             }
         }
 
+        public IEventAggregator SaleEventAggregator
+        {
+            get
+            {
+                if (_saleEventAggregator==null)
+                {
+                    _saleEventAggregator = new EventAggregator();
+                }
+                return _saleEventAggregator;
+            }
+
+            set
+            {
+                _saleEventAggregator = value;
+            }
+        }
+
+        public IEventAggregator PageEvent
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         void GetTotal() {
             double totalAmount = 0;
             double totalReduce = 0;
@@ -447,9 +483,9 @@ namespace HCRM.App.ViewModels
 
         }
 
-        async void SaveReceipt() {
+        void SaveReceipt() {
 
-            IsBusy = true;
+            //IsBusy = true;
             if (CurrentReceipt.TotalPaid >= CurrentReceipt.TotalMustPay)
             {
                 CurrentReceipt.IsPaid = true;                
@@ -463,25 +499,27 @@ namespace HCRM.App.ViewModels
                 CurrentReceipt.EmployeeID = SelectedEmployee.EmployeeID;
             }
 
+            
+            
             //Views.PrintViews.PrintPreview wd = new Views.PrintViews.PrintPreview(CurrentReceipt);
             //wd.ShowDialog();
             ////return;
 
-            var result = await ReceiptDeliveryRepo.Instance.SaveModel(CurrentReceipt.Model);
+            //var result = await ReceiptDeliveryRepo.Instance.SaveModel(CurrentReceipt.Model);
 
-            if (result.StatusCode== System.Net.HttpStatusCode.OK)
-            {
-                RefreshForm();
-                //ApiHelper.Alert("Lưu ý", "Lưu hóa đơn thành công");
-            }
-            else
-            {
-                //ApiHelper.Alert("Lưu ý", "Không thể lưu hóa đơn");
-            }
+            //if (result.StatusCode== System.Net.HttpStatusCode.OK)
+            //{
+            //    RefreshPage();
+            //    //ApiHelper.Alert("Lưu ý", "Lưu hóa đơn thành công");
+            //}
+            //else
+            //{
+            //    //ApiHelper.Alert("Lưu ý", "Không thể lưu hóa đơn");
+            //}
 
-            IsBusy = false;
+            //IsBusy = false;
         }
-
+        
         bool validateReceipt() {
             return CurrentReceipt.ListDetails.Count > 0;                
         }
@@ -491,7 +529,7 @@ namespace HCRM.App.ViewModels
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 CurrentReceipt.ListDetails.Remove(CurrentDetails);
-                Refresh();
+                RefreshReceiptValues();
             }
         }
 
@@ -500,27 +538,38 @@ namespace HCRM.App.ViewModels
             IsBusy = true;
             Products = await ProductRepo.Instance.GetModelList();
             Employees = await EmployeeRepo.Instance.GetModelList();
-            Customers = await CustomerRepo.GetCustomerList();
-
+            Customers = await CustomerRepo.Instance.GetModelList();
+            CurrentReceipt = new ReceiptDeliveryViewModel(SaleEventAggregator);
+            SelectedProduct = null;
+            RefreshReceiptValues();
+            CurrentDetails = new ReceiptDetailsViewModel();
             PagingDataGrid = new PagingViewModel<CRM_Product, ProductViewModel>(Products, PageSize);
             IsBusy = false;
         }
         public SaleFormViewModel()
         {
             RefreshPage();
-            _eventAggregator = ApplicationService.Instance.EventAggregator;
+            //ApplicationService.Instance.ActiveEventAggregator = new EventAggregator();
 
-            ItemListChanged<bool> _event = ApplicationService.Instance.EventAggregator.GetEvent<ItemListChanged<bool>>();
-            _event.Subscribe(ItemsChanged);
-            //SaveReceiptDeliveryResultEvent _event = ApplicationService.Instance.EventAggregator.GetEvent<SaveReceiptDeliveryResultEvent>();
-            //_event.Subscribe(SaveResult);
+            SaveReceiptResultEvent<bool> _event = SaleEventAggregator.GetEvent<SaveReceiptResultEvent<bool>>(); //ApplicationService.Instance.ActiveEventAggregator.GetEvent<SaveReceiptResultEvent<bool>>();
+            _event.Subscribe(SaveResult);
+
+            ProductListChanged _productListEvent = ApplicationService.Instance.GlobalEventAggregator.GetEvent<ProductListChanged>();
+            _productListEvent.Subscribe(ProductChanged);
         }
 
-        private void ItemsChanged(bool isChanged)
+        private void ProductChanged(bool obj)
         {
-            if (isChanged)
+            if (obj)
             {
-                RefreshPage();
+                //RefreshPage();
+                foreach (var details in CurrentReceipt.ListDetails)
+                {
+                    details.Product = Products.FirstOrDefault(p => p.ProductID == details.ProductID);
+                    details.UnitPrice = details.Product.NormalPrice;
+                    details.StrUnitPrice = common.FormatPrice(details.UnitPrice.ToString());
+                }
+                RefreshReceiptValues();
             }
         }
 
@@ -528,12 +577,7 @@ namespace HCRM.App.ViewModels
         {
             if (result)
             {
-                RefreshForm();
-                ApiHelper.Alert("Lưu ý", "Lưu hóa đơn thành công");
-            }
-            else
-            {
-                ApiHelper.Alert("Lưu ý", "Không thể lưu hóa đơn");
+                RefreshPage();
             }
         }
     }

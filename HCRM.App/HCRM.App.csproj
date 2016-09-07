@@ -99,6 +99,14 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
       <Private>True</Private>
@@ -222,14 +230,26 @@
     <Compile Include="Pages\Employees\ListEmployee.xaml.cs">
       <DependentUpon>ListEmployee.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Popups\ProductDetails.xaml.cs">
+      <DependentUpon>ProductDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProductPage.xaml.cs">
       <DependentUpon>ProductPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Products\ListProduct.xaml.cs">
+      <DependentUpon>ListProduct.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Products\ImportProduct.xaml.cs">
       <DependentUpon>ImportProduct.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Products\SaleProduct.xaml.cs">
       <DependentUpon>SaleProduct.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ReceiptPage.xaml.cs">
+      <DependentUpon>ReceiptPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Receipts\ListDeliveryReceipt.xaml.cs">
+      <DependentUpon>ListDeliveryReceipt.xaml</DependentUpon>
     </Compile>
     <Compile Include="Prism\IEventAggregator.cs" />
     <Compile Include="Properties\Settings1.Designer.cs">
@@ -240,10 +260,12 @@
     <Compile Include="Repositories\AddressRepo.cs" />
     <Compile Include="Repositories\ApiURLRepo.cs" />
     <Compile Include="Repositories\BaseRepo.cs" />
+    <Compile Include="Repositories\ProviderRepo.cs" />
     <Compile Include="Repositories\CustomerRepo.cs" />
     <Compile Include="Repositories\EmployeeRepo.cs" />
     <Compile Include="Repositories\MenuRepo.cs" />
     <Compile Include="Repositories\ProductRepo.cs" />
+    <Compile Include="Repositories\ReceiptImportRepo.cs" />
     <Compile Include="Repositories\ReceiptDeliveryRepo.cs" />
     <Compile Include="Repositories\ReceiptDetailsRepo.cs" />
     <Compile Include="Services\ApplicationService.cs" />
@@ -257,13 +279,18 @@
     <Compile Include="ViewModels\Alert\Notification.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\AuthenticatedViewModel.cs" />
+    <Compile Include="ViewModels\ElementViewModels\ProviderViewModel.cs" />
+    <Compile Include="ViewModels\ElementViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\PagingViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\ProductViewModel.cs" />
+    <Compile Include="ViewModels\ElementViewModels\ReceiptImportViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\ReceiptDeliveryViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModels\ReceiptDetailsViewModel.cs" />
     <Compile Include="ViewModels\FileDialogViewModel.cs" />
+    <Compile Include="ViewModels\FormViewModels\ListDeliveryReceiptViewModel.cs" />
+    <Compile Include="ViewModels\FormViewModels\ImportFormViewModel.cs" />
     <Compile Include="ViewModels\FormViewModels\SaleFormViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -291,26 +318,11 @@
     <Compile Include="Views\CustomControls\ReportViewer.xaml.cs">
       <DependentUpon>ReportViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FormViews\SaleFormView.xaml.cs">
-      <DependentUpon>SaleFormView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\OthersViews\CustomerPageView.xaml.cs">
-      <DependentUpon>CustomerPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\OthersViews\EmployeePageView.xaml.cs">
-      <DependentUpon>EmployeePageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PrintViews\PrintPreview.xaml.cs">
-      <DependentUpon>PrintPreview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProductViews\ProductPageView.xaml.cs">
-      <DependentUpon>ProductPageView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -328,15 +340,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Popups\ProductDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProductPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Products\ImportProduct.xaml">
+    <Page Include="Pages\Products\ListProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Products\ImportProduct.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Products\SaleProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ReceiptPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Receipts\ListDeliveryReceipt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -383,6 +411,19 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReportTemplates\RPReceipt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Page Include="Themes\Datagrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Default.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Alert\DesignTimeNotificationData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -399,31 +440,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FormViews\SaleFormView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Home.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LoginWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\OthersViews\CustomerPageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\OthersViews\EmployeePageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PrintViews\PrintPreview.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ProductViews\ProductPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -465,9 +486,7 @@
       <Name>HCRM.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Themes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="DB\HCRM.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

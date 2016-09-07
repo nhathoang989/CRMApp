@@ -10,15 +10,30 @@ namespace HCRM.App.Services
 
         internal static ApplicationService Instance { get { return _instance; } }
 
-        private IEventAggregator _eventAggregator;
-        internal IEventAggregator EventAggregator
+        private IEventAggregator _globalEventAggregator;
+        internal IEventAggregator GlobalEventAggregator
         {
             get
             {
-                if (_eventAggregator == null)
-                    _eventAggregator = new EventAggregator();
+                if (_globalEventAggregator == null)
+                    _globalEventAggregator = new EventAggregator();
 
-                return _eventAggregator;
+                return _globalEventAggregator;
+            }
+        }
+
+        private IEventAggregator _activeEventAggregator;
+        internal IEventAggregator ActiveEventAggregator
+        {
+            get
+            {
+                if (_activeEventAggregator == null)
+                    _activeEventAggregator = new EventAggregator();
+
+                return _activeEventAggregator;
+            }
+            set {
+                _activeEventAggregator = value;
             }
         }
     }

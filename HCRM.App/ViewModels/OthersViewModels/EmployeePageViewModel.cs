@@ -315,9 +315,9 @@ namespace HCRM.App.ViewModels.OthersViewModels
         #endregion
         public EmployeePageViewModel() : base()
         {
-            _eventAggregator = ApplicationService.Instance.EventAggregator;
+            _eventAggregator = ApplicationService.Instance.GlobalEventAggregator;
 
-            ItemListChanged<bool> _event = ApplicationService.Instance.EventAggregator.GetEvent<ItemListChanged<bool>>();
+            ItemListChanged<bool> _event = ApplicationService.Instance.GlobalEventAggregator.GetEvent<ItemListChanged<bool>>();
             _event.Subscribe(ItemsChanged);
 
             RefreshEmployees();

@@ -6,22 +6,24 @@ using Prism.Events;
 using RestSharp;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System;
 
 namespace HCRM.App.ViewModels
 {
     public abstract class ViewModelBase<TModel, TView> : ObjectBase where TModel : new() where TView : new()
     {
-        protected static IEventAggregator _eventAggregator = ApplicationService.Instance.EventAggregator;
+        protected static IEventAggregator _eventAggregator = ApplicationService.Instance.GlobalEventAggregator;
 
         private BaseRepo<TModel, TView> _baseRepo;
         private TModel _model;
+        private IEventAggregator _eventHandler;
         private string _modelName;
         private int _errorCount;
         //private ApiURLRepo _urlRepo;
 
         private ICommand _saveCommand;
         private ICommand _removeCommand;
-
+        private ICommand _previewCommand;
         public ICommand SaveCommand
         {
             get
@@ -111,6 +113,43 @@ namespace HCRM.App.ViewModels
             }
         }
 
+        public IEventAggregator EventHandler
+        {
+            get
+            {
+                if (_eventHandler==null)
+                {
+                    _eventHandler = ApplicationService.Instance.GlobalEventAggregator;
+                }
+                return _eventHandler;
+            }
+
+            set
+            {
+                _eventHandler = value;
+            }
+        }
+
+        public ICommand PreviewCommand
+        {
+            get
+            {
+                if (_previewCommand==null)
+                {
+                    _previewCommand = new RelayCommand(vm => Preview(), vm => CanPreview());
+                }
+                return _previewCommand;
+            }
+
+            set
+            {
+                _previewCommand = value;
+            }
+        }
+
+
+
+
         //public ApiURLRepo URLRepo
         //{
         //    get
@@ -123,6 +162,10 @@ namespace HCRM.App.ViewModels
         //        _urlRepo = value;
         //    }
         //}
+        bool CanPreview() {
+            return Model != null;
+        }
+        public abstract void Preview();
 
         public abstract void RemoveModel();
         public abstract Task<IRestResponse> SaveModel();

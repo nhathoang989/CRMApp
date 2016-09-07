@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="BaseDAL.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CRM\ProviderDAL.cs" />
+    <Compile Include="CRM\ReceiptImportDAL.cs" />
     <Compile Include="CRM\ReceiptDetailsDAL.cs" />
     <Compile Include="CRM\AddressDAL.cs" />
     <Compile Include="CRM\CustomerDAL.cs" />
@@ -58,7 +60,6 @@
     <Compile Include="CRM\MenuDAL.cs" />
     <Compile Include="CRM\ProductDAL.cs" />
     <Compile Include="CRM\ProductDetailsTemplateDAL.cs" />
-    <Compile Include="CRM\ProviderDAL.cs" />
     <Compile Include="CRM\ReceiptDeliveryDAL.cs" />
     <Compile Include="IDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

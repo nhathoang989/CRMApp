@@ -21,7 +21,7 @@ namespace HCRM.Data
         }
     
         public long ReceiptID { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public System.DateTime CreatedDate { get; set; }
         public string OrderName { get; set; }
         public string OrderAddress { get; set; }
         public string OrderPhone { get; set; }
@@ -44,6 +44,7 @@ namespace HCRM.Data
         public Nullable<int> CustomerID { get; set; }
     
         public virtual CRM_Customer CRM_Customer { get; set; }
+        public virtual CRM_Employee CRM_Employee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CRM_Receipt_Details> CRM_Receipt_Details { get; set; }
     }

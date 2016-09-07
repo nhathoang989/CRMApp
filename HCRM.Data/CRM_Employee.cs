@@ -18,6 +18,9 @@ namespace HCRM.Data
         public CRM_Employee()
         {
             this.CRM_Address = new HashSet<CRM_Address>();
+            this.CRM_Receipt_Delivery = new HashSet<CRM_Receipt_Delivery>();
+            this.CRM_Receipt_Return = new HashSet<CRM_Receipt_Return>();
+            this.CRM_Receipt_Import = new HashSet<CRM_Receipt_Import>();
         }
     
         public int EmployeeID { get; set; }
@@ -36,5 +39,11 @@ namespace HCRM.Data
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CRM_Address> CRM_Address { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CRM_Receipt_Delivery> CRM_Receipt_Delivery { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CRM_Receipt_Return> CRM_Receipt_Return { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CRM_Receipt_Import> CRM_Receipt_Import { get; set; }
     }
 }

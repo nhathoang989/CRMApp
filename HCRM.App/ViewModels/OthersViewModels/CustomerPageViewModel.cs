@@ -1,15 +1,23 @@
 ﻿using HCRM.App.Framework;
-using System;
 using HCRM.App.ViewInterfaces;
-using System.Windows.Input;
-using HCRM.Data;
-using System.Windows;
-using HCRM.App.Helpers;
-using HCRM.App.Ultilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using HCRM.App.ViewModels.ElementViewModels;
 using HCRM.App.Repositories;
+using Prism.Events;
+using HCRM.App.Services;
+using HCRM.App.Behaviors;
+using System.Windows.Input;
+using HCRM.Data;
+using System;
+using HCRM.App.Helpers;
+using CodeReason.Reports;
+using System.Windows.Xps.Packaging;
+using System.Data;
+using HCRM.App.Views.CustomControls;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace HCRM.App.ViewModels.OthersViewModels
 {
@@ -18,31 +26,46 @@ namespace HCRM.App.ViewModels.OthersViewModels
         #region Properties
 
         //public CreateCustomerViewModel Model { get; private set; }
-        private CRM_Customer _currentCustomer;
-        private CRM_Address _currentAddress;
-        private List<CRM_Customer> _Customers;
-        private List<CRM_Customer> _listAllCustomer;
-        private List<CRM_Customer> currentListCustomer;
-        private string keyword;
-        private ICommand _searchCommand;
-        private ICommand _saveCommand;
+        private PagingViewModel<CRM_Customer, CustomerViewModel> _pagingViewModel;
+        private int PageSize = 5;
+        private bool _isBusy;
+        private CustomerViewModel _currentCustomer;
+        private List<CustomerViewModel> _customers;
+        private AddressViewModel _currentAddress;
+        private List<CustomerViewModel> _listAllCustomer;
+        private List<CustomerViewModel> currentListCustomer;
+        private ICommand _exportCommand;
+        private IEventAggregator _eventAggregator;
         private ICommand _newCustomerCommand;
-        private FileDialogViewModel _fileDlg;
-        private string _filter;
-        private string _currentAvatar;
-        private string _selectedPath;
-        public string SelectedPath
+        public ICommand NewCustomerCommand
         {
-            get { return _selectedPath; }
-            set { _selectedPath = value; OnPropertyChanged("SelectedPath"); }
+            get
+            {
+                if (_newCustomerCommand == null)
+                {
+                    _newCustomerCommand = new RelayCommand(p => NewCustomer());
+                }
+                return _newCustomerCommand;
+            }
+
+            set
+            {
+                NewCustomerCommand = value;
+            }
         }
-        public CRM_Customer CurrentCustomer
+
+        private void NewCustomer()
+        {
+            CurrentCustomer = new CustomerViewModel();
+        }
+
+        public CustomerViewModel CurrentCustomer
         {
             get
             {
                 if (_currentCustomer == null)
                 {
-                    _currentCustomer = new CRM_Customer();
+                    _currentCustomer = new CustomerViewModel();
                 }
                 return _currentCustomer;
 
@@ -55,17 +78,19 @@ namespace HCRM.App.ViewModels.OthersViewModels
                     _currentCustomer = value;
                     if (value != null)
                     {
-                        if (_currentCustomer.CRM_Address != null && CurrentCustomer.CRM_Address.Count > 0)
+                        if (_currentCustomer.ListAddress != null && CurrentCustomer.ListAddress.Count > 0)
                         {
-                            CurrentAddress = CurrentCustomer.CRM_Address.First();
+                            CurrentAddress = CurrentCustomer.ListAddress.First();
                         }
-                        CurrentAvatar = common.getFullFilePath(_currentCustomer.Avatar);
+
                     }
                     else
                     {
                         CurrentAddress = null;
-                        CurrentAvatar = null;
+
                     }
+                    // Publish event.  
+
                     OnPropertyChanged("CurrentCustomer");
                 }
             }
@@ -87,16 +112,16 @@ namespace HCRM.App.ViewModels.OthersViewModels
             }
         }
 
-        public List<CRM_Customer> Customers
+        public List<CustomerViewModel> Customers
         {
             get
             {
-                return _Customers;
+                return _customers;
             }
 
             set
             {
-                _Customers = value;
+                _customers = value;
                 OnPropertyChanged("Customers");
             }
         }
@@ -105,91 +130,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
 
         #region Commands
 
-
-
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new RelayCommand(
-                        p => SaveCustomer(),
-
-                        p => CanSave());
-                }
-
-                return _saveCommand;
-            }
-        }
-
-        public ICommand NewCustomerCommand
-        {
-            get
-            {
-                if (_newCustomerCommand == null)
-                {
-                    _newCustomerCommand = new RelayCommand(
-                        p => RefreshForm());
-                }
-                return _newCustomerCommand;
-            }
-
-            set
-            {
-                _newCustomerCommand = value;
-            }
-        }
-
-        public string Keyword
-        {
-            get
-            {
-                return keyword;
-            }
-
-            set
-            {
-                keyword = value;
-                OnPropertyChanged("Keyword");
-            }
-        }
-
-        public string Filter
-        {
-            get
-            {
-                return _filter;
-            }
-
-            set
-            {
-                _filter = value.ToLower();
-                OnPropertyChanged("Filter");
-                FilterCustomers();
-            }
-        }
-
-        public ICommand SearchCommand
-        {
-            get
-            {
-                if (_searchCommand == null)
-                {
-                    _searchCommand = new RelayCommand(
-                        p => SearchCustomers(),
-                        p => CanSearch());
-                }
-                return _searchCommand;
-            }
-
-            set
-            {
-                _searchCommand = value;
-            }
-        }
-
-        public List<CRM_Customer> CurrentListCustomer
+        public List<CustomerViewModel> CurrentListCustomer
         {
             get
             {
@@ -202,14 +143,14 @@ namespace HCRM.App.ViewModels.OthersViewModels
                 Customers = currentListCustomer;
             }
         }
-
-        public CRM_Address CurrentAddress
+        public AddressViewModel CurrentAddress
         {
             get
             {
-                if (_currentAddress == null)
+                //return CurrentItem.ListAddress.FirstOrDefault();
+                if (CurrentCustomer.ListAddress != null)
                 {
-                    _currentAddress = new CRM_Address();
+                    _currentAddress = CurrentCustomer.ListAddress.FirstOrDefault();
                 }
                 return _currentAddress;
             }
@@ -220,40 +161,7 @@ namespace HCRM.App.ViewModels.OthersViewModels
                 OnPropertyChanged("CurrentAddress");
             }
         }
-
-
-        public FileDialogViewModel FileDlg
-        {
-            get
-            {
-                if (_fileDlg == null)
-                {
-                    _fileDlg = new FileDialogViewModel();
-                }
-                return _fileDlg;
-            }
-
-            set
-            {
-                _fileDlg = value;
-            }
-        }
-
-        public string CurrentAvatar
-        {
-            get
-            {
-                return _currentAvatar;
-            }
-
-            set
-            {
-                _currentAvatar = value;
-                OnPropertyChanged("CurrentAvatar");
-            }
-        }
-
-        public List<CRM_Customer> ListAllCustomer
+        public List<CustomerViewModel> ListAllCustomer
         {
             get
             {
@@ -266,45 +174,102 @@ namespace HCRM.App.ViewModels.OthersViewModels
             }
         }
 
-
         #endregion
 
         #region Functions
 
-        bool CanSave()
+        void ExportPage()
         {
-            return CurrentCustomer != null && CurrentCustomer.Name != null && CurrentCustomer.PhoneNumber != null;
-            //return !string.IsNullOrEmpty(Keyword);
-        }
-        bool CanSearch()
-        {
-            return true;
-            //return !string.IsNullOrEmpty(Keyword);
-        }
-        void RefreshForm()
-        {
-            CurrentCustomer = new CRM_Customer();
-            CurrentAvatar = "";
-            CurrentAddress = null;
-        }
-        async void ReFreshCustomers()
-        {
-            CurrentListCustomer = await CustomerRepo.GetCustomerList(0, 10);
+            try
+            {
+                ReportDocument reportDocument = new ReportDocument();
+                reportDocument.ImageProcessing += reportDocument_ImageProcessing;
+                StreamReader reader = new StreamReader(new FileStream(@"ReportTemplates\RPListCustomers.xaml", FileMode.Open, FileAccess.Read));
+                reportDocument.XamlData = reader.ReadToEnd();
+                reportDocument.XamlImagePath = Path.Combine(Environment.CurrentDirectory, @"ReportTemplates\");
+                reader.Close();
+
+                DateTime dateTimeStart = DateTime.Now; // start time measure here
+
+                List<ReportData> listData = new List<ReportData>();
+
+                ReportData data = new ReportData();
+                data.ReportDocumentValues.Add("PrintDate", dateTimeStart);
+                DataTable table = new DataTable("Data");
+                table.Columns.Add("Order", typeof(int));
+                table.Columns.Add("Name", typeof(string));
+                table.Columns.Add("Avatar", typeof(string));
+                table.Columns.Add("Position", typeof(string));
+
+                foreach (var item in CurrentListCustomer)
+                {
+                    //MemoryStream ms = new MemoryStream();
+                    //BitmapImage bi = new BitmapImage();
+                    //byte[] bytArray = File.ReadAllBytes(item.Avatar);
+                    //ms.Write(bytArray, 0, bytArray.Length);
+                    //ms.Position = 0;
+                    //bi.BeginInit();
+                    //bi.StreamSource = ms;
+                    //bi.EndInit();
+                    //Image avatar = new Image();
+                    //avatar.Source = bi;
+                    table.Rows.Add(new object[] { CurrentListCustomer.IndexOf(item) + 1, item.Name, "Avatar", item.Position });
+                }
+                data.DataTables.Add(table);
+
+                listData.Add(data);
+                XpsDocument xps = reportDocument.CreateXpsDocument(listData);
+                ReportViewer rp = new ReportViewer(xps);
+
+                rp.ShowDialog();
+
+                // show the elapsed time in window title
+                //Title += " - generated in " + (DateTime.Now - dateTimeStart).TotalMilliseconds + "ms";
+            }
+            catch (Exception ex) { }
         }
 
-        async void SearchCustomers()
+        private void reportDocument_ImageProcessing(object sender, ImageEventArgs e)
         {
-            CurrentListCustomer = await CustomerRepo.SearchCustomers(Keyword);
-            CurrentCustomer = CurrentListCustomer.FirstOrDefault();
+
+            //throw new NotImplementedException();
         }
+
         public AutoCompleteFilterPredicate<object> CustomerFilter
         {
             get
             {
                 return (searchText, obj) =>
-                    (obj as CRM_Customer).Name.ToLower().Contains(searchText.ToLower())
-                    || (obj as CRM_Customer).PhoneNumber.Contains(searchText.ToLower())
-                    || (obj as CRM_Customer).Email.ToLower().Contains(searchText.ToLower());
+                    (obj as CustomerViewModel).Name.Contains(searchText)
+                    || (obj as CustomerViewModel).PhoneNumber.Contains(searchText)
+                    || (obj as CustomerViewModel).Email.Contains(searchText);
+            }
+        }
+
+        public PagingViewModel<CRM_Customer, CustomerViewModel> PagingViewModel
+        {
+            get
+            {
+                return _pagingViewModel;
+            }
+
+            set
+            {
+                _pagingViewModel = value;
+                OnPropertyChanged("PagingViewModel");
+            }
+        }
+
+        public int PageSize1
+        {
+            get
+            {
+                return PageSize;
+            }
+
+            set
+            {
+                PageSize = value;
             }
         }
 
@@ -312,62 +277,59 @@ namespace HCRM.App.ViewModels.OthersViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _isBusy;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _isBusy = value;
+                OnPropertyChanged("IsBusy");
             }
         }
 
-        void FilterCustomers()
+        public ICommand ExportCommand
         {
-            Customers = CurrentListCustomer.Where(p => Filter == "" || p.Name.ToLower().Contains(Filter) || p.Email.ToLower().Contains(Filter) || p.PhoneNumber.ToLower().Contains(Filter)).ToList();
+            get
+            {
+                if (_exportCommand == null)
+                {
+                    _exportCommand = new RelayCommand(p => ExportPage());
+                }
+                return _exportCommand;
+            }
+
+            set
+            {
+                _exportCommand = value;
+            }
         }
-        async void SaveCustomer()
+
+        async void RefreshCustomers()
         {
-            try
-            {
-
-
-                if (CurrentCustomer.CustomerID <= 0)
-                {
-                    CurrentCustomer.CreatedDate = DateTime.Now;
-                    CurrentCustomer.CreatedBy = App.currUser.username;
-                    CurrentCustomer.IsDeleted = false;
-                }
-                if (CurrentAddress != null && (!string.IsNullOrEmpty(CurrentAddress.Street) || !string.IsNullOrEmpty(CurrentAddress.City)))
-                {
-                    //CurrentAddress.CRM_Customer = CurrentCustomer;
-                    CurrentAddress.CustomerID = CurrentCustomer.CustomerID;
-                    CurrentCustomer.CRM_Address.Add(CurrentAddress);
-                }
-                CurrentCustomer.Email = CurrentCustomer.Email == null ? "" : CurrentCustomer.Email;
-                var result = await CustomerRepo.CreateOrEditCustomer(CurrentCustomer, FileDlg.Info);
-                if (result)
-                {
-                    CurrentAvatar = common.getFullFilePath(CurrentCustomer.Avatar);
-                    ApiHelper.Alert("Lưu ý", "Lưu nhân viên thành công");
-                }
-                else
-                {
-                    ApiHelper.Alert("Lưu ý", "Không thể lưu nhân viên");
-                }
-            }
-            catch (Exception ex)
-            {
-                ApiHelper.Alert("Lưu ý", ex.Message);
-            }
+            IsBusy = true;
+            CurrentListCustomer = await CustomerRepo.Instance.GetModelList();
+            PagingViewModel = new PagingViewModel<CRM_Customer, CustomerViewModel>(CurrentListCustomer, PageSize1);
+            IsBusy = false;
         }
-
 
         #endregion
         public CustomerPageViewModel() : base()
         {
-            ReFreshCustomers();
+            _eventAggregator = ApplicationService.Instance.GlobalEventAggregator;
 
-            //CurrentCustomer = new CustomerViewModel();
+            ItemListChanged<bool> _event = ApplicationService.Instance.GlobalEventAggregator.GetEvent<ItemListChanged<bool>>();
+            _event.Subscribe(ItemsChanged);
+
+            RefreshCustomers();
+        }
+
+        private void ItemsChanged(bool isChanged)
+        {
+            if (isChanged)
+            {
+
+                RefreshCustomers();
+            }
         }
     }
 }

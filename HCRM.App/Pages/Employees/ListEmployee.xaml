@@ -9,7 +9,7 @@
              xmlns:cv="clr-namespace:HCRM.App.Views.Converters"
              xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
               xmlns:customControl="clr-namespace:HCRM.App.Views.CustomControls" 
-             
+             MaxWidth="1500"
              >
     <Grid Style="{StaticResource ContentRoot}">
         <xctk:BusyIndicator Name="busyIndicator" IsBusy="{Binding IsBusy}">
@@ -123,7 +123,7 @@
                         <StackPanel Height="auto">
                             <StackPanel DataContext="{Binding AvatarFileDlg}"  Width="480">
                                 <TextBlock Text="Hình ảnh"/>
-                                <xctk:AutoSelectTextBox IsReadOnly="True" Width="130" Text="{Binding FileName}"/>
+                                <xctk:AutoSelectTextBox IsReadOnly="True" Width="85" Text="{Binding FileName}"/>
                                 <Button Content="Browse" MaxHeight="30" Command="{Binding OpenCommand}" />
                             </StackPanel>
                         </StackPanel>

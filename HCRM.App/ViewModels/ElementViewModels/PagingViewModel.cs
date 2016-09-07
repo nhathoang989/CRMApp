@@ -16,7 +16,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private ICommand lastCommand;
         private List<TView> lstDisplay;
         private List<TView> lstAll;
-        private int _pageSize = 10;
+        private int _pageSize;
         private int _itemCount;
         private int _currentPageIndex;
         private int _totalPage;
@@ -29,7 +29,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
                 if (previousCommand == null)
                 {
-                    previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-1),p=>CanPrevPage());
+                    previousCommand = new RelayCommand(p => ChangeListView(CurrentPageIndex-2),p=>CanPrevPage());
                 }
                 return previousCommand;
             }
@@ -97,12 +97,17 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             get
             {
+                if (_pageSize==0)
+                {
+                    _pageSize = 10;
+                }
                 return _pageSize;
             }
 
             set
             {
                 _pageSize = value;
+                OnPropertyChanged("PageSize");
             }
         }
 
@@ -227,9 +232,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
 
         public PagingViewModel(List<TView> lstView, int pageSize)
         {
-            LstAll = lstView;
-            ItemCount = lstView.Count;
             PageSize = pageSize;
+            LstAll = lstView;
+            ItemCount = lstView.Count;            
             ChangeListView(0);
         }
 

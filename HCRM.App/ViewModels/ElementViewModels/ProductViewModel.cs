@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using HCRM.App.Behaviors;
 using FirstFloor.ModernUI.Windows.Controls;
+using Prism.Events;
+using HCRM.App.Services;
+using HCRM.App.Pages.Popups;
 
 namespace HCRM.App.ViewModels.ElementViewModels
 {
     public class ProductViewModel : ViewModelBase<CRM_Product, ProductViewModel>
     {
         
-        #region Properties
+        
         private double _discount;
         private string _title;
         private int _TotalRemain;
@@ -40,11 +43,12 @@ namespace HCRM.App.ViewModels.ElementViewModels
         private string _strNormalPrice;
         private string _code;
         private string _subImages;
-        private FileDialogViewModel _fileDlg;
-
-        private int _iImport;
-
+        private FileDialogViewModel _fileDlg;        
+        private int _iImport;       
         private int _iSaled;
+        
+
+        #region Properties
         public int ISaled
         {
             get
@@ -88,9 +92,6 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 _fileDlg  = value;
             }
         }
-
-       
-
         public double Discount
         {
             get
@@ -407,8 +408,9 @@ namespace HCRM.App.ViewModels.ElementViewModels
                 if (string.IsNullOrEmpty(value))
                 {
                     value = "0";
-                }                
-                _strNormalPrice = value;
+                }
+                _strNormalPrice = common.FormatPrice(value);
+                NormalPrice = common.ReversePrice(_strNormalPrice);
                 OnPropertyChanged("StrNormalPrice");
             }
         }
@@ -439,7 +441,7 @@ namespace HCRM.App.ViewModels.ElementViewModels
            
 
             var result = await ProductRepo.Instance.SaveModel(Model);
-            _eventAggregator.GetEvent<ItemListChanged<bool>>().Publish(result.StatusCode == System.Net.HttpStatusCode.OK);
+            ApplicationService.Instance.GlobalEventAggregator.GetEvent<ProductListChanged>().Publish(result.StatusCode == System.Net.HttpStatusCode.OK);
            
             return result;
         }
@@ -524,6 +526,13 @@ namespace HCRM.App.ViewModels.ElementViewModels
             }
         }
 
+        public override void Preview()
+        {
+            ProductDetails popupPreview = new ProductDetails(EventHandler);
+            EventHandler.GetEvent<ItemSelected<ProductViewModel>>().Publish(this);
+            popupPreview.ShowDialog();
+        }
+
 
         #endregion
 
@@ -539,9 +548,15 @@ namespace HCRM.App.ViewModels.ElementViewModels
             Model = new CRM_Product();
         }
 
+        public ProductViewModel(IEventAggregator parentEventHandler) : base("api/Product", "Product")
+        {
+            EventHandler = parentEventHandler;
+            Model = new CRM_Product();
+        }
+
 
         #endregion
-       
+
     }
 }
 

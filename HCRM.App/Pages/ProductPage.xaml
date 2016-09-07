@@ -5,12 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             >
+    <UserControl.Resources>
+        
+    </UserControl.Resources>
     <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
-        <mui:ModernTab Layout="List"  SelectedSource="/Pages/Products/SaleProduct.xaml">
+        <mui:ModernTab Layout="List" Style="{StaticResource SideMenuLink}"  SelectedSource="/Pages/Products/ListProduct.xaml">
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
+                <mui:Link DisplayName="Danh sách" Source="/Pages/Products/ListProduct.xaml" />
                 <mui:Link DisplayName="Xuất hàng" Source="/Pages/Products/SaleProduct.xaml" />
                 <mui:Link DisplayName="Nhập hàng" Source="/Pages/Products/ImportProduct.xaml" />
             </mui:ModernTab.Links>

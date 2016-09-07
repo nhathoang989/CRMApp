@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ModernUINavigationApp1.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ChosenAccent" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#00000000</Value>
+    </Setting>
+    <Setting Name="ChosenTheme" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ChosenFontSize" Type="FirstFloor.ModernUI.Presentation.FontSize" Scope="User">
+      <Value Profile="(Default)">Large</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

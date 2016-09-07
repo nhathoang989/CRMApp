@@ -5,34 +5,37 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e07254c53d154b9baea16cc75212e0d1" Name="Diagram1">
-        <EntityTypeShape EntityType="HCRMModel.CRM_Address" Width="1.5" PointX="6" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Customer" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Employee" Width="1.5" PointX="3.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Menu" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Product" Width="1.5" PointX="3" PointY="22" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Product_Details_Template" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Product_Property" Width="1.5" PointX="5.25" PointY="24" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Provider" Width="1.5" PointX="3.75" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Delivery" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Details" Width="1.5" PointX="5.25" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Return" Width="1.5" PointX="3" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Warehouse" Width="1.5" PointX="3" PointY="29.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Role_Menu" Width="1.5" PointX="8" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_Tags" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.CRM_User" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HCRMModel.sysdiagram" Width="1.5" PointX="8.75" PointY="7.75" IsExpanded="true" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Customer" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Employee" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Provider" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Customer" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Return_CRM_Customer" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Role_Menu_CRM_Menu" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Product_Property_CRM_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Product" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Warehouse_CRM_Provider" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Return" ManuallyRouted="false" />
-        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Warehouse" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Address" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Customer" Width="1.5" PointX="0.75" PointY="14" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Employee" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Menu" Width="1.5" PointX="8.75" PointY="3.25" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Product" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Product_Details_Template" Width="1.5" PointX="10.75" PointY="7" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Product_Property" Width="1.5" PointX="8.25" PointY="14.25" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Provider" Width="1.5" PointX="0.75" PointY="17.875" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Delivery" Width="1.5" PointX="6" PointY="8.125" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Details" Width="1.5" PointX="8.25" PointY="9.375" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Return" Width="1.5" PointX="3" PointY="9" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Role_Menu" Width="1.5" PointX="11" PointY="3.75" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Tags" Width="1.5" PointX="10.75" PointY="10" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_User" Width="1.5" PointX="10.75" PointY="13" />
+        <EntityTypeShape EntityType="HCRMModel.sysdiagram" Width="1.5" PointX="2.75" PointY="14" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Customer" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Employee" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Address_CRM_Provider" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Customer" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Return_CRM_Customer" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Delivery_CRM_Employee" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Return_CRM_Employee" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Role_Menu_CRM_Menu" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Product_Property_CRM_Products" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Product" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Delivery" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Return" />
+        <EntityTypeShape EntityType="HCRMModel.CRM_Receipt_Import" Width="1.5" PointX="5" PointY="14.75" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Import_CRM_Employee" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Import_CRM_Provider" />
+        <AssociationConnector Association="HCRMModel.FK_CRM_Receipt_Details_CRM_Receipt_Import" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

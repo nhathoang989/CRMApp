@@ -17,7 +17,7 @@ namespace HCRM.Data
         public long ReceiptDetailsID { get; set; }
         public Nullable<long> ReceiptDeliveryID { get; set; }
         public Nullable<long> ReceiptReturnID { get; set; }
-        public Nullable<long> ReceiptWarehouseID { get; set; }
+        public Nullable<long> ReceiptImportID { get; set; }
         public long ProductID { get; set; }
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
@@ -26,6 +26,6 @@ namespace HCRM.Data
         public virtual CRM_Product CRM_Product { get; set; }
         public virtual CRM_Receipt_Delivery CRM_Receipt_Delivery { get; set; }
         public virtual CRM_Receipt_Return CRM_Receipt_Return { get; set; }
-        public virtual CRM_Receipt_Warehouse CRM_Receipt_Warehouse { get; set; }
+        public virtual CRM_Receipt_Import CRM_Receipt_Import { get; set; }
     }
 }

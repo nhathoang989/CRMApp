@@ -1,84 +1,66 @@
 ﻿using System.Web.Http;
 using HCRM.Data;
 using HCRM.DAL.CRM;
+using HCRM.DAL;
 
 namespace HCMS.API.Controllers.CRM
 {
     [RoutePrefix("api/Customer")]
-    public class CustomerController : BaseApiController
+    public class CustomerController : BaseCRMController<CRM_Customer>
     {
-        string errorMsg = "";
-        CustomerDAL _CustomerRepo = CustomerDAL.GetInstance();
-
-        [Route("GetCustomerList/{pageIndex:int?}/{pageSize:int?}")]
-        public IHttpActionResult GetCustomerList(int? pageIndex = null, int? pageSize = null)
-        {
-            var lstCustomer = _CustomerRepo.GetCustomerList(pageIndex, pageSize);
-            return Ok(lstCustomer);
-        }
 
         [HttpGet]
-        [Route("SearchCustomers/{keyword}")]
+        [Route("SearchModelList/{keyword}")]
         public IHttpActionResult SearchCustomers(string keyword)
         {
-            var lstCustomer = _CustomerRepo.SearchCustomerList(keyword);
+            var lstCustomer = CustomerDAL.Instance.SearchCustomerList(keyword);
             return Ok(lstCustomer);
         }
 
-        [Route("GetCustomer/{id}")]
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("GetModelList/{pageIndex:int?}/{pageSize:int?}")]
+        public IHttpActionResult GetCustomerList(int? pageIndex = null, int? pageSize = null)
+        {
+            string direction = "asc";
+            var lstCustomer = CustomerDAL.Instance.GetModelList(e => e.Name, direction, pageIndex, pageSize);
+            foreach (var cus in lstCustomer)
+            {
+                cus.CRM_Address = AddressDAL.Instance.GetModelListBy(a => a.CustomerID == cus.CustomerID, a => a.Street, direction, null, null);
+            }
+            return Ok(lstCustomer);
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("RemoveModel")]
+        public IHttpActionResult RemoveCustomer([FromBody]CRM_Customer model)
+        {
+            return RemoveModel(model);
+
+        }
+        [Route("GetSingleModel/{id}")]
         public IHttpActionResult GetCustomer(int id)
         {
-            var Customer = _CustomerRepo.GetSingleModel(e => e.CustomerID == id);
-            if (Customer == null)
+            var Customer = CustomerDAL.Instance.GetSingleModel(e => e.CustomerID == id);
+            if (Customer != null)
             {
-                return NotFound();
+                return Ok(Customer);
             }
-            return Ok(Customer);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("CreateCustomer")]
-        public IHttpActionResult CreateCustomer([FromBody]CRM_Customer Customer)
-        {
-            if (Customer == null)
-            {
-                return NotFound();
-            }
-            var result = _CustomerRepo.CreateModel(Customer, out errorMsg);
-            if (result != null)
-            {
-                return Ok();
-            }
-            else
-            {
-                return GetErrorResult(errorMsg);
-            }
+            return NotFound();
 
         }
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("CreateOrEditCustomer")]
-        public IHttpActionResult CreateOrEditCustomer([FromBody]CRM_Customer Customer)
+        [Route("SaveModel")]
+        public IHttpActionResult SaveCustomer([FromBody]CRM_Customer model)
         {
-            CRM_Customer result = null;
-            if (Customer == null)
-            {
-                return NotFound();
-            }
-
-            result = _CustomerRepo.CreateOrUpdateCustomer(Customer, out errorMsg);
-
-            if (result != null)
-            {
-                return Ok();
-            }
-            else
-            {
-                return GetErrorResult(errorMsg);
-            }
-
+            return SaveModel(model);
         }
 
     }

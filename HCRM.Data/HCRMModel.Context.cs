@@ -12,22 +12,14 @@ namespace HCRM.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Linq;
+    
     public partial class HCRMEntities : DbContext
     {
         public HCRMEntities()
             : base("name=HCRMEntities")
         {
         }
-
-        //public override int SaveChanges()
-        //{
-        //    //var added = this.ChangeTracker.Entries().Where(e => e.State == System.Data.Entity.EntityState.Added);
-
-        //    // Do your thing, like changing the state to detached
-        //    return base.SaveChanges();
-        //}
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -44,10 +36,10 @@ namespace HCRM.Data
         public virtual DbSet<CRM_Receipt_Delivery> CRM_Receipt_Delivery { get; set; }
         public virtual DbSet<CRM_Receipt_Details> CRM_Receipt_Details { get; set; }
         public virtual DbSet<CRM_Receipt_Return> CRM_Receipt_Return { get; set; }
-        public virtual DbSet<CRM_Receipt_Warehouse> CRM_Receipt_Warehouse { get; set; }
         public virtual DbSet<CRM_Role_Menu> CRM_Role_Menu { get; set; }
         public virtual DbSet<CRM_Tags> CRM_Tags { get; set; }
         public virtual DbSet<CRM_User> CRM_User { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<CRM_Receipt_Import> CRM_Receipt_Import { get; set; }
     }
 }

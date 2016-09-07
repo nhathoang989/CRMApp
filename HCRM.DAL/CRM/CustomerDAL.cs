@@ -9,30 +9,28 @@ namespace HCRM.DAL.CRM
     {
         private static CustomerDAL _CustomerDAL;
 
-        public static CustomerDAL GetInstance()
+        public static CustomerDAL Instance
         {
-            if (_CustomerDAL == null)
+            get
             {
-                _CustomerDAL = new CustomerDAL();
-
-            }
-            return _CustomerDAL;
-        }
-        public CRM_Customer CreateOrUpdateCustomer(CRM_Customer Customer, out string errorMsg)
-        {
-            using (HCRMEntities context = new HCRMEntities())
-            {
-                errorMsg = "";
-                context.Entry(Customer).State = Exists(Customer) ? EntityState.Modified : EntityState.Added;
-
-
-                foreach (var address in Customer.CRM_Address)
+                if (_CustomerDAL == null)
                 {
-                    context.Entry(address).State = AddressDAL.Instance.Exists(address) ? EntityState.Modified : EntityState.Added;
+                    _CustomerDAL = new CustomerDAL();
+
                 }
-                context.SaveChanges();
-                return Customer;
+                return _CustomerDAL;
             }
+        }
+        public CRM_Customer SaveCustomer(CRM_Customer customer, out string errorMsg)
+        {
+            errorMsg = "";
+            var e = SaveModel(customer, out errorMsg);
+            foreach (var address in customer.CRM_Address)
+            {
+                address.CustomerID = e.CustomerID;
+                AddressDAL.Instance.SaveModel(address, out errorMsg);
+            }
+            return e;
         }
         public List<CRM_Customer> SearchCustomerList(string keyword, int? pageIndex = 0, int? pageSize = 100)
         {
@@ -54,10 +52,10 @@ namespace HCRM.DAL.CRM
         {
             using (HCRMEntities context = new HCRMEntities())
             {
-                var lstResult = GetModelList(c => c.Name, "asc", pageIndex, pageSize);
-                foreach (var item in lstResult)
+                var lstResult = context.CRM_Customer.OrderBy(e => e.Name).Include(e => e.CRM_Address);
+                if (pageSize.HasValue)
                 {
-                    item.CRM_Address = AddressDAL.Instance.FindBy(a => a.CustomerID == item.CustomerID, c => c.AddressID, "asc", pageIndex, pageSize);
+                    lstResult = lstResult.Skip(pageIndex.Value * pageSize.Value).Take(pageSize.Value);
                 }
                 return lstResult.ToList();
             }

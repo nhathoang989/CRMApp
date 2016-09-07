@@ -1,0 +1,20 @@
+﻿HCRM.App
+
+
+winexe
+C#
+.cs
+D:\Nhat Hoang\Projects\GitHub\CRMApp\HCRM.App\obj\Debug\
+HCRM.App
+none
+false
+DEBUG;TRACE
+D:\Nhat Hoang\Projects\GitHub\CRMApp\HCRM.App\App.xaml
+221347254095
+6600406859
+931132397031
+101441283053
+MainWindow.xaml;Pages\EmployeePage.xaml;Pages\Employees\ListEmployee.xaml;Pages\Popups\ProductDetails.xaml;Pages\ProductPage.xaml;Pages\Products\ListProduct.xaml;Pages\Products\ImportProduct.xaml;Pages\Products\SaleProduct.xaml;Pages\ReceiptPage.xaml;Pages\Receipts\ListDeliveryReceipt.xaml;Pages\Settings\About.xaml;Pages\Settings\Appearance.xaml;Pages\Home.xaml;Pages\SettingsPage.xaml;Themes\Datagrid.xaml;Themes\Default.xaml;Views\Alert\DesignTimeNotificationData.xaml;Views\Alert\GrowlNotifiactions.xaml;Views\CustomControls\PaginDataGridView.xaml;Views\CustomControls\ReportViewer.xaml;Views\Home.xaml;Views\LoginWindow.xaml;
+
+False
+

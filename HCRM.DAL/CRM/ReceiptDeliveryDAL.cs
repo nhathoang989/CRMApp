@@ -25,7 +25,14 @@ namespace HCRM.DAL.CRM
         {
             errorMsg = "";
             var lstDetails = receipt.CRM_Receipt_Details.ToList();
+            if (receipt.CRM_Customer!=null)
+            {
+                CRM_Customer cus = CustomerDAL.Instance.SaveCustomer(receipt.CRM_Customer, out errorMsg);
+                receipt.CustomerID = cus.CustomerID;
+                receipt.CRM_Customer = null;
+            }
 
+            receipt.CRM_Employee = null;
             receipt.CRM_Receipt_Details = null;
             var model = SaveModel(receipt, out errorMsg);
 
@@ -36,12 +43,12 @@ namespace HCRM.DAL.CRM
                 details.CRM_Product = null;
                 details.ReceiptDeliveryID = model.ReceiptID;
                 ReceiptDetailsDAL.Instance.SaveModel(details, out errorMsg);
-
-                
                 product.TotalRemain -= details.Quantity;
                 product.TotalSaled += details.Quantity;
                 ProductDAL.Instance.SaveModel(product,out errorMsg);
             }
+            
+            
             return model;
         }
 

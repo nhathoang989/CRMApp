@@ -18,7 +18,7 @@ namespace HCRM.Data
         public CRM_Provider()
         {
             this.CRM_Address = new HashSet<CRM_Address>();
-            this.CRM_Receipt_Warehouse = new HashSet<CRM_Receipt_Warehouse>();
+            this.CRM_Receipt_Import = new HashSet<CRM_Receipt_Import>();
         }
     
         public int ProviderID { get; set; }
@@ -33,6 +33,6 @@ namespace HCRM.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CRM_Address> CRM_Address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CRM_Receipt_Warehouse> CRM_Receipt_Warehouse { get; set; }
+        public virtual ICollection<CRM_Receipt_Import> CRM_Receipt_Import { get; set; }
     }
 }

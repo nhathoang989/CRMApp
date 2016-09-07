@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="HCRM.App.Pages.Receipts.ListDeliveryReceipt"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cv="clr-namespace:HCRM.App.Views.Converters"
+             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+              xmlns:customControl="clr-namespace:HCRM.App.Views.CustomControls" 
+             mc:Ignorable="d" 
+             >
+    <Grid Style="{StaticResource ContentRoot}">
+        <xctk:BusyIndicator Name="busyIndicator" IsBusy="{Binding IsBusy}">
+            <xctk:BusyIndicator.BusyContent>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center">Please wait...</TextBlock>
+                </StackPanel>
+            </xctk:BusyIndicator.BusyContent>
+
+            <xctk:BusyIndicator.Content>
+                
+                <ScrollViewer>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="20">
+
+                            <TextBlock Text="Từ khóa"/>
+                            <Controls:AutoCompleteBox Width="250" Margin="10 0" ItemsSource="{Binding ListReceipt}" 
+                                                  ValueMemberPath="CreatedDate"
+                                                  ItemFilter="{Binding ReceiptFilter}"
+                                                  IsTextCompletionEnabled="True"                                              
+                                                  SelectedItem="{Binding CurrentReceipt,Mode=OneWayToSource}"
+                                                  MinimumPrefixLength="2"
+                                                  MinimumPopulateDelay="300"
+                                                  VerticalAlignment="Center"
+                                                  >
+                                <Controls:AutoCompleteBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" />
+                                            <TextBlock Text="{Binding Email}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Controls:AutoCompleteBox.ItemTemplate>
+                            </Controls:AutoCompleteBox>
+                            <StackPanel>
+                                
+                            </StackPanel>
+                            <Button Content="Xuất báo cáo" Width="120" Command="{Binding ExportCommand}"/>
+
+                            <Button Content="Xem hóa đơn" Command="{Binding CurrentReceipt.PrintPreviewCommand}" Width="150" HorizontalAlignment="Left" Margin="20 0"/>
+                        </StackPanel>
+                        <WrapPanel MaxHeight="50" Style="{StaticResource WrapInfos}"  Margin="20" Orientation="Horizontal">
+                            <StackPanel Width="350">
+                                <TextBlock Text="Từ ngày"/>
+                                <DatePicker SelectedDate="{Binding FromDate}" />
+                            </StackPanel>
+                            <StackPanel Width="350">
+                                <TextBlock Text="Đến ngày"/>
+                                <DatePicker SelectedDate="{Binding ToDate}"/>
+                            </StackPanel>
+                            <Button Content="Tìm" Command="{Binding FilterCommand}" Width="150" HorizontalAlignment="Left"/>
+                        </WrapPanel>
+                        
+                        <WrapPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                            <StackPanel Grid.Column="0" DataContext="{Binding PagingDataGrid}">
+                                <TextBlock Text="Danh sách hóa đơn"  Style="{StaticResource Heading2}" Margin="10"/>
+                                <DataGrid ColumnWidth="150" HorizontalAlignment="Left" AutoGenerateColumns="False" 
+                                          ItemsSource="{Binding LstDisplay}" 
+                                          SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.CurrentReceipt}"
+                                RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Khách hàng" Binding="{Binding OrderName}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Giá trị" Binding="{Binding StrTotalAmount}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Giảm" Binding="{Binding StrTotalReduce}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Dư nợ" Binding="{Binding StrTotalRemain}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <customControl:PaginDataGridView Width="Auto" HorizontalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left" Margin="10 0 0 0">
+                                <TextBlock Text="Chi tiết hóa đơn"  Style="{StaticResource Heading2}" Margin="10"/>
+                                <DataGrid ColumnWidth="150" HorizontalAlignment="Left" AutoGenerateColumns="False" 
+                                          ItemsSource="{Binding CurrentReceipt.ListDetails}"                                           
+                                RowHeight="50" CanUserAddRows="False" CanUserDeleteRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Sản phẩm" Binding="{Binding Product.Title}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Số lượng" Binding="{Binding StrTotalAmount}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Đơn giá" Binding="{Binding StrUnitPrice}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Giảm" Binding="{Binding StrReducePrice}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </WrapPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </xctk:BusyIndicator.Content>
+        </xctk:BusyIndicator>
+    </Grid>
+</UserControl>

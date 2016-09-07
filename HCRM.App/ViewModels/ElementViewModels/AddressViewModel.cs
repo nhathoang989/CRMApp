@@ -136,6 +136,11 @@ namespace HCRM.App.ViewModels.ElementViewModels
         {
             throw new NotImplementedException();
         }
+
+        public override void Preview()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         public AddressViewModel(CRM_Address model) : base("api/Address", "Address")
