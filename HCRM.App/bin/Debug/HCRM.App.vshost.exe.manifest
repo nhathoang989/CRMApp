@@ -119,14 +119,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HCRM.App.exe" size="251368">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HCRM.App.exe" size="251880">
       <assemblyIdentity name="HCRM.App" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>N7ka388u2y6f+C68KOt/T4toXY/74WPjsPAc1T1/mAc=</dsig:DigestValue>
+        <dsig:DigestValue>/ZKfNM8TnvFNxVyReUqYgpl7LsIKbLSqZ5P0r26+Ivw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
